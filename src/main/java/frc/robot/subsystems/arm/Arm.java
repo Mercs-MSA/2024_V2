@@ -60,7 +60,7 @@ public class Arm extends SubsystemBase{
             : InvertedValue.CounterClockwise_Positive;
         config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
         config.Feedback.FeedbackRemoteSensorID = ArmConstants.armEncoderID;
-        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.FusedCANcoder;
+        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
         config.Feedback.RotorToSensorRatio = ArmConstants.rotorToSensorRatio;
         config.Feedback.SensorToMechanismRatio = ArmConstants.sensorToMechanismRatio;
         leaderTalon.getConfigurator().apply(config, 1.0);
@@ -98,6 +98,10 @@ public class Arm extends SubsystemBase{
     public void leaderGoToPositionIncrement(double increment) {
         double targetPose = leaderTalon.getPosition().getValueAsDouble() + (increment);
         leaderTalon.setControl(leaderVoltagePosition.withPosition(targetPose));
+    }
+
+    public void leaderGoToPosition(double pos) {
+        leaderTalon.setControl(leaderVoltagePosition.withPosition(pos));
     }
 
     public void stop(){
