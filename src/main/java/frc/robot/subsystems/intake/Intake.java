@@ -122,7 +122,6 @@ public class Intake extends SubsystemBase {
   public void optimization_for_CAN() {
     StatusSignal<Double> m_IntakeMotor_canbus1signal1 = intakeMotor.getPosition();
     StatusSignal<Double> m_IntakeTemp_canbus1signal1 = intakeMotor.getDeviceTemp();
-    StatusSignal<Double> m_IntakeDutyCycle_canbus1signal1 = intakeMotor.getDutyCycle();
     BaseStatusSignal.setUpdateFrequencyForAll(60, m_IntakeMotor_canbus1signal1);
     BaseStatusSignal.setUpdateFrequencyForAll(1, m_IntakeTemp_canbus1signal1);
     ParentDevice.optimizeBusUtilizationForAll(intakeMotor);
