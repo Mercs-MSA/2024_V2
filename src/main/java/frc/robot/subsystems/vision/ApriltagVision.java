@@ -16,6 +16,7 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.util.struct.Struct;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
@@ -61,7 +62,7 @@ public class ApriltagVision extends SubsystemBase {
                   Swerve.poseEstimator.addVisionMeasurement(
                           new Pose2d(frontRight.estimatedPose.toPose2d().getTranslation(),
                                   Swerve.poseEstimator.getEstimatedPosition().getRotation()),
-                          mFrontRightAprilTagResult.getTimestampSeconds());
+                          Timer.getFPGATimestamp() - mFrontRightAprilTagResult.getLatencyMillis());
                 });
               }
           }
@@ -76,7 +77,7 @@ public class ApriltagVision extends SubsystemBase {
                     Swerve.poseEstimator.addVisionMeasurement(
                             new Pose2d(backLeft.estimatedPose.toPose2d().getTranslation(),
                                     Swerve.poseEstimator.getEstimatedPosition().getRotation()),
-                            mBackLeftAprilTagResult.getTimestampSeconds());
+                            Timer.getFPGATimestamp() - mFrontRightAprilTagResult.getLatencyMillis());
                 });
               }
           }
