@@ -288,6 +288,7 @@ public final class Constants {
 
     public static class IndexConstants{
         public static int kIndexMotorId = 29;
+        public static int kIndexMotorSpeed = 85;
     }
 
 
