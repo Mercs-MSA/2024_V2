@@ -281,6 +281,15 @@ public final class Constants {
         
     }
 
+    public static class IntakeConstants{
+        public static int kIntakeMotorId = 28;
+        public static int kIntakeMotorSpeed = 85;
+    }
+
+    public static class IndexConstants{
+        public static int kIndexMotorId = 29;
+    }
+
 
 /** Utility functions for flipping from the blue to red alliance. */
 public class AllianceFlipUtil {
