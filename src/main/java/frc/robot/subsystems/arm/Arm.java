@@ -16,6 +16,8 @@ import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
@@ -89,6 +91,18 @@ public class Arm extends SubsystemBase{
 
     }
 
+    @Override
+    public void periodic() {
+        SmartDashboard.putNumber("Leader Motor Temperature", leaderTalon.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Leader Motor Position", leaderTalon.getPosition().getValueAsDouble());
+
+
+        SmartDashboard.putNumber("Follower Motor Temperature", leaderTalon.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Follower Motor Position", leaderTalon.getPosition().getValueAsDouble());
+
+        SmartDashboard.putNumber("Arm Cancoder", absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+    }
+
     public void setBrakeMode(boolean enabled){
         leaderTalon.setNeutralMode(enabled ? NeutralModeValue.Brake : NeutralModeValue.Coast);
         followerTalon.setNeutralMode(enabled ? NeutralModeValue.Brake : NeutralModeValue.Coast);
@@ -102,6 +116,15 @@ public class Arm extends SubsystemBase{
 
     public void leaderGoToPosition(double pos) {
         leaderTalon.setControl(leaderVoltagePosition.withPosition(pos));
+    }
+
+    public void resetToAbsolute(){
+        double absolutePosition = getCANcoder().getRotations() - ArmConstants.angleOffset.getRotations();
+        leaderTalon.setPosition(absolutePosition);
+    }
+    
+    public Rotation2d getCANcoder(){
+        return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValue());
     }
 
     public void stop(){

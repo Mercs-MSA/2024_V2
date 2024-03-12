@@ -282,6 +282,7 @@ public final class Constants {
 
         public static int rotorToSensorRatio = 1;
         public static int sensorToMechanismRatio = 1;
+        public static Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
     }
 
     public static class IntakeConstants{

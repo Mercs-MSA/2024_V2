@@ -101,12 +101,13 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
   
-    shooterMotorPos = shooterMotor.getPosition().getValueAsDouble();
-    shooterMotorSpeed = shooterMotor.getDutyCycle().getValueAsDouble();
+    SmartDashboard.putNumber("Shooter Motor Speed", shooterMotor.getDutyCycle().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter Motor Temperature", shooterMotor.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter rpm", shooterMotor.getVelocity().getValueAsDouble());
 
-    SmartDashboard.putNumber("Index Motor Speed", shooterMotorSpeed);
-    SmartDashboard.putNumber("Index Motor Temperature", shooterMotor.getDeviceTemp().getValueAsDouble());
-    SmartDashboard.putNumber("Index rpm", shooterMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter1 Motor Speed", shooterMotor1.getDutyCycle().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter1 Motor Temperature", shooterMotor1.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter1 rpm", shooterMotor1.getVelocity().getValueAsDouble());
   }
   
   // USE FOR TESTING ALSO
