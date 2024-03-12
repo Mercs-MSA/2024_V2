@@ -185,7 +185,7 @@ public final class Constants {
          * Minimum target ambiguity. Targets with higher ambiguity will be discarded. Not appliable when multiple tags are
          * in view in a single camera.
          */
-        public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
+        public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.1;
 
         public static class gamePieceCameraInfo {
             // public static Transform3d robotToCamera = new Transform3d(12.114, -8.874, 15.266, new Rotation3d(0, 0, 0));
