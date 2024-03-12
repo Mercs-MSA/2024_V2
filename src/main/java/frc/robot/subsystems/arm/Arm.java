@@ -33,7 +33,7 @@ public class Arm extends SubsystemBase{
     private final List<StatusSignal<Double>> appliedVoltage;
     private final List<StatusSignal<Double>> supplyCurrent;
     private final List<StatusSignal<Double>> tempCelsius;
-    private final PositionVoltage leaderVoltagePosition = new PositionVoltage(0, 0, false, 0, 0, false, false, false);
+    private final PositionVoltage leaderVoltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
 
     // Config
     private final TalonFXConfiguration config = new TalonFXConfiguration();

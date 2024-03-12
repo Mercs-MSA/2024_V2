@@ -15,7 +15,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -46,7 +45,6 @@ public class ApriltagVision extends SubsystemBase {
 
         mFrontRightEstimator.setRobotToCameraTransform(Constants.Vision.aprilTagFrontRight.robotToCamera);
         mBackLeftEstimator.setRobotToCameraTransform(Constants.Vision.aprilTagBackLeft.robotToCamera);
-
         
     }
 
@@ -58,10 +56,12 @@ public class ApriltagVision extends SubsystemBase {
 
                 mFrontRight = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
 
-                if (mFrontRight.isPresent()){
-                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mFrontRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds());
-                }
-
+                mFrontRight.ifPresent(frontRight -> {
+                  Swerve.poseEstimator.addVisionMeasurement(
+                          new Pose2d(frontRight.estimatedPose.toPose2d().getTranslation(),
+                                  Swerve.poseEstimator.getEstimatedPosition().getRotation()),
+                          mFrontRightAprilTagResult.getTimestampSeconds());
+                });
             }
 
             if (this.mBackLeftCam != null){
@@ -69,13 +69,13 @@ public class ApriltagVision extends SubsystemBase {
 
                 mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
 
-                if (mBackLeft.isPresent()){
-                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
-                }
-
-
+                mBackLeft.ifPresent(backLeft -> {
+                    Swerve.poseEstimator.addVisionMeasurement(
+                            new Pose2d(backLeft.estimatedPose.toPose2d().getTranslation(),
+                                    Swerve.poseEstimator.getEstimatedPosition().getRotation()),
+                            mBackLeftAprilTagResult.getTimestampSeconds());
+                });
             }
-
         }
     }
 
@@ -91,43 +91,3 @@ public class ApriltagVision extends SubsystemBase {
     
 }
 
-
-class AprilTagStruct implements Struct<AprilTag> {
-  @Override
-  public Class<AprilTag> getTypeClass() {
-    return AprilTag.class;
-  }
-
-  @Override
-  public String getTypeString() {
-    return "struct:AprilTag";
-  }
-
-  @Override
-  public int getSize() {
-    return kSizeInt8 + Pose3d.struct.getSize();
-  }
-
-  @Override
-  public String getSchema() {
-    return "uint8 id;Pose3d pose";
-  }
-
-  @Override
-  public Struct<?>[] getNested() {
-    return new Struct<?>[] {Pose3d.struct};
-  }
-
-  @Override
-  public AprilTag unpack(ByteBuffer bb) {
-    int id = (int) bb.get();
-    Pose3d pose = Pose3d.struct.unpack(bb);
-    return new AprilTag(id, pose);
-  }
-
-@Override
-  public void pack(ByteBuffer bb, AprilTag value) {
-    bb.put((byte) value.ID);
-    Pose3d.struct.pack(bb, value.pose);
-  }
-}

@@ -6,22 +6,18 @@ import java.util.Optional;
 import com.choreo.lib.Choreo;
 import com.choreo.lib.ChoreoTrajectory;
 
-import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.PIDController;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
-import frc.robot.Constants.AutoConstants.*;
 import frc.robot.subsystems.Swerve;
 
-public class SwerveTrajectoryCommand extends Command{
+public class SwerveChoreoTrajectoryCommand extends Command{
     private Swerve s_Swerve;
     private ChoreoTrajectory trajectory;
 
-    public SwerveTrajectoryCommand(Swerve s_Swerve, ChoreoTrajectory trajectory){
+    public SwerveChoreoTrajectoryCommand(Swerve s_Swerve, ChoreoTrajectory trajectory){
         this.s_Swerve = s_Swerve;
         this.trajectory = trajectory;
         addRequirements(s_Swerve);

@@ -181,6 +181,12 @@ public final class Constants {
 
         public static double gamePieceYawOffset = -56.088;
 
+        /**
+         * Minimum target ambiguity. Targets with higher ambiguity will be discarded. Not appliable when multiple tags are
+         * in view in a single camera.
+         */
+        public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.2;
+
         public static class gamePieceCameraInfo {
             // public static Transform3d robotToCamera = new Transform3d(12.114, -8.874, 15.266, new Rotation3d(0, 0, 0));
             // public static Transform3d robotToCamera = new Transform3d(10, -3.5, 16.966, new Rotation3d(0, 0, 0));
@@ -228,7 +234,6 @@ public final class Constants {
 
         public static final Pose2d convertToRedSide(Pose2d pose) {
             return new Pose2d(fieldWidth - pose.getX(), pose.getY(), Rotation2d.fromDegrees(180).minus(pose.getRotation()));
-
         }
 
         public static Pose2d getPose(String a){
@@ -277,8 +282,6 @@ public final class Constants {
 
         public static int rotorToSensorRatio = 1;
         public static int sensorToMechanismRatio = 1;
-
-        
     }
 
     public static class IntakeConstants{
@@ -289,6 +292,11 @@ public final class Constants {
     public static class IndexConstants{
         public static int kIndexMotorId = 29;
         public static int kIndexMotorSpeed = 85;
+    }
+
+    public static class ShooterConstants{
+        public static int kshooterMotorId = 24;
+        public static int kshooterMotor1Id = 25;
     }
 
 
