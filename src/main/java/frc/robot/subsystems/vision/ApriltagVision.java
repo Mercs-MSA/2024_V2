@@ -1,5 +1,6 @@
 package frc.robot.subsystems.vision;
 
+import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -9,21 +10,15 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.estimation.TargetModel;
 import org.photonvision.targeting.PhotonPipelineResult;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
-import edu.wpi.first.math.Matrix;
-import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.numbers.N1;
-import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Swerve;
 
 public class ApriltagVision extends SubsystemBase {
@@ -69,27 +64,19 @@ public class ApriltagVision extends SubsystemBase {
 
             }
 
-            // if (this.mBackLeftCam != null){
-            //     mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
+            if (this.mBackLeftCam != null){
+                mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
 
-                
+                mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
 
-            //     if (mBackLeftAprilTagResult.getTargets().size() >= 2){
-            //         mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
-
-            //         if (mBackLeft.isPresent()){
-            //             Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
-            //         }
-            //     }
+                if (mBackLeft.isPresent()){
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
+                }
 
 
-            // }
-
-            // SmartDashboard.putData("mFrontRightAprilTagResult", mFrontRightAprilTagResult.getLatestResult().targets);
+            }
 
         }
-
-
     }
 
     public Optional<EstimatedRobotPose> getFrontRightEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, PhotonPipelineResult mFrontRightAprilTagResult) {
@@ -101,37 +88,46 @@ public class ApriltagVision extends SubsystemBase {
         mBackLeftEstimator.setReferencePose(prevEstimatedRobotPose);
         return mBackLeftEstimator.update(mBackLeftAprilTagResult);
     }
-
-    // /**
-    //  * The standard deviations of the estimated pose from {@link #getEstimatedGlobalPose()}, for use
-    //  * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}.
-    //  * This should only be used when there are targets visible.
-    //  *
-    //  * @param estimatedPose The estimated pose to guess standard deviations for.
-    //  */
-    // public Matrix<N3, N1> getFREstimationStdDevs(Pose2d estimatedPose) {
-    //     var estStdDevs = Constants.Vision.kSingleTagStdDevs;
-    //     var targets = mFrontRightAprilTagResult;
-    //     int numTags = 0;
-    //     double avgDist = 0;
-    //     for (var tgt : targets) {
-    //         var tagPose = mFrontRightEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
-    //         if (tagPose.isEmpty()) continue;
-    //         numTags++;
-    //         avgDist +=
-    //                 tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
-    //     }
-    //     if (numTags == 0) return estStdDevs;
-    //     avgDist /= numTags;
-    //     // Decrease std devs if multiple targets are visible
-    //     if (numTags > 1) estStdDevs = Constants.Vision.kMultiTagStdDevs;
-    //     // Increase std devs based on (average) distance
-    //     if (numTags == 1 && avgDist > 4)
-    //         estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-    //     else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-
-    //     return estStdDevs;
-    // }
-
     
+}
+
+
+class AprilTagStruct implements Struct<AprilTag> {
+  @Override
+  public Class<AprilTag> getTypeClass() {
+    return AprilTag.class;
+  }
+
+  @Override
+  public String getTypeString() {
+    return "struct:AprilTag";
+  }
+
+  @Override
+  public int getSize() {
+    return kSizeInt8 + Pose3d.struct.getSize();
+  }
+
+  @Override
+  public String getSchema() {
+    return "uint8 id;Pose3d pose";
+  }
+
+  @Override
+  public Struct<?>[] getNested() {
+    return new Struct<?>[] {Pose3d.struct};
+  }
+
+  @Override
+  public AprilTag unpack(ByteBuffer bb) {
+    int id = (int) bb.get();
+    Pose3d pose = Pose3d.struct.unpack(bb);
+    return new AprilTag(id, pose);
+  }
+
+@Override
+  public void pack(ByteBuffer bb, AprilTag value) {
+    bb.put((byte) value.ID);
+    Pose3d.struct.pack(bb, value.pose);
+  }
 }

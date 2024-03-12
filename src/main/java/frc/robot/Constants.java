@@ -1,7 +1,4 @@
 package frc.robot;
-
-import java.util.Optional;
-
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
@@ -18,12 +15,8 @@ import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.units.Unit;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
-import frc.robot.subsystems.SAT.SAT;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
@@ -80,7 +73,7 @@ public final class Constants {
         /* These values are used by the drive falcon to ramp in open loop and closed loop driving.
          * We found a small open loop ramp (0.25) helps with tread wear, tipping, etc */
         public static final double openLoopRamp = 0.3;
-        public static final double closedLoopRamp = 0.4;
+        public static final double closedLoopRamp = 0.2;
 
 
         /* Angle Motor PID Values */
@@ -90,7 +83,7 @@ public final class Constants {
 
 
         /* Drive Motor PID Values */
-        public static final double driveKP = 0.03;
+        public static final double driveKP = 0.1;
         public static final double driveKI = 0.0;
         public static final double driveKD = 0.0;
         public static final double driveKF = 0.0;
@@ -172,229 +165,6 @@ public final class Constants {
         public static final TrapezoidProfile.Constraints kThetaControllerConstraints =
             new TrapezoidProfile.Constraints(
                 kMaxAngularSpeedRadiansPerSecond, kMaxAngularSpeedRadiansPerSecondSquared);
-    }
-    
-    public static class IntakeConstants {
-        public static final int kIntakeMotorId = 26;
-        public static final double kIntakeMotorSpeed = 100;
-        public static final double kIntakeProcessRotations = 1.9;
-        public static final double kIndexProcessRotations = -1.5;
-        public static final int kIndexMotorId = 24; 
-        public static final int kIndexMotorSpeed = 90;
-        public static final double kSlowIndexMotorSpeed = -20;
-        public static final int kIntakeUpperSensorId = 0;
-        public static final int kIntakeLowerSensor1Id = 1;
-        public static final int kIntakeLowerSensor2Id = 2;
-        public static final int kIntakeLowerSensor3Id = 3;       
-        public static final double kIntakeMotorTolerance = 0.3;
-        public static final double kIndexMotorTolerance = 0.1;
-        public static final double kIntakeMotorDCTolerance = 0.3;
-        public static final double kIndexMotorDCTolerance = 0.05;
-
-        public static boolean kRobotHasNote;
-        
-        /*
-         * States for Intake:
-         * IDLE: the motor is off, sensor doesn't see anything, doesn't have a note in it
-         * START: the motor on, sensor doesn't see anything
-         * INTAKE: the motor is on, the sensor sees a note enter
-         * PROCESS: the motor is on but moving precisely, the sensor doesn't see anything
-         * HOLD: the motor is off, the sensor doesn't see anything, has a note in it
-         * INDEX: the motor is on, the sensor sees a note leave
-         */
-        public static intakeState currentIntakeState = intakeState.IDLE;
-        public enum intakeState{
-            IDLE, 
-            START, 
-            INTAKE,
-            PROCESS, 
-            HOLD,
-            INDEX,
-            OVERRIDE_MOTOR_ON,
-            OVERRIDE_MOTOR_OFF
-        }
-        /*
-         * States for Index:
-         * IDLE: the motor is off, sensor doesn't see anything, doesn't have a note in it
-         * START: the motor is on, sensor doesn't see anything
-         * INTAKE: the motor is on, the sensor sees a note enter
-         * PROCESS: the motor is on but moving precisely, the sensor doesn't see anything
-         * HOLD: the motor is off, the sensor doesn't see anything, has a note in it
-         * FIRE: the motor is on, the sensor sees the note leave
-         */
-        public static indexState currentIndexState = indexState.IDLE;
-        public enum indexState{
-            IDLE, 
-            START, 
-            INTAKE,
-            PROCESS, 
-            HOLD,
-            FIRE,
-            OVERRIDE_MOTOR_ON,
-            OVERRIDE_MOTOR_OFF
-        }    
-   
-    }
-
-    // This is for miscellaneous constants
-    public static class Misc {
-        public static final double Conversion_Factor = 6.3648;    // this is the calculated conversion factor at 19.4 volts (nominal expected value)
-    }
-
-    public static class SATConstants {
-        // Motor IDs
-        public static final int SAT_SHOOTER1_MOTOR_ID = 29;
-        public static final int SAT_SHOOTER2_MOTOR_ID = 27;
-
-        public static final int SAT_PIVOT_MOTOR_ID = 19;
-        public static final int SAT_BASE1_MOTOR_ID = 55;
-        public static final int SAT_BASE2_MOTOR_ID = 25;
-        // INDEXER IS 24
-
-        public static final int SAT_OBJECTDETECTOR_SENSOR_ID = 1;
-        
-        public static class SUBWOOFER{
-            public static final double motor1_base = -9.571777;
-            public static final double motor2_base = -7.906;
-            public static final double pivot = 0.0;
-            public static final double shooterSpeed = -52.5;
-        }
-
-        public static class AMP_STAGE_1{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 0.0;
-            public static final double shooterSpeed = 0;
-        }
-
-        public static class AMP_STAGE_2{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 0.0;
-            public static final double shooterSpeed = -20;
-        }
-
-        public static class TRAP{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
-            public static final double pivot = 0.0; //46.939;
-            public static final double shooterSpeed = -20;
-        }
-
-        public static class PODIUM{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -15;
-            public static final double shooterSpeed = -52.5;
-        }
-
-        public static class WING{
-            public static final double motor1_base = -9.571777;
-            public static final double motor2_base = -7.906;
-            public static final double pivot = 0.0;
-            public static final double shooterSpeed = -20.5;
-        }
-
-        public static class HANDOFF{
-            public static final double motor1_base = START.motor1_base;
-            public static final double motor2_base = START.motor2_base;
-            public static final double pivot = -2.5;
-            public static final double shooterSpeed = 0;
-        }
-
-        public static class START{
-            public static final double motor1_base = 0.334;
-            public static final double motor2_base = -0.334;
-            public static final double pivot = -1.21;
-            public static final double shooterSpeed = 0;
-        }
-
-        public static final double PIVOT_MECHANICALLY_REQUIRED_POS = 7.8;
-        public static final double MOTOR_TOLERANCE = 0.6;
-
-        public static final double SHOOTER_SPEED = -50;
-        public static final double kShooterSpeedTolerance = 10.0;
-
-        /*THIS NEEDS TO INCLUDE THE CONVERSION FROM DEGREES TO ENCODER COUNTS */
-        public static final int BASE_ENCODER_RATIO = 50;
-        public static final int PIVOT_ENCODER_RATIO = 20;
-
-
-      // PID coefficients
-        public static final double kP = 0.1;
-        public static final double kI = 1e-4;
-        public static final double kD = 1;
-        public static final double kIz = 0;
-        public static final double kFF = 0;
-        public static final double kMaxOutput = 1;
-        public static final double kMinOutput = -1;
-
-        public static Position state = Position.START;
-        public static enum Position {
-            PODIUM,
-            SUB,
-            AMP,
-            TRAP,
-            START,
-            WING,
-            HANDOFF
-        }
-
-        public static void setState(String pos){
-            pos = pos.toLowerCase();
-            switch (pos) {
-                case "podium":
-                    state = Position.PODIUM;
-                    break;
-                case "sub":
-                    state = Position.SUB;
-                    break;
-                case "amp":
-                    state = Position.AMP;
-                    break;
-                case "trap":
-                    state = Position.TRAP;
-                    break;
-                case "wing":
-                    state = Position.WING;
-                    break;
-                case "handoff":
-                    state = Position.HANDOFF;
-                    break;
-                case "start":
-                    state = Position.START;
-                    break;
-                default:
-                    state = Position.START;
-                    break;
-            }
-        }
-
-        public String getState(){
-            return state.toString().toLowerCase();
-        }
-    }
-       
-    public static final class climberConstants
-    {
- 
-      public static final int tubeMotor_Left_ID = 38;    ///  reassign this to something else...
-      public static final int tubeMotor_Right_ID = 23;
-
-
-      public static final double climber_Increment = 64;
-
-      public static final double LEFT_BOTTOM_POSITION = -1.10;
-      public static final double RIGHT_BOTTOM_POSITION = 0.80;
-
-      public static final double LEFT_TOP_POSITION = -146.0;
-      public static final double RIGHT_TOP_POSITION = -146.0;
-
-
-      public static final double LEFT_MID_POSITION = -70.0;
-      public static final double RIGHT_MID_POSITION = -70.0;
-    
-    
     }
 
     public static class Vision {
@@ -487,59 +257,23 @@ public final class Constants {
         
     }
 
-    public static final class State {
-        public static robotState currentRobotState = robotState.IDLE;
+    public static class ArmConstants{
+        public static int leaderID = 26;
+        public static int followerTalon = 27;
+        public static int armEncoderID = 14;
+        public static double armEncoderOffsetRads = 0.0;
+        public static boolean leaderInverted = true;
 
+        /* Leader Motor PID Values */
+        public static final double leaderKP = 0.1;
+        public static final double leaderKI = 0.0;
+        public static final double leaderKD = 0.0;
+        public static final double leaderKF = 0.0;
 
-        enum robotState{
-            INTAKE, //the intake must be at ground note pickup position, the SAT must b flat, the note is stored in intake (for now)
-            IDLE, //the intake must be up, the SAT must be flat, the note is stored in feeder (part of SAT)
-            PIVOT, //the intake must be up, the SAT will move to angled position based on kinematics calculations, the note is stored in feeder (part of SAT)
-            SCORING //the intake must be up, the SAT must be at thge angled position, the note must move from feeders to flywheels  
-        }  
-   
-        // if intake IR does not detect note, the intake must keep spining; else, intake does not spin
-        // flywheel must always be spinning
-        // if robot state is SCORING, feeder must be spinning; else, feeder does not spin
-        // Big Question: can we combine IDLE and PIVOT??? (ans: yes, these will be done auto without driver from switching states)
+        public static int rotorToSensorRatio = 1;
+        public static int sensorToMechanismRatio = 1;
 
-
-        public static robotState getState(){
-            return currentRobotState;
-        }
-
-
-        public static void setState(String newState) {
-            switch (newState.toUpperCase()) {
-                case "INTAKE":
-                    currentRobotState = robotState.INTAKE;
-                    break;
-                case "IDLE":
-                    currentRobotState = robotState.IDLE;
-                    break;
-                case "PIVOT":
-                    currentRobotState = robotState.PIVOT;
-                    break;
-                case "SCORING":
-                    currentRobotState = robotState.SCORING;
-                    break;
-                default:
-                    currentRobotState = robotState.INTAKE; //do I want to do this?
-                    break;
-            }
-        }
-       
-    }
-
-    public static final class ScoringConstants {
-        public static ScoringMode currentScoringMode = ScoringMode.SUBWOOFER;
-        public enum ScoringMode {
-            WING,
-            AMP,
-            SUBWOOFER,
-            PODIUM,
-            TRAP
-        }
+        
     }
 
     public static boolean isWithinTol(double targetPose, double currentPose, double tolerance) {

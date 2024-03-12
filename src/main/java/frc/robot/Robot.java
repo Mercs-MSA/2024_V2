@@ -4,42 +4,12 @@
 
 package frc.robot;
 
-import java.io.IOException;
 import java.util.Optional;
-
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Transform3d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.Field2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
-import frc.robot.Constants.State.robotState;
-import frc.robot.Constants.Vision.aprilTagBackLeft;
-import frc.robot.commands.CommandChangeRobotHasNote;
-import frc.robot.commands.CommandShooterReverse;
-import frc.robot.commands.CommandShooterStart;
-import frc.robot.commands.CommandShooterStop;
-import frc.robot.commands.CommandSwerveToPoseProxy;
-import frc.robot.commands.BaseSubcommands.CommandBaseScoringPosition;
-import frc.robot.commands.BaseSubcommands.CommandBaseStartPosition;
-import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
-import frc.robot.commands.IndexSubcommands.CommandIndexStart;
-import frc.robot.commands.IndexSubcommands.CommandIndexStop;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
-import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
-import frc.robot.commands.PivotSubcommands.CommandPivotHandoffPosition;
-import frc.robot.commands.PivotSubcommands.CommandPivotScoringPosition;
-import frc.robot.commands.PivotSubcommands.CommandPivotStartPosition;
-// import frc.robot.subsystems.vision.ApriltagVision;
-import frc.robot.subsystems.climber.climber;
-import frc.robot.subsystems.SAT.SAT;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -56,9 +26,6 @@ public class Robot extends TimedRobot {
 
   private final RobotContainer m_robotContainer = new RobotContainer();
 
-  robotState currentRobotState = robotState.IDLE;
-
-  Field2d poseEstimateField2d = new Field2d();
   Pose2d apiltagPlusGyro = new Pose2d();
   private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
 
@@ -71,11 +38,15 @@ public class Robot extends TimedRobot {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
     m_robotContainer.configureButtonBindings();
-    Constants.State.setState("IDLE");
-    // Optional<Alliance> alliance = DriverStation.getAlliance();
-    // if (alliance.isPresent()) {
-    //   Constants.Vision.isRedAlliance = (alliance.get() == DriverStation.Alliance.Red);
-    // }
+
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    if (alliance.isPresent()) {
+      Constants.Vision.isRedAlliance = (alliance.get() == DriverStation.Alliance.Red);
+    }
+    else {
+      Constants.Vision.isRedAlliance = false;
+    }
+    SmartDashboard.putBoolean("Are we red alliance?", Constants.Vision.isRedAlliance);
   }
 
   /**
@@ -92,41 +63,11 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
-    SmartDashboard.putString("Current Robot State", Constants.State.getState().toString());
-    SmartDashboard.putString("Pose", RobotContainer.s_Swerve.getPose().toString());
-    SmartDashboard.putBoolean("Robot Has Note", Constants.IntakeConstants.kRobotHasNote);
-
-    SmartDashboard.putNumber("gyro yaw", m_robotContainer.s_Swerve.gyro.getAngle());
-
-    SmartDashboard.putBoolean("Are we red alliance?", Constants.Vision.isRedAlliance);
-
-    // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
-    // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
-    // SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
-    // SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
-    // SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
-    // SmartDashboard.putNumber("Climber Left motor Pos: ", m_robotContainer.m_climber.outputLeftData());
-    // SmartDashboard.putNumber("Climber Right motor Pos: ", m_robotContainer.m_climber.outputRightData());
-    // SmartDashboard.putNumber("Base1 Pos", m_robotContainer.m_SAT.outputBase1Data());
-    // SmartDashboard.putNumber("Base2 Pos", m_robotContainer.m_SAT.outputBase2Data());
-    // SmartDashboard.putNumber("Pivot Pos", m_robotContainer.m_SAT.outputPivotData());
-    //SmartDashboard.putNumber("MiniPC Input Voltage (volts)", Constants.Misc.Conversion_Factor*PSU_Volt_Monitor.getAverageVoltage());
-
-    // poseEstimateField2d.setRobotPose(RobotContainer.s_Swerve.poseEstimator.getEstimatedPosition());
-    // SmartDashboard.putData("estimated robot pose", poseEstimateField2d);
-
-    SmartDashboard.putData(CommandScheduler.getInstance());
-
-    SmartDashboard.putNumber("Intake Speed", m_robotContainer.m_intake.getIntakeMotorSpeed());
-    SmartDashboard.putNumber("Indexer Speed", m_robotContainer.m_intake.getIndexMotorSpeed());
-
-    SmartDashboard.putString("Scoring Mode", Constants.ScoringConstants.currentScoringMode.toString());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
-    resetAllMotorCommands();
   }
 
   @Override
@@ -137,83 +78,10 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    // // schedule the autonomous command (example)
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.schedule();
-    // }
-
-    m_robotContainer.s_Swerve.resetOdometry(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)));
-            new SequentialCommandGroup(
-              //fire note
-              new CommandPivotScoringPosition(m_robotContainer.m_SAT), // pivot move to whatever current mode is
-                    new CommandBaseScoringPosition(m_robotContainer.m_SAT), // base move to whatever current mode is
-
-                    new CommandIndexReverse(m_robotContainer.m_intake),
-                    new WaitCommand(0.1),
-                    new CommandIndexStop(m_robotContainer.m_intake),
-                    new CommandShooterStart(m_robotContainer.m_SAT), // shoot with speed of whatever current mode is
-                    new WaitCommand(1), // waiting for the note to leave robot
-                    new CommandIndexStart(m_robotContainer.m_intake),
-                    new WaitCommand(2), // waiting for the note to leave robot
-                    new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
-                        new CommandIndexStop(m_robotContainer.m_intake),
-                        new CommandShooterStop(m_robotContainer.m_SAT)
-                    ),
-                    new CommandChangeRobotHasNote(false),
-                    new WaitCommand(3),
-                    new CommandBaseStartPosition(m_robotContainer.m_SAT),
-                    new CommandPivotStartPosition(m_robotContainer.m_SAT),
-
-            //start handoof / intake
-            new CommandBaseStartPosition(m_robotContainer.m_SAT),
-            new CommandIndexStart(m_robotContainer.m_intake),
-            new CommandPivotHandoffPosition(m_robotContainer.m_SAT),
-            new CommandIntakeStart(m_robotContainer.m_intake),
-            new CommandShooterReverse(m_robotContainer.m_SAT),
-            new CommandChangeRobotHasNote(true),
-
-            //drive to note
-            new CommandSwerveToPoseProxy(
-                m_robotContainer.s_Swerve,
-                () -> 3.45,
-                () -> 5.54,
-                () -> 0),
-
-              new WaitCommand(3)
-            
-            // //speaker center 
-            // new CommandSwerveToPoseProxy(
-            //     m_robotContainer.s_Swerve,
-            //     () -> 1.38,
-            //     () -> 5.54,
-            //     () -> 0),
-
-                
-            // new WaitCommand(3),
-
-            //   //fire note
-            //   new CommandPivotScoringPosition(m_robotContainer.m_SAT), // pivot move to whatever current mode is
-            //         new CommandBaseScoringPosition(m_robotContainer.m_SAT), // base move to whatever current mode is
-
-            //         new CommandIndexReverse(m_robotContainer.m_intake),
-            //         new WaitCommand(0.1),
-            //         new CommandIndexStop(m_robotContainer.m_intake),
-            //         new CommandShooterStart(m_robotContainer.m_SAT), // shoot with speed of whatever current mode is
-            //         new WaitCommand(1), // waiting for the note to leave robot
-            //         new CommandIndexStart(m_robotContainer.m_intake),
-            //         new WaitCommand(2), // waiting for the note to leave robot
-            //         new ParallelCommandGroup( // Since Index and Shooter are different subsystems, stop both at same time
-            //             new CommandIndexStop(m_robotContainer.m_intake),
-            //             new CommandShooterStop(m_robotContainer.m_SAT)
-            //         ),
-            //         new CommandChangeRobotHasNote(false),
-            //         new WaitCommand(3),
-            //         new CommandBaseStartPosition(m_robotContainer.m_SAT),
-            //         new CommandPivotStartPosition(m_robotContainer.m_SAT)
-            ).schedule();
-
-    
-
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.schedule();
+    }
+  
     Constants.Vision.visionTurnedOn = false;
   }
 
@@ -227,11 +95,11 @@ public class Robot extends TimedRobot {
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
     // this line or comment it out.
-    // if (m_autonomousCommand != null) {
-    //   m_autonomousCommand.cancel();
-    // }
-    resetAllMotorCommands();
-    // Constants.Vision.visionTurnedOn = true;
+    if (m_autonomousCommand != null) {
+      m_autonomousCommand.cancel();
+    }
+
+    Constants.Vision.visionTurnedOn = true;
   }
 
   /** This function is called periodically during operator control. */
@@ -243,26 +111,10 @@ public class Robot extends TimedRobot {
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
-    resetAllMotorCommands();
   }
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
-
-
-  /** This function makes sure that all outstanding commands are cleared and that all motors are commanded to stop.
-   ** This should be run whenever you want to make sure that everything stops being controlled. */  
-  public void resetAllMotorCommands() {
-    CommandScheduler.getInstance().cancelAll();
-    m_robotContainer.m_SAT.resetMotors();
-    m_robotContainer.m_climber.resetMotors();
-    m_robotContainer.m_intake.resetMotors();
-  }
-
-  public void goToHomePos(){
-    m_robotContainer.m_SAT.goToHomePos();
-    m_robotContainer.m_climber.goToHomePos();
-  }
 
 }
