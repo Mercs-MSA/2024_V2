@@ -25,12 +25,12 @@ public class Arm extends SubsystemBase{
     // Hardware
     private final TalonFX leaderTalon;
     private final TalonFX followerTalon;
-    private CANcoder absoluteEncoder;
+    // private CANcoder absoluteEncoder;
 
     // Status Signals
     private final StatusSignal<Double> internalPositionRotations;
-    private final StatusSignal<Double> encoderAbsolutePositionRotations;
-    private final StatusSignal<Double> encoderRelativePositionRotations;
+    // private final StatusSignal<Double> encoderAbsolutePositionRotations;
+    // private final StatusSignal<Double> encoderRelativePositionRotations;
     private final StatusSignal<Double> velocityRps;
     private final List<StatusSignal<Double>> appliedVoltage;
     private final List<StatusSignal<Double>> supplyCurrent;
@@ -38,39 +38,57 @@ public class Arm extends SubsystemBase{
     private final PositionVoltage leaderVoltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
 
     // Config
-    private final TalonFXConfiguration config = new TalonFXConfiguration();
+    private final TalonFXConfiguration configLeader = new TalonFXConfiguration();
+    private final TalonFXConfiguration configFollower = new TalonFXConfiguration();
 
     public Arm(){
         leaderTalon = new TalonFX(ArmConstants.leaderID);
         followerTalon = new TalonFX(ArmConstants.followerTalon);
         followerTalon.setControl(new Follower(ArmConstants.leaderID, true));
-        absoluteEncoder = new CANcoder(ArmConstants.armEncoderID);
+        // absoluteEncoder = new CANcoder(ArmConstants.armEncoderID);
 
         CANcoderConfiguration armEncoderConfig = new CANcoderConfiguration();
         armEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
-        absoluteEncoder.getConfigurator().apply(armEncoderConfig, 1.0);
+        // absoluteEncoder.getConfigurator().apply(armEncoderConfig, 1.0);
 
         // Leader motor configs
-        config.Slot0.kP = ArmConstants.leaderKP;
-        config.Slot0.kI = ArmConstants.leaderKI;
-        config.Slot0.kD = ArmConstants.leaderKD;
-        config.Voltage.PeakForwardVoltage = 16;
-        config.Voltage.PeakReverseVoltage  = -16;
-        config.MotorOutput.Inverted =
+        configLeader.Slot0.kP = ArmConstants.leaderKP;
+        configLeader.Slot0.kI = ArmConstants.leaderKI;
+        configLeader.Slot0.kD = ArmConstants.leaderKD;
+        configLeader.Voltage.PeakForwardVoltage = 16;
+        configLeader.Voltage.PeakReverseVoltage  = -16;
+        configLeader.MotorOutput.Inverted =
         ArmConstants.leaderInverted
             ? InvertedValue.Clockwise_Positive
             : InvertedValue.CounterClockwise_Positive;
-        config.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        config.Feedback.FeedbackRemoteSensorID = ArmConstants.armEncoderID;
-        config.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
-        config.Feedback.RotorToSensorRatio = ArmConstants.rotorToSensorRatio;
-        config.Feedback.SensorToMechanismRatio = ArmConstants.sensorToMechanismRatio;
-        leaderTalon.getConfigurator().apply(config, 1.0);
+        configLeader.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        // configLeader.Feedback.FeedbackRemoteSensorID = ArmConstants.armEncoderID;
+        // configLeader.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        configLeader.Feedback.RotorToSensorRatio = ArmConstants.rotorToSensorRatio;
+        configLeader.Feedback.SensorToMechanismRatio = ArmConstants.sensorToMechanismRatio;
+        leaderTalon.getConfigurator().apply(configLeader, 1.0);
+
+        // Follower motor configs
+        configFollower.Slot0.kP = ArmConstants.leaderKP;
+        configFollower.Slot0.kI = ArmConstants.leaderKI;
+        configFollower.Slot0.kD = ArmConstants.leaderKD;
+        configFollower.Voltage.PeakForwardVoltage = 16;
+        configFollower.Voltage.PeakReverseVoltage  = -16;
+        configFollower.MotorOutput.Inverted =
+        ArmConstants.leaderInverted
+            ? InvertedValue.Clockwise_Positive
+            : InvertedValue.CounterClockwise_Positive;
+        configFollower.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+        // configFollower.Feedback.FeedbackRemoteSensorID = ArmConstants.armEncoderID;
+        // configFollower.Feedback.FeedbackSensorSource = FeedbackSensorSourceValue.RemoteCANcoder;
+        configFollower.Feedback.RotorToSensorRatio = ArmConstants.rotorToSensorRatio;
+        configFollower.Feedback.SensorToMechanismRatio = ArmConstants.sensorToMechanismRatio;
+        followerTalon.getConfigurator().apply(configFollower, 1.0);
 
         // Status signals
         internalPositionRotations = leaderTalon.getPosition();
-        encoderAbsolutePositionRotations = absoluteEncoder.getAbsolutePosition();
-        encoderRelativePositionRotations = absoluteEncoder.getPosition();
+        // encoderAbsolutePositionRotations = absoluteEncoder.getAbsolutePosition();
+        // encoderRelativePositionRotations = absoluteEncoder.getPosition();
         velocityRps = leaderTalon.getVelocity();
         appliedVoltage = List.of(leaderTalon.getMotorVoltage(), followerTalon.getMotorVoltage());
         supplyCurrent = List.of(leaderTalon.getSupplyCurrent(), followerTalon.getSupplyCurrent());
@@ -86,8 +104,8 @@ public class Arm extends SubsystemBase{
         tempCelsius.get(0),
         tempCelsius.get(1));
 
-        BaseStatusSignal.setUpdateFrequencyForAll(
-        1000, encoderAbsolutePositionRotations, encoderRelativePositionRotations);
+        // BaseStatusSignal.setUpdateFrequencyForAll(
+        // 1000, encoderAbsolutePositionRotations, encoderRelativePositionRotations);
 
     }
 
@@ -100,7 +118,7 @@ public class Arm extends SubsystemBase{
         SmartDashboard.putNumber("Follower Motor Temperature", leaderTalon.getDeviceTemp().getValueAsDouble());
         SmartDashboard.putNumber("Follower Motor Position", leaderTalon.getPosition().getValueAsDouble());
 
-        SmartDashboard.putNumber("Arm Cancoder", absoluteEncoder.getAbsolutePosition().getValueAsDouble());
+        // SmartDashboard.putNumber("Arm Cancoder", absoluteEncoder.getAbsolutePosition().getValueAsDouble());
     }
 
     public void setBrakeMode(boolean enabled){
@@ -118,14 +136,14 @@ public class Arm extends SubsystemBase{
         leaderTalon.setControl(leaderVoltagePosition.withPosition(pos));
     }
 
-    public void resetToAbsolute(){
-        double absolutePosition = getCANcoder().getRotations() - ArmConstants.angleOffset.getRotations();
-        leaderTalon.setPosition(absolutePosition);
-    }
+    // public void resetToAbsolute(){
+    //     double absolutePosition = getCANcoder().getRotations() - ArmConstants.angleOffset.getRotations();
+    //     leaderTalon.setPosition(absolutePosition);
+    // }
     
-    public Rotation2d getCANcoder(){
-        return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValue());
-    }
+    // public Rotation2d getCANcoder(){
+    //     return Rotation2d.fromRotations(absoluteEncoder.getAbsolutePosition().getValue());
+    // }
 
     public void stop(){
         leaderTalon.setControl(new NeutralOut());
