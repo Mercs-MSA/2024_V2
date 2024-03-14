@@ -5,10 +5,16 @@ import java.util.Map;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
+
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.commands.CommandDriveToPose;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.vision.ApriltagVision;
@@ -76,12 +82,37 @@ public class RobotContainer {
         
     }
 
+    // /**
+    //  * Use this to pass the autonomous command to the main {@link Robot} class.
+    //  *
+    //  * @return the command to run in autonomous
+    //  */
+    // public Command getAutonomousCommand() {
+    //     return autoChooser.getSelected();
+    // }
+
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        return new SequentialCommandGroup(
+            new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(2.85, 5.60, Rotation2d.fromDegrees(0))),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(2.67, 4.09, Rotation2d.fromDegrees(0))),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(2.77, 7.09, Rotation2d.fromDegrees(0))),
+
+            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))) //sub
+
+        );
     }
+
 }
