@@ -7,6 +7,7 @@ import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SwerveControllerCommand;
 
@@ -16,6 +17,10 @@ public class SwerveTrajectoryCommand extends Command {
     private Trajectory trajectory;
     private boolean firstCommand;
     private ProfiledPIDController thetaController;
+    private final PIDController xController =
+      new PIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD);
+    private final PIDController yController =
+      new PIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD);
 
     public SwerveTrajectoryCommand(Swerve s_Swerve, Trajectory trajectory, boolean firstCommand){
         this.trajectory = trajectory;
@@ -39,8 +44,8 @@ public class SwerveTrajectoryCommand extends Command {
                 this.trajectory,
                 this.s_Swerve::getPose,
                 Constants.Swerve.swerveKinematics,
-                new PIDController(Constants.AutoConstants.kPXController, 0, 0),
-                new PIDController(Constants.AutoConstants.kPYController, 0, 0),
+                xController,
+                yController,
                 this.thetaController,
                 this.s_Swerve::setModuleStates,
                 this.s_Swerve);
@@ -58,8 +63,9 @@ public class SwerveTrajectoryCommand extends Command {
   
     @Override
     public boolean isFinished() {
-        return Constants.isPoseWithinTol(this.trajectory.getStates().get(this.trajectory.getStates().size()-1).poseMeters, 
-                                        this.s_Swerve.getPose(), 
-                                        Constants.AutoConstants.tol);
+        // return Constants.isPoseWithinTol(this.trajectory.getStates().get(this.trajectory.getStates().size()-1).poseMeters, 
+        //                                 this.s_Swerve.getPose(), 
+        //                                 Constants.AutoConstants.tol);
+        return xController.atSetpoint() && yController.atSetpoint() && thetaController.atGoal();
     }
 }

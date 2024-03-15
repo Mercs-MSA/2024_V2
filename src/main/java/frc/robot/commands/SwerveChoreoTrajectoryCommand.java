@@ -16,25 +16,33 @@ import frc.robot.subsystems.Swerve;
 public class SwerveChoreoTrajectoryCommand extends Command{
     private Swerve s_Swerve;
     private ChoreoTrajectory trajectory;
+    private PIDController thetaController;
+    private final PIDController xController =
+        new PIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD);
+    private final PIDController yController =
+        new PIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD);
 
     public SwerveChoreoTrajectoryCommand(Swerve s_Swerve, ChoreoTrajectory trajectory){
         this.s_Swerve = s_Swerve;
         this.trajectory = trajectory;
+        this.thetaController =
+        new PIDController(
+            Constants.AutoConstants.kPThetaController, 0, 0);
+        this.thetaController.enableContinuousInput(-Math.PI, Math.PI);
         addRequirements(s_Swerve);
     }
 
     @Override
     public void initialize() {
-        var thetaController = new PIDController(Constants.AutoConstants.kPThetaController, 0, 0);
-        thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
         Command swerveCommand = Choreo.choreoSwerveCommand(
             trajectory, // Choreo trajectory from above
             s_Swerve::getPose, // A function that returns the current field-relative pose of the robot: your
                                 // wheel or vision odometry
-            new PIDController(4, 0.0, 0.0), // PIDController for field-relative X
+            xController, // PIDController for field-relative X
                                                                                     // translation (input: X error in meters,
                                                                                     // output: m/s).
-            new PIDController(4, 0.0, 0.0), // PIDController for field-relative Y
+            yController, // PIDController for field-relative Y
                                                                                     // translation (input: Y error in meters,
                                                                                     // output: m/s).
             thetaController, // PID constants to correct for rotation
@@ -63,6 +71,7 @@ public class SwerveChoreoTrajectoryCommand extends Command{
   
     @Override
     public boolean isFinished() {
-        return Constants.isPoseWithinTol(trajectory.getFinalPose(), s_Swerve.getPose(), Constants.AutoConstants.tol);
+        // return Constants.isPoseWithinTol(trajectory.getFinalPose(), s_Swerve.getPose(), Constants.AutoConstants.tol);
+        return xController.atSetpoint() && yController.atSetpoint() && thetaController.atSetpoint();
     }
 }
