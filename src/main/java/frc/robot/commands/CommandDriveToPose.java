@@ -6,28 +6,28 @@ import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.CommandSwerveDrivetrain;
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve;
 
 public class CommandDriveToPose extends Command {
 
-  private final Swerve swerve;
+  private final CommandSwerveDrivetrain swerve;
   private Pose2d desiredPose;
 
   private final ProfiledPIDController xController =
-      new ProfiledPIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(4, 3.0));
+      new ProfiledPIDController(3.2, 0, 0, new TrapezoidProfile.Constraints(4, 3.2));
   private final ProfiledPIDController yController =
-      new ProfiledPIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(4, 3.0));
+      new ProfiledPIDController(3.2, 0, 0, new TrapezoidProfile.Constraints(4, 3.2));
   private final ProfiledPIDController thetaController =
-      new ProfiledPIDController(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
+      new ProfiledPIDController(3, 0, 0, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
 
-  public CommandDriveToPose(Swerve swerve, Pose2d pose) {
+  public CommandDriveToPose(CommandSwerveDrivetrain swerve, Pose2d pose) {
     this.swerve = swerve;
     this.desiredPose = pose;
 
-    xController.setTolerance(0.01);
-    yController.setTolerance(0.01);
-    thetaController.setTolerance(Units.degreesToRadians(1));
+    xController.setTolerance(0.2);
+    yController.setTolerance(0.2);
+    thetaController.setTolerance(Units.degreesToRadians(2.5));
     thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
     addRequirements(swerve);
@@ -35,7 +35,7 @@ public class CommandDriveToPose extends Command {
 
   @Override
   public void initialize() {
-    var currPose = swerve.getPose();
+    var currPose = swerve.getState().Pose;
     xController.reset(currPose.getX());
     yController.reset(currPose.getY());
     thetaController.reset(currPose.getRotation().getRadians());
@@ -43,7 +43,7 @@ public class CommandDriveToPose extends Command {
 
   @Override
   public void execute() {
-    var currPose = swerve.getPose();
+    var currPose = swerve.getState().Pose;
     var targetPose = desiredPose;
 
     double xvelocity = xController.calculate(currPose.getX(), targetPose.getX());
@@ -58,9 +58,9 @@ public class CommandDriveToPose extends Command {
       thetaVelocity = 0.0;
     }
 
-    swerve.driveRobotRelative(
+    swerve.setControl(swerve.AutoRequest.withSpeeds(
         ChassisSpeeds.fromFieldRelativeSpeeds(
-            xvelocity, yvelocity, thetaVelocity, currPose.getRotation()));
+            xvelocity, yvelocity, thetaVelocity, currPose.getRotation())));
   }
 
   public boolean atGoal() {

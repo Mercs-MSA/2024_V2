@@ -1,6 +1,5 @@
 package frc.robot.subsystems.vision;
 
-import java.nio.ByteBuffer;
 import java.util.Optional;
 
 import org.photonvision.EstimatedRobotPose;
@@ -10,16 +9,13 @@ import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.estimation.TargetModel;
 import org.photonvision.targeting.PhotonPipelineResult;
 
-import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.util.struct.Struct;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve;
+import frc.robot.Robot;
 
 public class ApriltagVision extends SubsystemBase {
   
@@ -56,12 +52,12 @@ public class ApriltagVision extends SubsystemBase {
               mFrontRightAprilTagResult = mFrontRightCam.getLatestResult();
 
               if (mFrontRightAprilTagResult.targets.size() >= 2 || (mFrontRightAprilTagResult.targets.size() == 1 && mFrontRightAprilTagResult.getBestTarget().getPoseAmbiguity() < Constants.Vision.APRILTAG_AMBIGUITY_THRESHOLD)){
-                mFrontRight = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
+                mFrontRight = getBackLeftEstimatedGlobalPose(Robot.m_robotContainer.drivetrain.getState().Pose, mFrontRightAprilTagResult);
 
                 mFrontRight.ifPresent(frontRight -> {
-                  Swerve.poseEstimator.addVisionMeasurement(
+                  Robot.m_robotContainer.drivetrain.addVisionMeasurement(
                           new Pose2d(frontRight.estimatedPose.toPose2d().getTranslation(),
-                                  Swerve.poseEstimator.getEstimatedPosition().getRotation()),
+                                  Robot.m_robotContainer.drivetrain.getState().Pose.getRotation()),
                           Timer.getFPGATimestamp() - mFrontRightAprilTagResult.getLatencyMillis());
                 });
               }
@@ -71,12 +67,12 @@ public class ApriltagVision extends SubsystemBase {
               mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
 
               if (mBackLeftAprilTagResult.targets.size() >= 2 || (mBackLeftAprilTagResult.targets.size() == 1 && mBackLeftAprilTagResult.getBestTarget().getPoseAmbiguity() < Constants.Vision.APRILTAG_AMBIGUITY_THRESHOLD)){
-                mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
+                mBackLeft = getFrontRightEstimatedGlobalPose(Robot.m_robotContainer.drivetrain.getState().Pose, mBackLeftAprilTagResult);
 
                 mBackLeft.ifPresent(backLeft -> {
-                    Swerve.poseEstimator.addVisionMeasurement(
+                    Robot.m_robotContainer.drivetrain.addVisionMeasurement(
                             new Pose2d(backLeft.estimatedPose.toPose2d().getTranslation(),
-                                    Swerve.poseEstimator.getEstimatedPosition().getRotation()),
+                                    Robot.m_robotContainer.drivetrain.getState().Pose.getRotation()),
                             Timer.getFPGATimestamp() - mFrontRightAprilTagResult.getLatencyMillis());
                 });
               }

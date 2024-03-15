@@ -9,7 +9,6 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.subsystems.Swerve;
 
 public class CustomGamePieceVision extends SubsystemBase{
     private NetworkTableInstance ntInst;
@@ -76,16 +75,6 @@ public class CustomGamePieceVision extends SubsystemBase{
         return gamePieceDist;
     }
 
-
-    /**
-     * Align center of camera with game piece
-     * @param Swerve drive subsystem
-     */
-    public void alignNoteYaw(Swerve swerve) {
-        if (visionOk) {
-            swerve.drive(new Translation2d(0, 0), gamePieceYaw/20, false, true);
-        }
-    }
 
      /**
      * Generate yaw command based on Note sighting from the camera

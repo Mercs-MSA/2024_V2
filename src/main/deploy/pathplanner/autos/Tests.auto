@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.38,
-      "y": 5.54
+      "x": 4.061722123444247,
+      "y": 5.038789506150441
     },
     "rotation": 0
   },
@@ -12,20 +12,13 @@
     "data": {
       "commands": [
         {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "CenterLeave"
+            "pathName": "SimplePath"
           }
         }
       ]
     }
   },
-  "folder": null,
-  "choreoAuto": false
+  "folder": null
 }
