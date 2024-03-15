@@ -1,4 +1,4 @@
-package frc.robot.subsystems.arm;
+package frc.robot.subsystems.pivot;
 
 import java.util.List;
 
@@ -17,7 +17,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ArmConstants;
 
-public class Arm extends SubsystemBase{
+public class Pivot extends SubsystemBase{
     // Hardware
     private final TalonFX leaderTalon;
     private final TalonFX followerTalon;
@@ -34,7 +34,9 @@ public class Arm extends SubsystemBase{
     private final TalonFXConfiguration configLeader = new TalonFXConfiguration();
     private final TalonFXConfiguration configFollower = new TalonFXConfiguration();
 
-    public Arm(){
+    private double targetPose;
+
+    public Pivot(){
         leaderTalon = new TalonFX(ArmConstants.leaderID);
         followerTalon = new TalonFX(ArmConstants.followerTalon);
         followerTalon.setControl(new Follower(ArmConstants.leaderID, true));
@@ -56,21 +58,22 @@ public class Arm extends SubsystemBase{
         configLeader.Feedback.RotorToSensorRatio = ArmConstants.rotorToSensorRatio;
         configLeader.Feedback.SensorToMechanismRatio = ArmConstants.sensorToMechanismRatio;
         leaderTalon.getConfigurator().apply(configLeader, 1.0);
+        followerTalon.getConfigurator().apply(configLeader, 1.0);
 
-        // Follower motor configs
-        configFollower.Slot0.kP = ArmConstants.leaderKP;
-        configFollower.Slot0.kI = ArmConstants.leaderKI;
-        configFollower.Slot0.kD = ArmConstants.leaderKD;
-        configFollower.Voltage.PeakForwardVoltage = 16;
-        configFollower.Voltage.PeakReverseVoltage  = -16;
-        configFollower.MotorOutput.Inverted =
-        ArmConstants.leaderInverted
-            ? InvertedValue.Clockwise_Positive
-            : InvertedValue.CounterClockwise_Positive;
-        configFollower.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-        configFollower.Feedback.RotorToSensorRatio = ArmConstants.rotorToSensorRatio;
-        configFollower.Feedback.SensorToMechanismRatio = ArmConstants.sensorToMechanismRatio;
-        followerTalon.getConfigurator().apply(configFollower, 1.0);
+        // // Follower motor configs
+        // configFollower.Slot0.kP = ArmConstants.leaderKP;
+        // configFollower.Slot0.kI = ArmConstants.leaderKI;
+        // configFollower.Slot0.kD = ArmConstants.leaderKD;
+        // configFollower.Voltage.PeakForwardVoltage = 16;
+        // configFollower.Voltage.PeakReverseVoltage  = -16;
+        // configFollower.MotorOutput.Inverted =
+        // ArmConstants.leaderInverted
+        //     ? InvertedValue.Clockwise_Positive
+        //     : InvertedValue.CounterClockwise_Positive;
+        // configFollower.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+        // configFollower.Feedback.RotorToSensorRatio = ArmConstants.rotorToSensorRatio;
+        // configFollower.Feedback.SensorToMechanismRatio = ArmConstants.sensorToMechanismRatio;
+        
 
         // Status signals
         internalPositionRotations = leaderTalon.getPosition();
@@ -88,6 +91,10 @@ public class Arm extends SubsystemBase{
         supplyCurrent.get(1),
         tempCelsius.get(0),
         tempCelsius.get(1));
+
+        leaderTalon.setPosition(0);
+        followerTalon.setPosition(0);
+        
     }
 
     @Override
@@ -96,8 +103,8 @@ public class Arm extends SubsystemBase{
         SmartDashboard.putNumber("Leader Motor Position", leaderTalon.getPosition().getValueAsDouble());
 
 
-        SmartDashboard.putNumber("Follower Motor Temperature", leaderTalon.getDeviceTemp().getValueAsDouble());
-        SmartDashboard.putNumber("Follower Motor Position", leaderTalon.getPosition().getValueAsDouble());
+        SmartDashboard.putNumber("Follower Motor Temperature", followerTalon.getDeviceTemp().getValueAsDouble());
+        SmartDashboard.putNumber("Follower Motor Position", followerTalon.getPosition().getValueAsDouble());
     }
 
     public void setBrakeMode(boolean enabled){
@@ -105,9 +112,13 @@ public class Arm extends SubsystemBase{
         followerTalon.setNeutralMode(enabled ? NeutralModeValue.Brake : NeutralModeValue.Coast);
     }
 
+    public double getLeaderPos(){
+        return leaderTalon.getPosition().getValueAsDouble();
+    }
+
     // This is for test purposes only
     public void leaderGoToPositionIncrement(double increment) {
-        double targetPose = leaderTalon.getPosition().getValueAsDouble() + (increment);
+        targetPose = targetPose + (increment*2);
         leaderTalon.setControl(leaderVoltagePosition.withPosition(targetPose));
     }
 

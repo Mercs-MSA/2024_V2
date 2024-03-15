@@ -114,10 +114,10 @@ public final class Constants {
          /* Module Specific Constants */
         /* Front Left Module - Module 0 */
         public static final class Mod0 {
-            public static final int driveMotorID = 39;
-            public static final int angleMotorID = 40;
-            public static final int canCoderID = 11;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(61.34765625);
+            public static final int driveMotorID = 14;
+            public static final int angleMotorID = 15;
+            public static final int canCoderID = 4;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(61.787);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -125,20 +125,20 @@ public final class Constants {
 
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
-            public static final int driveMotorID = 36;
-            public static final int angleMotorID = 37;
-            public static final int canCoderID = 10;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(83.232421875 + 180); //-98.525390625 or //83.232421875 - 180
+            public static final int driveMotorID = 11;
+            public static final int angleMotorID = 13;
+            public static final int canCoderID = 1;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-61.436); //-98.525390625 or //83.232421875 - 180
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
        
         /* Back Left Module - Module 2 */
         public static final class Mod2 {
-            public static final int driveMotorID = 31;
-            public static final int angleMotorID = 33;
-            public static final int canCoderID = 13;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(47.373046875);
+            public static final int driveMotorID = 8;
+            public static final int angleMotorID = 12;
+            public static final int canCoderID = 2;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(91.582 + 180);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -146,12 +146,38 @@ public final class Constants {
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {
-            public static final int driveMotorID = 34;
-            public static final int angleMotorID = 35;
-            public static final int canCoderID = 12;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-73.037109375 + 180);
+            public static final int driveMotorID = 10;
+            public static final int angleMotorID = 6;
+            public static final int canCoderID = 3;
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(46.934);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
+        }
+    }
+
+    public static final class SATConstants {
+        public static final class SUB{
+            public static final double pivot = 0.0;
+            public static final double shooter1 = 0.0;
+            public static final double shooter2 = 0.0;
+        }
+
+        public static final class AMP{
+            public static final double pivot = 0.0;
+            public static final double shooter1 = 0.0;
+            public static final double shooter2 = 0.0;
+        }
+
+        public static final class PODIUM{
+            public static final double pivot = 0.0;
+            public static final double shooter1 = 0.0;
+            public static final double shooter2 = 0.0;
+        }
+        
+        public static final class WING{
+            public static final double pivot = 0.0;
+            public static final double shooter1 = 0.0;
+            public static final double shooter2 = 0.0;
         }
     }
 
@@ -187,6 +213,12 @@ public final class Constants {
         public static boolean isRedAlliance = false;
 
         public static double gamePieceYawOffset = -56.088;
+
+        public static final Pose2d centerFace =
+        new Pose2d(
+            Units.inchesToMeters(35.775),
+            Units.inchesToMeters(218.416),
+            Rotation2d.fromDegrees(180));
 
         /**
          * Minimum target ambiguity. Targets with higher ambiguity will be discarded. Not appliable when multiple tags are
@@ -271,13 +303,19 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+
+        public double pivotAngleCalculator(Pose2d currentPose){
+            double distance = Math.sqrt(Math.pow(centerFace.getX() - currentPose.getX(), 2)) + Math.pow(centerFace.getY() - currentPose.getY(), 2);
+
+            return distance*1;//math
+        }
         
     }
 
     public static class ArmConstants{
-        public static int leaderID = 26;
-        public static int followerTalon = 27;
-        public static int armEncoderID = 14;
+        public static int leaderID = 5;
+        public static int followerTalon = 7;
+        // public static int armEncoderID = 14;
         public static double armEncoderOffsetRads = 0.0;
         public static boolean leaderInverted = true;
 
@@ -290,15 +328,16 @@ public final class Constants {
         public static int rotorToSensorRatio = 1;
         public static int sensorToMechanismRatio = 1;
         public static Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
+        public static double tol = 0.6;
     }
 
     public static class IntakeConstants{
-        public static int kIntakeMotorId = 28;
+        public static int kIntakeMotorId = 9;
         public static int kIntakeMotorSpeed = 85;
     }
 
     public static class IndexConstants{
-        public static int kIndexMotorId = 29;
+        public static int kIndexMotorId = 17;
         public static int kIndexMotorSpeed = 85;
     }
 
@@ -360,6 +399,18 @@ public class AllianceFlipUtil {
         && DriverStation.getAlliance().get() == Alliance.Red;
     }
 }
+
+    public static final class ScoringConstants {
+        public static ScoringMode currentScoringMode = ScoringMode.SUBWOOFER;
+        public enum ScoringMode {
+            WING,
+            AMP,
+            SUBWOOFER,
+            PODIUM,
+            TRAP,
+            AUTOAIM
+        }
+    }
 
     public static boolean isWithinTol(double targetPose, double currentPose, double tolerance) {
         return (Math.abs(targetPose - currentPose) <= tolerance);

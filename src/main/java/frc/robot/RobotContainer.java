@@ -12,11 +12,28 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import frc.robot.Constants.SATConstants;
+import frc.robot.Constants.ScoringConstants;
 import frc.robot.commands.CommandDriveToPose;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
+import frc.robot.commands.IndexSubcommands.CommandIndexStart;
+import frc.robot.commands.IndexSubcommands.CommandIndexStopNeutral;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
+import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
+import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
+import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.index.Index;
+import frc.robot.subsystems.intake.Intake;
+import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.ApriltagVision;
 // import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
@@ -35,6 +52,10 @@ public class RobotContainer {
 
     /* Subsystems */
     public static final Swerve s_Swerve = new Swerve();
+    public static final Intake m_intake = new Intake();
+    public static final Index m_index = new Index();
+    public static final Pivot m_pivot = new Pivot();
+    public static final Shooter m_shooter = new Shooter();
 
     public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_yaw", "note_dist");
     public ApriltagVision m_ApriltagVision = new ApriltagVision();
@@ -79,7 +100,99 @@ public class RobotContainer {
     }
 
     public void operatorControls(){
+        // operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
+        // operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
+        // operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
         
+        operator.leftBumper()
+        .onTrue(
+            intakeNote()
+        )
+        .onFalse(
+            new ParallelCommandGroup(
+                new CommandIntakeStopNeutral(m_intake),
+                new CommandIndexStopNeutral(m_index)
+            )
+        );
+
+        operator.rightBumper()
+        .onTrue(
+            expelNote()
+        )
+        .onFalse(
+            stopIntakeIndexNeutral()
+        );
+
+        operator.a()
+        .onTrue(
+            new CommandShooterStart(m_shooter, 25, 25)
+        )
+        .onFalse(
+            new CommandShooterStopNeutral(m_shooter)
+        );
+
+        operator.pov(0).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(0.25), m_pivot));
+        operator.pov(180).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(-0.25), m_pivot));
+    }
+
+    public Command intakeNote(){
+        return new ParallelCommandGroup(
+                new CommandIntakeStart(m_intake),
+                new CommandIndexStart(m_index)
+        );
+        
+    }
+
+    public Command expelNote(){
+        return new ParallelCommandGroup(
+                new CommandIndexReverse(m_index),
+                new CommandIntakeReverse(m_intake)
+        );
+    }
+
+    public Command scoreNote(){
+        double pivotPos = 0.0;
+        double shooterMotorSpeed1 = 0.0;
+        double shooterMotorSpeed2 = 0.0;
+        switch (ScoringConstants.currentScoringMode) {
+            case PODIUM:
+                pivotPos = SATConstants.PODIUM.pivot;
+                shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
+                shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
+                break;
+            case SUBWOOFER:
+                pivotPos = SATConstants.SUB.pivot;
+                shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
+                shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
+                break;
+            case WING:
+                pivotPos = SATConstants.WING.pivot;
+                shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
+                shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
+                break;
+            case AUTOAIM:
+                pivotPos = SATConstants.SUB.pivot;
+                shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
+                shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
+                break;
+            default:
+                pivotPos = SATConstants.SUB.pivot;
+                shooterMotorSpeed1 = SATConstants.SUB.shooter1;
+                shooterMotorSpeed2 = SATConstants.SUB.shooter2;
+                break;
+        }
+
+        return new SequentialCommandGroup(
+            new CommandPivotToPose(m_pivot, pivotPos),
+            new CommandShooterStart(m_shooter, shooterMotorSpeed1, shooterMotorSpeed2)
+        );
+    }
+
+    public Command stopIntakeIndexNeutral(){
+        return new ParallelCommandGroup(
+            new CommandIntakeStopNeutral(m_intake),
+            new CommandIndexStopNeutral(m_index)
+        );
     }
 
     // /**
