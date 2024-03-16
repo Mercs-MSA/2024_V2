@@ -161,7 +161,7 @@ public final class Constants {
         }
 
         public static final class AMP{
-            public static final double pivot = 138.4;
+            public static final double pivot = 166.4291992;
             public static final double shooter1 = -20;
             public static final double shooter2 = -20;
         }

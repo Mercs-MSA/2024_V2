@@ -12,7 +12,6 @@ import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.shooter.Shooter;
 
 public class CommandScoreDriver extends Command {
-    private double pivotPos = 0;
     private double shooterMotorSpeed1, shooterMotorSpeed2 = 0;
     private Pivot m_pivot;
     private Amper m_amper;
@@ -20,8 +19,7 @@ public class CommandScoreDriver extends Command {
     private Shooter m_shooter;
     private AmperMotor m_amperMotor;
 
-    public CommandScoreDriver(Pivot m_pivot, Amper m_amper, Index m_index, Shooter m_shooter, AmperMotor m_amperMotor) {
-        this.m_pivot = m_pivot;
+    public CommandScoreDriver(Amper m_amper, Index m_index, Shooter m_shooter, AmperMotor m_amperMotor) {
         this.m_amper = m_amper;
         this.m_index = m_index;
         this.m_shooter = m_shooter;

@@ -20,6 +20,7 @@ import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
+import frc.robot.commands.CommandScoreDriver;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorReverse;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStart;
@@ -102,13 +103,26 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         driverControls();
-        // operatorControls();
-        manualTesting();
+        operatorControls();
+        // manualTesting();
 
     }
 
     public void driverControls(){
-        
+        driver.rightBumper().onTrue(
+            // new CommandScoreDriver(m_amper, m_index, m_shooter, m_amperMotor)
+            new ParallelCommandGroup(
+                new CommandAmperMotorStart(m_amperMotor),
+                new CommandIndexStart(m_index),
+                new CommandShooterStart(m_shooter, -15, -15)
+            )
+        )
+        .onFalse(
+            stopIntakeIndexShooterAmperNeutral()
+        );
+        // driver.getRightTriggerAxis().greaterTh(
+        //    new CommandScoreDriver(m_pivot, m_amper, m_index, m_shooter, m_amperMotor); 
+        // );
     }
 
     public void manualTesting(){
@@ -164,10 +178,10 @@ public class RobotContainer {
             stopIntakeIndexShooterAmperNeutral()
         );
 
-        // operator.a().onTrue(
-        //     new CommandPivotToPose(m_pivot, 0.2)
+        operator.a().onTrue(
+            new CommandPivotToPose(m_pivot, 0.2)
 
-        // );
+        );
 
         operator.y().onTrue(
             shootNote(0, -35)
