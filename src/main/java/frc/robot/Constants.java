@@ -170,8 +170,8 @@ public final class Constants {
 
         public static final class PODIUM{
             public static final double pivot = 0.0;
-            public static final double shooter1 = -60.0;
-            public static final double shooter2 = -60.0;
+            public static final double shooter1 = -45.0;
+            public static final double shooter2 = -45.0;
         }
         
         public static final class WING{
@@ -304,7 +304,7 @@ public final class Constants {
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
-        public double pivotAngleCalculator(Pose2d currentPose){
+        public static double pivotAngleCalculator(Pose2d currentPose){
             double distance = Math.sqrt(Math.pow(centerFace.getX() - currentPose.getX(), 2)) + Math.pow(centerFace.getY() - currentPose.getY(), 2);
 
             return distance*1;//math

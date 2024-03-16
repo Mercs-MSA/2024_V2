@@ -15,7 +15,11 @@ import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.Robot;
+import frc.robot.subsystems.Swerve;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.ScoringConstants;
 
 public class Pivot extends SubsystemBase{
     // Hardware
