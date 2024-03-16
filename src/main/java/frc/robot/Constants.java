@@ -40,7 +40,7 @@ public final class Constants {
 
         /* Swerve Kinematics
          * No need to ever change this unless you are not doing a traditional rectangular/square 4 module swerve */
-         public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
+        public static final SwerveDriveKinematics swerveKinematics = new SwerveDriveKinematics(
             new Translation2d(wheelBase / 2.0, trackWidth / 2.0),
             new Translation2d(wheelBase / 2.0, -trackWidth / 2.0),
             new Translation2d(-wheelBase / 2.0, trackWidth / 2.0),
@@ -122,7 +122,6 @@ public final class Constants {
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
 
-
         /* Front Right Module - Module 1 */
         public static final class Mod1 {
             public static final int driveMotorID = 11;
@@ -142,7 +141,6 @@ public final class Constants {
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
-
 
         /* Back Right Module - Module 3 */
         public static final class Mod3 {

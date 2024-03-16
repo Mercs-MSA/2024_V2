@@ -27,12 +27,7 @@ public class Shooter extends SubsystemBase {
   private final TalonFX shooterMotor1 = new TalonFX(ShooterConstants.kshooterMotor1Id);
   private final PositionVoltage shooterMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final VelocityVoltage shooterMotor_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
-
-
   private double shooterMotorPos;
-  private double shooterMotorSpeed;
-
-
 
   /** Creates a new Index. */
   public Shooter() {
