@@ -1,5 +1,6 @@
 package frc.robot.commands.PivotSubcommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.pivot.Pivot;
@@ -17,6 +18,7 @@ public class CommandPivotToPose extends Command {
   @Override
   public void initialize() {
     m_pivot.leaderGoToPosition(pos);
+    SmartDashboard.putNumber("pivot is trying to go to this pos", pos);
   }
 
   @Override

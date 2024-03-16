@@ -21,6 +21,9 @@ import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorReverse;
+import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStart;
+import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStopNeutral;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
 import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
@@ -34,6 +37,7 @@ import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.amper.Amper;
+import frc.robot.subsystems.amperMotor.AmperMotor;
 import frc.robot.subsystems.index.Index;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.pivot.Pivot;
@@ -61,6 +65,7 @@ public class RobotContainer {
     public static final Pivot m_pivot = new Pivot();
     public static final Shooter m_shooter = new Shooter();
     public static final Amper m_amper = new Amper();
+    public static final AmperMotor m_amperMotor = new AmperMotor();
 
     public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_yaw", "note_dist");
     public ApriltagVision m_ApriltagVision = new ApriltagVision();
@@ -97,8 +102,8 @@ public class RobotContainer {
 
     public void configureButtonBindings() {
         driverControls();
-        operatorControls();
-        // manualTesting();
+        // operatorControls();
+        manualTesting();
 
     }
 
@@ -109,13 +114,27 @@ public class RobotContainer {
     public void manualTesting(){
         operator.pov(0).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(0.25), m_pivot));
         operator.pov(180).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(-0.25), m_pivot));
+
+        // operator.a().onTrue(
+        //     new CommandAmperMotorReverse(m_amperMotor)
+        // )
+        // .onFalse(
+        //     new CommandAmperMotorStopNeutral(m_amperMotor)
+        // );
+
+        // operator.y().onTrue(
+        //     new CommandAmperMotorStart(m_amperMotor)
+        // )
+        // .onFalse(
+        //     new CommandAmperMotorStopNeutral(m_amperMotor)
+        // );
     }
 
     public void operatorControls(){
         operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.AUTOAIM));
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
-        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
-        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
+        operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
         
         operator.leftBumper()
         .onTrue(
@@ -142,7 +161,16 @@ public class RobotContainer {
             scoreNote()
         )
         .onFalse(
-            new CommandShooterStopNeutral(m_shooter)
+            stopIntakeIndexShooterAmperNeutral()
+        );
+
+        // operator.a().onTrue(
+        //     new CommandPivotToPose(m_pivot, 0.2)
+
+        // );
+
+        operator.y().onTrue(
+            shootNote(0, -35)
         );
 
     }
@@ -162,10 +190,19 @@ public class RobotContainer {
         );
     }
 
+    public Command goToStart(){
+        return new CommandPivotToPose(m_pivot, Constants.SATConstants.START.pivot);
+    }
+
+    public void periodic(){
+
+    }
+
     public Command scoreNote(){
         double pivotPos = 0.0;
         double shooterMotorSpeed1 = 0.0;
         double shooterMotorSpeed2 = 0.0;
+        SmartDashboard.putNumber("pivotPosVariable", pivotPos);
         switch (ScoringConstants.currentScoringMode) {
             case PODIUM:
                 pivotPos = SATConstants.PODIUM.pivot;
@@ -187,6 +224,11 @@ public class RobotContainer {
                 shooterMotorSpeed1 = SATConstants.AMP.shooter1;
                 shooterMotorSpeed2 = SATConstants.AMP.shooter2;
                 break;
+            case START:
+                pivotPos = SATConstants.START.pivot;
+                shooterMotorSpeed1 = SATConstants.START.shooter1;
+                shooterMotorSpeed2 = SATConstants.START.shooter2;
+                break;
             default:
                 pivotPos = SATConstants.SUB.pivot;
                 shooterMotorSpeed1 = SATConstants.SUB.shooter1;
@@ -195,18 +237,23 @@ public class RobotContainer {
         }
 
         return new SequentialCommandGroup(
-            new ConditionalCommand(
-                new CommandPivotToPose(m_pivot, Constants.Vision.pivotAngleCalculator(Swerve.poseEstimator.getEstimatedPosition())),
-                new CommandPivotToPose(m_pivot, pivotPos), 
-                () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AUTOAIM),
+            new ParallelCommandGroup(
                 new ConditionalCommand(
-                new CommandAmperScoreAmp(m_amper),
-                new CommandAmperScoreNote(m_amper), 
-                () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AMP),
-            new CommandShooterStart(m_shooter, shooterMotorSpeed1, shooterMotorSpeed2),
-            intakeNote(),
-            new WaitCommand(0.5),
-            stopIntakeIndexNeutral()
+                    new CommandPivotToPose(m_pivot, Constants.Vision.pivotAngleCalculator(Swerve.poseEstimator.getEstimatedPosition())),
+                    new CommandPivotToPose(m_pivot, pivotPos), 
+                    () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AUTOAIM
+                ),
+                new ConditionalCommand(
+                    new ParallelCommandGroup(
+                        new CommandAmperScoreAmp(m_amper),
+                        new CommandAmperMotorStart(m_amperMotor)
+                    ),   
+                    new CommandAmperScoreNote(m_amper), 
+                    () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AMP)
+            ),
+            shootNote(shooterMotorSpeed1, shooterMotorSpeed2)
+            // new WaitCommand(1),
+            
         );
     }
 
@@ -218,16 +265,22 @@ public class RobotContainer {
     }
 
     public Command shootNote(){
-        return new SequentialCommandGroup(
-            new CommandShooterStart(m_shooter, -75, -60),
-            intakeNote()
-        );
+        return shootNote(-75, -60);
     }
 
     public Command stopIntakeIndexNeutral(){
         return new ParallelCommandGroup(
             new CommandIntakeStopNeutral(m_intake),
             new CommandIndexStopNeutral(m_index)
+        );
+    }
+
+    public Command stopIntakeIndexShooterAmperNeutral(){
+        return new ParallelCommandGroup(
+            new CommandIntakeStopNeutral(m_intake),
+            new CommandIndexStopNeutral(m_index),
+            new CommandShooterStopNeutral(m_shooter),
+            new CommandAmperMotorStopNeutral(m_amperMotor)
         );
     }
 

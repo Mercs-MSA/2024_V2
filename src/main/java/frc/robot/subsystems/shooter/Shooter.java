@@ -32,14 +32,19 @@ public class Shooter extends SubsystemBase {
   private double shooterMotorPos;
   private double shooterMotorSpeed;
 
+
+
   /** Creates a new Index. */
   public Shooter() {
     SmartDashboard.putString("sensor debug", "init");
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
     configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-    configs.Slot0.kP = 40.0; // An error of 0.5 rotations results in 1.2 volts output
+    configs.Slot0.kP = 25.0; // An error of 0.5 rotations results in 1.2 volts output
     configs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kS = 0.5; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kV = 0.121; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kA = 0; // A change of 1 rotation per second results in 0.1 volts output
 
     // Peak output of 8 volts
     configs.Voltage.PeakForwardVoltage = 16;

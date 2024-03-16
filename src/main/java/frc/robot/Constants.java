@@ -163,9 +163,9 @@ public final class Constants {
         }
 
         public static final class AMP{
-            public static final double pivot = 0.0;
-            public static final double shooter1 = 0.0;
-            public static final double shooter2 = 0.0;
+            public static final double pivot = 138.4;
+            public static final double shooter1 = -20;
+            public static final double shooter2 = -20;
         }
 
         public static final class PODIUM{
@@ -176,6 +176,12 @@ public final class Constants {
         
         public static final class WING{
             public static final double pivot = 0.0;
+            public static final double shooter1 = 0.0;
+            public static final double shooter2 = 0.0;
+        }
+
+        public static final class START{
+            public static final double pivot = 0.2;
             public static final double shooter1 = 0.0;
             public static final double shooter2 = 0.0;
         }
@@ -342,10 +348,10 @@ public final class Constants {
     }
 
     public static class AmperConstants{
-        public static int kAmperMotorId = 17;
+        public static int kAmperMotorId = 16;
         public static int kServoID1 = 9;
         public static int kServoID2 = 8;
-        public static int kAmperMotorSpeed = 50;
+        public static int kAmperMotorSpeed = 30;
     }
 
     public static class ShooterConstants{
@@ -407,15 +413,16 @@ public class AllianceFlipUtil {
     }
 }
 
-    public static final class ScoringConstants {
-        public static ScoringMode currentScoringMode = ScoringMode.SUBWOOFER;
+    public static class ScoringConstants {
+        public static ScoringMode currentScoringMode = ScoringMode.AMP;
         public enum ScoringMode {
             WING,
             AMP,
             SUBWOOFER,
             PODIUM,
             TRAP,
-            AUTOAIM
+            AUTOAIM,
+            START
         }
     }
 

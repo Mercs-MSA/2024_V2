@@ -36,9 +36,12 @@ public class AmperMotor extends SubsystemBase {
     SmartDashboard.putString("sensor debug", "init");
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
+    configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
     configs.Slot0.kP = 25.0; // An error of 0.5 rotations results in 1.2 volts output
-    configs.Slot0.kD = 0.4; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kS = 0.5; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kV = 0.121; // A change of 1 rotation per second results in 0.1 volts output
+    configs.Slot0.kA = 0; // A change of 1 rotation per second results in 0.1 volts output
 
     // Peak output of 8 volts
     configs.Voltage.PeakForwardVoltage = 16;
@@ -107,9 +110,9 @@ public class AmperMotor extends SubsystemBase {
     AmperMotorPos = AmperMotor.getPosition().getValueAsDouble();
     AmperMotorSpeed = AmperMotor.getDutyCycle().getValueAsDouble();
 
-    SmartDashboard.putNumber("Index Motor Speed", AmperMotorSpeed);
-    SmartDashboard.putNumber("Index Motor Temperature", AmperMotor.getDeviceTemp().getValueAsDouble());
-    SmartDashboard.putNumber("Index rpm", AmperMotor.getVelocity().getValueAsDouble());
+    SmartDashboard.putNumber("Amper Motor Speed", AmperMotorSpeed);
+    SmartDashboard.putNumber("Amper Motor Temperature", AmperMotor.getDeviceTemp().getValueAsDouble());
+    SmartDashboard.putNumber("Amper Motor rpm", AmperMotor.getVelocity().getValueAsDouble());
   }
   
   // USE FOR TESTING ALSO
