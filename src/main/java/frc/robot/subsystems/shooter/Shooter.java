@@ -37,9 +37,9 @@ public class Shooter extends SubsystemBase {
     SmartDashboard.putString("sensor debug", "init");
 
     TalonFXConfiguration configs = new TalonFXConfiguration();
-    configs.MotorOutput.NeutralMode = NeutralModeValue.Brake;
-    configs.Slot0.kP = 25.0; // An error of 0.5 rotations results in 1.2 volts output
-    configs.Slot0.kD = 0.4; // A change of 1 rotation per second results in 0.1 volts output
+    configs.MotorOutput.NeutralMode = NeutralModeValue.Coast;
+    configs.Slot0.kP = 40.0; // An error of 0.5 rotations results in 1.2 volts output
+    configs.Slot0.kD = 0.1; // A change of 1 rotation per second results in 0.1 volts output
 
     // Peak output of 8 volts
     configs.Voltage.PeakForwardVoltage = 16;
@@ -85,13 +85,17 @@ public class Shooter extends SubsystemBase {
 
   public void setBothShooterMotor(double speed, double speed1) {
     shooterMotor.setControl(shooterMotor_voltageVelocity.withVelocity(speed));
-    shooterMotor1.setControl(shooterMotor_voltageVelocity.withVelocity(speed1));
+    shooterMotor1.setControl(shooterMotor_voltageVelocity.withVelocity(-speed1));
   }
 
 
   public void stopshooterMotor() {
     shooterMotor.setControl(new NeutralOut());
     shooterMotor1.setControl(new NeutralOut());
+  }
+
+  public double getshooterMotor1Speed() {
+    return shooterMotor1.getVelocity().getValueAsDouble();
   }
 
   public double getshooterMotorSpeed() {
@@ -101,11 +105,11 @@ public class Shooter extends SubsystemBase {
   @Override
   public void periodic() {
   
-    SmartDashboard.putNumber("Shooter Motor Speed", shooterMotor.getDutyCycle().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter Motor Speed", shooterMotor.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Shooter Motor Temperature", shooterMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Shooter rpm", shooterMotor.getVelocity().getValueAsDouble());
 
-    SmartDashboard.putNumber("Shooter1 Motor Speed", shooterMotor1.getDutyCycle().getValueAsDouble());
+    SmartDashboard.putNumber("Shooter1 Motor Speed", shooterMotor1.getVelocity().getValueAsDouble());
     SmartDashboard.putNumber("Shooter1 Motor Temperature", shooterMotor1.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Shooter1 rpm", shooterMotor1.getVelocity().getValueAsDouble());
   }

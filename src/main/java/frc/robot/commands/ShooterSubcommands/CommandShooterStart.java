@@ -1,6 +1,8 @@
 package frc.robot.commands.ShooterSubcommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants;
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.subsystems.shooter.Shooter;
 
 public class CommandShooterStart extends Command {
@@ -29,8 +31,7 @@ public class CommandShooterStart extends Command {
 
   @Override
   public boolean isFinished() {
-    return true;
-    //Math.abs(m_intake.getIntakeMotorSpeed() - IntakeConstants.kIntakeMotorSpeed) <= IntakeConstants.kIntakeMotorDCTolerance;
+    return ((Math.abs(m_shooter.getshooterMotorSpeed() - motor1) <= 1) && (Math.abs(m_shooter.getshooterMotor1Speed() - motor2) <= 1));
   }
 }
 

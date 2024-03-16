@@ -11,14 +11,18 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
+import frc.robot.Constants.ScoringConstants.ScoringMode;
+import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.CommandDriveToPose;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
@@ -27,6 +31,7 @@ import frc.robot.commands.IndexSubcommands.CommandIndexStopNeutral;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
+import frc.robot.commands.PivotSubcommands.CommandPivotToNeutral;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
@@ -92,18 +97,26 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        driverControls();
-        operatorControls();
+        // driverControls();
+        // operatorControls();
+        manualTesting();
+
     }
 
     public void driverControls(){
         
     }
 
+    public void manualTesting(){
+        operator.pov(0).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(0.25), m_pivot));
+        operator.pov(180).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(-0.25), m_pivot));
+    }
+
     public void operatorControls(){
-        // operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
-        // operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
-        // operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
+        operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.AUTOAIM));
+        operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
+        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
+        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
         
         operator.leftBumper()
         .onTrue(
@@ -113,8 +126,7 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new CommandIndexReverse(m_index),
                 new WaitCommand(0.125),
-                new CommandIntakeStopNeutral(m_intake),
-                new CommandIndexStopNeutral(m_index)
+                stopIntakeIndexNeutral()
             )
         );
 
@@ -126,16 +138,31 @@ public class RobotContainer {
             stopIntakeIndexNeutral()
         );
 
-        operator.a()
+        operator.x()
         .onTrue(
-            new CommandShooterStart(m_shooter, 25, 25)
+            scoreNote()
         )
         .onFalse(
             new CommandShooterStopNeutral(m_shooter)
         );
 
-        operator.pov(0).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(0.25), m_pivot));
-        operator.pov(180).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(-0.25), m_pivot));
+        operator.y().onTrue(
+            new SequentialCommandGroup(
+                new CommandPivotToPose(m_pivot, 79)
+            )
+ 
+        );
+
+        operator.a().onTrue(
+            new SequentialCommandGroup(
+                new CommandPivotToPose(m_pivot, 0.2),
+                new CommandPivotToNeutral(m_pivot)
+            )
+ 
+        );
+
+
+;
     }
 
     public Command intakeNote(){
@@ -173,11 +200,6 @@ public class RobotContainer {
                 shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
                 shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
                 break;
-            case AUTOAIM:
-                pivotPos = SATConstants.SUB.pivot;
-                shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
-                shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
-                break;
             default:
                 pivotPos = SATConstants.SUB.pivot;
                 shooterMotorSpeed1 = SATConstants.SUB.shooter1;
@@ -186,8 +208,28 @@ public class RobotContainer {
         }
 
         return new SequentialCommandGroup(
-            new CommandPivotToPose(m_pivot, pivotPos),
-            new CommandShooterStart(m_shooter, shooterMotorSpeed1, shooterMotorSpeed2)
+            new ConditionalCommand(
+                new CommandPivotToPose(m_pivot, Constants.Vision.pivotAngleCalculator(Swerve.poseEstimator.getEstimatedPosition())),
+                new CommandPivotToPose(m_pivot, pivotPos), 
+                () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AUTOAIM),
+            new CommandShooterStart(m_shooter, shooterMotorSpeed1, shooterMotorSpeed2),
+            intakeNote(),
+            new WaitCommand(0.5),
+            stopIntakeIndexNeutral()
+        );
+    }
+
+    public Command shootNote(double shooterMotorSpeed1, double shooterMotorSpeed2){
+        return new SequentialCommandGroup(
+            new CommandShooterStart(m_shooter, shooterMotorSpeed1, shooterMotorSpeed2),
+            intakeNote()
+        );
+    }
+
+    public Command shootNote(){
+        return new SequentialCommandGroup(
+            new CommandShooterStart(m_shooter, -75, -60),
+            intakeNote()
         );
     }
 
@@ -198,37 +240,37 @@ public class RobotContainer {
         );
     }
 
-    // /**
-    //  * Use this to pass the autonomous command to the main {@link Robot} class.
-    //  *
-    //  * @return the command to run in autonomous
-    //  */
-    // public Command getAutonomousCommand() {
-    //     return autoChooser.getSelected();
-    // }
-
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
      *
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return new SequentialCommandGroup(
-            new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))),
-
-            new CommandDriveToPose(s_Swerve, new Pose2d(2.85, 5.60, Rotation2d.fromDegrees(0))),
-
-            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
-
-            new CommandDriveToPose(s_Swerve, new Pose2d(2.67, 4.09, Rotation2d.fromDegrees(0))),
-
-            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
-
-            new CommandDriveToPose(s_Swerve, new Pose2d(2.77, 7.09, Rotation2d.fromDegrees(0))),
-
-            new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))) //sub
-
-        );
+        return autoChooser.getSelected();
     }
+
+    // /**
+    //  * Use this to pass the autonomous command to the main {@link Robot} class.
+    //  *
+    //  * @return the command to run in autonomous
+    //  */
+    // public Command getAutonomousCommand() {
+    //     return new SequentialCommandGroup(
+    //         new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))),
+
+    //         new CommandDriveToPose(s_Swerve, new Pose2d(2.85, 5.60, Rotation2d.fromDegrees(0))),
+
+    //         new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+
+    //         new CommandDriveToPose(s_Swerve, new Pose2d(2.67, 4.09, Rotation2d.fromDegrees(0))),
+
+    //         new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+
+    //         new CommandDriveToPose(s_Swerve, new Pose2d(2.77, 7.09, Rotation2d.fromDegrees(0))),
+
+    //         new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))) //sub
+
+    //     );
+    // }
 
 }
