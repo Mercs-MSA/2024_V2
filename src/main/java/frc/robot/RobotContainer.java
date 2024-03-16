@@ -15,6 +15,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
@@ -110,6 +111,8 @@ public class RobotContainer {
         )
         .onFalse(
             new ParallelCommandGroup(
+                new CommandIndexReverse(m_index),
+                new WaitCommand(0.125),
                 new CommandIntakeStopNeutral(m_intake),
                 new CommandIndexStopNeutral(m_index)
             )
