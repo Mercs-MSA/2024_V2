@@ -341,6 +341,13 @@ public final class Constants {
         public static int kIndexMotorSpeed = 85;
     }
 
+    public static class AmperConstants{
+        public static int kAmperMotorId = 17;
+        public static int kServoID1 = 9;
+        public static int kServoID2 = 8;
+        public static int kAmperMotorSpeed = 50;
+    }
+
     public static class ShooterConstants{
         public static int kshooterMotorId = 39;
         public static int kshooterMotor1Id = 18;
