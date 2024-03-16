@@ -7,14 +7,11 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -23,19 +20,20 @@ import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
-import frc.robot.commands.CommandDriveToPose;
 import frc.robot.commands.TeleopSwerve;
+import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
+import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
 import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
 import frc.robot.commands.IndexSubcommands.CommandIndexStart;
 import frc.robot.commands.IndexSubcommands.CommandIndexStopNeutral;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
-import frc.robot.commands.PivotSubcommands.CommandPivotToNeutral;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.amper.Amper;
 import frc.robot.subsystems.index.Index;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.pivot.Pivot;
@@ -62,6 +60,7 @@ public class RobotContainer {
     public static final Index m_index = new Index();
     public static final Pivot m_pivot = new Pivot();
     public static final Shooter m_shooter = new Shooter();
+    public static final Amper m_amper = new Amper();
 
     public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_yaw", "note_dist");
     public ApriltagVision m_ApriltagVision = new ApriltagVision();
@@ -97,9 +96,9 @@ public class RobotContainer {
     }
 
     public void configureButtonBindings() {
-        // driverControls();
-        // operatorControls();
-        manualTesting();
+        driverControls();
+        operatorControls();
+        // manualTesting();
 
     }
 
@@ -123,7 +122,7 @@ public class RobotContainer {
             intakeNote()
         )
         .onFalse(
-            new ParallelCommandGroup(
+            new SequentialCommandGroup(
                 new CommandIndexReverse(m_index),
                 new WaitCommand(0.125),
                 stopIntakeIndexNeutral()
@@ -146,23 +145,6 @@ public class RobotContainer {
             new CommandShooterStopNeutral(m_shooter)
         );
 
-        operator.y().onTrue(
-            new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 79)
-            )
- 
-        );
-
-        operator.a().onTrue(
-            new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 0.2),
-                new CommandPivotToNeutral(m_pivot)
-            )
- 
-        );
-
-
-;
     }
 
     public Command intakeNote(){
@@ -200,6 +182,11 @@ public class RobotContainer {
                 shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
                 shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
                 break;
+            case AMP:
+                pivotPos = SATConstants.AMP.pivot;
+                shooterMotorSpeed1 = SATConstants.AMP.shooter1;
+                shooterMotorSpeed2 = SATConstants.AMP.shooter2;
+                break;
             default:
                 pivotPos = SATConstants.SUB.pivot;
                 shooterMotorSpeed1 = SATConstants.SUB.shooter1;
@@ -212,6 +199,10 @@ public class RobotContainer {
                 new CommandPivotToPose(m_pivot, Constants.Vision.pivotAngleCalculator(Swerve.poseEstimator.getEstimatedPosition())),
                 new CommandPivotToPose(m_pivot, pivotPos), 
                 () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AUTOAIM),
+                new ConditionalCommand(
+                new CommandAmperScoreAmp(m_amper),
+                new CommandAmperScoreNote(m_amper), 
+                () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AMP),
             new CommandShooterStart(m_shooter, shooterMotorSpeed1, shooterMotorSpeed2),
             intakeNote(),
             new WaitCommand(0.5),

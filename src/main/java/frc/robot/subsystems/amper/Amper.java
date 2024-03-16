@@ -5,12 +5,11 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 public class Amper extends SubsystemBase{
-    private Servo m_servo1;
-    private Servo m_servo2;
+    private Servo m_servo1 = new Servo(9);
+    private Servo m_servo2 = new Servo(8);
 
     public Amper(){
-        m_servo1 = new Servo(0);
-        m_servo2 = new Servo(0);
+    
         m_servo1.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
         m_servo2.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
     }
@@ -22,8 +21,8 @@ public class Amper extends SubsystemBase{
 
     @Override
     public void periodic() {
-        SmartDashboard.putNumber("Servo 1 pos", m_servo1.get());
-        SmartDashboard.putNumber("Servo 2 pos", m_servo2.get());
+        SmartDashboard.putNumber("Servo 9 pos", m_servo1.get());
+        SmartDashboard.putNumber("Servo 8 pos", m_servo2.get());
     }
 
 

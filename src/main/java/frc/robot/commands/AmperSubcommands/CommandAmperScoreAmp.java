@@ -3,17 +3,17 @@ package frc.robot.commands.AmperSubcommands;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.amper.Amper;
 
-public class CommandAmperAmp extends Command {
+public class CommandAmperScoreAmp extends Command {
   private final Amper m_amper;
   
-  public CommandAmperAmp(Amper i) {
+  public CommandAmperScoreAmp(Amper i) {
     this.m_amper = i;
     addRequirements(m_amper);
   }
 
   @Override
   public void initialize() {
-    m_amper.setServo(1, 1);
+    m_amper.setServo(0, 0);
   }
 
   @Override
