@@ -13,6 +13,12 @@ import com.ctre.phoenix6.hardware.TalonFX;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.revrobotics.SparkMaxAlternateEncoder;
+
+import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.DigitalSource;
+import edu.wpi.first.wpilibj.DutyCycleEncoder;
+import edu.wpi.first.wpilibj.Encoder;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
@@ -25,6 +31,9 @@ public class Pivot extends SubsystemBase{
     // Hardware
     private final TalonFX leaderTalon;
     private final TalonFX followerTalon;
+    private static final DigitalSource throughBore = new DigitalInput(9);
+    // DutyCycleEncoder throughBoreEncoder = new DutyCycleEncoder(throughBore);
+    // private static final SparkMaxAlternateEncoder.Type kAltEncType = SparkMaxAlternateEncoder.Type.kQuadrature;
 
     // Status Signals
     private final StatusSignal<Double> internalPositionRotations;
@@ -36,7 +45,6 @@ public class Pivot extends SubsystemBase{
 
     // Config
     private final TalonFXConfiguration configLeader = new TalonFXConfiguration();
-    private final TalonFXConfiguration configFollower = new TalonFXConfiguration();
 
     private double targetPose;
 
@@ -64,21 +72,6 @@ public class Pivot extends SubsystemBase{
         leaderTalon.getConfigurator().apply(configLeader, 1.0);
         followerTalon.getConfigurator().apply(configLeader, 1.0);
 
-        // // Follower motor configs
-        // configFollower.Slot0.kP = ArmConstants.leaderKP;
-        // configFollower.Slot0.kI = ArmConstants.leaderKI;
-        // configFollower.Slot0.kD = ArmConstants.leaderKD;
-        // configFollower.Voltage.PeakForwardVoltage = 16;
-        // configFollower.Voltage.PeakReverseVoltage  = -16;
-        // configFollower.MotorOutput.Inverted =
-        // ArmConstants.leaderInverted
-        //     ? InvertedValue.Clockwise_Positive
-        //     : InvertedValue.CounterClockwise_Positive;
-        // configFollower.MotorOutput.NeutralMode = NeutralModeValue.Coast;
-        // configFollower.Feedback.RotorToSensorRatio = ArmConstants.rotorToSensorRatio;
-        // configFollower.Feedback.SensorToMechanismRatio = ArmConstants.sensorToMechanismRatio;
-        
-
         // Status signals
         internalPositionRotations = leaderTalon.getPosition();
         velocityRps = leaderTalon.getVelocity();
@@ -98,6 +91,8 @@ public class Pivot extends SubsystemBase{
 
         leaderTalon.setPosition(0);
         followerTalon.setPosition(0);
+
+        // throughBoreEncoder.setDistancePerRotation(targetPose);;
         
     }
 
@@ -120,7 +115,6 @@ public class Pivot extends SubsystemBase{
         return leaderTalon.getPosition().getValueAsDouble();
     }
 
-    // This is for test purposes only
     public void leaderGoToPositionIncrement(double increment) {
         targetPose = targetPose + (increment*2);
         leaderTalon.setControl(leaderVoltagePosition.withPosition(targetPose));
