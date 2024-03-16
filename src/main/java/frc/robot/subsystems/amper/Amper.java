@@ -9,8 +9,8 @@ public class Amper extends SubsystemBase{
     private Servo m_servo2;
 
     public Amper(){
-        m_servo1 =  new Servo(0);
-        m_servo2 =  new Servo(0);
+        m_servo1 = new Servo(0);
+        m_servo2 = new Servo(0);
         m_servo1.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
         m_servo2.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
     }
