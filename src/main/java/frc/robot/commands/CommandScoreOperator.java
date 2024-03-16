@@ -25,6 +25,7 @@ public class CommandScoreOperator extends Command {
         this.m_amper = m_amper;
         this.m_index = m_index;
         this.m_shooter = m_shooter;
+        this.m_amperMotor = m_amperMotor;
     }
 
     @Override
@@ -76,14 +77,11 @@ public class CommandScoreOperator extends Command {
         else {
             m_amper.setServo(1, 1);
         }
-
-        m_index.startIndexMotor();
-        m_shooter.setBothShooterMotor(shooterMotorSpeed1, shooterMotorSpeed2);
     }
 
     @Override
     public boolean isFinished(){
-        return false;
+        return Constants.isWithinTol(this.pivotPos, m_pivot.getLeaderPos(), Constants.ArmConstants.tol);
     }
 
 }

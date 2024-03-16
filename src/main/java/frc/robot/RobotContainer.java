@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -21,6 +22,7 @@ import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.CommandScoreDriver;
+import frc.robot.commands.CommandScoreOperator;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorReverse;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStart;
@@ -114,7 +116,7 @@ public class RobotContainer {
             new ParallelCommandGroup(
                 new CommandAmperMotorStart(m_amperMotor),
                 new CommandIndexStart(m_index),
-                new CommandShooterStart(m_shooter, -15, -15)
+                new CommandShooterStart(m_shooter)
             )
         )
         .onFalse(
@@ -172,7 +174,7 @@ public class RobotContainer {
 
         operator.x()
         .onTrue(
-            scoreNote()
+            new CommandScoreOperator(m_pivot, m_amper, m_index, m_shooter, m_amperMotor)
         )
         .onFalse(
             stopIntakeIndexShooterAmperNeutral()
@@ -292,6 +294,7 @@ public class RobotContainer {
     public Command stopIntakeIndexShooterAmperNeutral(){
         return new ParallelCommandGroup(
             new CommandIntakeStopNeutral(m_intake),
+            new PrintCommand("it ran stopIntakeIndexShooterAmperNeutral"),
             new CommandIndexStopNeutral(m_index),
             new CommandShooterStopNeutral(m_shooter),
             new CommandAmperMotorStopNeutral(m_amperMotor)
