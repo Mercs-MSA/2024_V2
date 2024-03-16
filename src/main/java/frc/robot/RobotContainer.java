@@ -13,11 +13,15 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
+import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
+import frc.robot.Constants.ScoringConstants.ScoringMode;
+import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.CommandDriveToPose;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
@@ -26,6 +30,7 @@ import frc.robot.commands.IndexSubcommands.CommandIndexStopNeutral;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
+import frc.robot.commands.PivotSubcommands.CommandPivotToNeutral;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
@@ -100,9 +105,9 @@ public class RobotContainer {
     }
 
     public void operatorControls(){
-        // operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
-        // operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
-        // operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
+        operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
+        operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
+        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
         
         operator.leftBumper()
         .onTrue(
@@ -123,16 +128,34 @@ public class RobotContainer {
             stopIntakeIndexNeutral()
         );
 
-        operator.a()
+        operator.x() //negative shoots the note (fyi, there is a negative sign inside the actual spin command)
         .onTrue(
-            new CommandShooterStart(m_shooter, 25, 25)
+            new CommandShooterStart(m_shooter, -65, -65)
         )
         .onFalse(
             new CommandShooterStopNeutral(m_shooter)
         );
 
-        operator.pov(0).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(0.25), m_pivot));
-        operator.pov(180).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(-0.25), m_pivot));
+        operator.y().onTrue(
+            new SequentialCommandGroup(
+                new CommandPivotToPose(m_pivot, 79),
+                new PrintCommand("Pivot Done")
+            )
+ 
+        );
+
+        operator.a().onTrue(
+            new SequentialCommandGroup(
+                new CommandPivotToPose(m_pivot, 0.2),
+                new PrintCommand("Pivot Done"),
+                new CommandPivotToNeutral(m_pivot)
+            )
+ 
+        );
+
+
+        // operator.pov(0).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(0.25), m_pivot));
+        // operator.pov(180).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(-0.25), m_pivot));
     }
 
     public Command intakeNote(){
@@ -184,7 +207,10 @@ public class RobotContainer {
 
         return new SequentialCommandGroup(
             new CommandPivotToPose(m_pivot, pivotPos),
-            new CommandShooterStart(m_shooter, shooterMotorSpeed1, shooterMotorSpeed2)
+            new CommandShooterStart(m_shooter, shooterMotorSpeed1, shooterMotorSpeed2),
+            intakeNote(),
+            new WaitCommand(0.3),
+            stopIntakeIndexNeutral()
         );
     }
 

@@ -157,9 +157,9 @@ public final class Constants {
 
     public static final class SATConstants {
         public static final class SUB{
-            public static final double pivot = 0.0;
-            public static final double shooter1 = 0.0;
-            public static final double shooter2 = 0.0;
+            public static final double pivot = 79;
+            public static final double shooter1 = -65;
+            public static final double shooter2 = -65;
         }
 
         public static final class AMP{
@@ -170,8 +170,8 @@ public final class Constants {
 
         public static final class PODIUM{
             public static final double pivot = 0.0;
-            public static final double shooter1 = 0.0;
-            public static final double shooter2 = 0.0;
+            public static final double shooter1 = -60.0;
+            public static final double shooter2 = -60.0;
         }
         
         public static final class WING{
@@ -320,7 +320,7 @@ public final class Constants {
         public static boolean leaderInverted = true;
 
         /* Leader Motor PID Values */
-        public static final double leaderKP = 0.1;
+        public static final double leaderKP = 1.5;
         public static final double leaderKI = 0.0;
         public static final double leaderKD = 0.0;
         public static final double leaderKF = 0.0;
@@ -342,8 +342,8 @@ public final class Constants {
     }
 
     public static class ShooterConstants{
-        public static int kshooterMotorId = 24;
-        public static int kshooterMotor1Id = 25;
+        public static int kshooterMotorId = 39;
+        public static int kshooterMotor1Id = 18;
     }
 
 
