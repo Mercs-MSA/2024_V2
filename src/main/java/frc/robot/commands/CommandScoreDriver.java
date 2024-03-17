@@ -19,10 +19,11 @@ public class CommandScoreDriver extends Command {
     private Shooter m_shooter;
     private AmperMotor m_amperMotor;
 
-    public CommandScoreDriver(Amper m_amper, Index m_index, Shooter m_shooter, AmperMotor m_amperMotor) {
+    public CommandScoreDriver(Amper m_amper, Shooter m_shooter, AmperMotor m_amperMotor) {
         this.m_amper = m_amper;
         this.m_index = m_index;
         this.m_shooter = m_shooter;
+        this.m_amperMotor = m_amperMotor;
     }
 
     @Override
@@ -55,20 +56,19 @@ public class CommandScoreDriver extends Command {
         }
 
         if (ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AMP){
-            m_amper.setServo(0, 0);
             m_amperMotor.startAmperMotor();
         }
-        else {
-            m_amper.setServo(1, 1);
-        }
 
-        m_index.startIndexMotor();
+        // m_index.startIndexMotor();
         m_shooter.setBothShooterMotor(shooterMotorSpeed1, shooterMotorSpeed2);
     }
 
     @Override
     public boolean isFinished(){
-        return false;
+        return (Constants.isWithinTol(shooterMotorSpeed1, m_shooter.getshooterMotorSpeed(), Constants.ShooterConstants.tol)
+        &&         
+        Constants.isWithinTol(shooterMotorSpeed2, -1 * m_shooter.getshooterMotor1Speed(), Constants.ShooterConstants.tol));
+
     }
 
 }

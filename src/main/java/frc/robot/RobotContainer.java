@@ -36,6 +36,7 @@ import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
+import frc.robot.commands.ShooterSubcommands.CommandShooterReverse;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
 import frc.robot.subsystems.Swerve;
@@ -112,11 +113,9 @@ public class RobotContainer {
 
     public void driverControls(){
         driver.rightBumper().onTrue(
-            // new CommandScoreDriver(m_amper, m_index, m_shooter, m_amperMotor)
-            new ParallelCommandGroup(
-                new CommandAmperMotorStart(m_amperMotor),
-                new CommandIndexStart(m_index),
-                new CommandShooterStart(m_shooter)
+            new SequentialCommandGroup(
+                new CommandScoreDriver(m_amper, m_shooter, m_amperMotor),
+                new CommandIndexStart(m_index)
             )
         )
         .onFalse(
@@ -131,6 +130,40 @@ public class RobotContainer {
         operator.pov(0).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(0.25), m_pivot));
         operator.pov(180).whileTrue(new RunCommand(() -> m_pivot.leaderGoToPositionIncrement(-0.25), m_pivot));
 
+                
+        operator.leftBumper()
+        .onTrue(
+            new ParallelCommandGroup(
+                intakeNote(),
+                new CommandShooterReverse(m_shooter, 10, 10)
+            )
+            
+        )
+        .onFalse(
+            new SequentialCommandGroup(
+                new CommandShooterStopNeutral(m_shooter),
+                new CommandIndexReverse(m_index),
+                new WaitCommand(0.1),
+                stopIntakeIndexNeutral()
+            )
+        );
+
+        operator.rightBumper()
+        .onTrue(
+            expelNote()
+        )
+        .onFalse(
+            stopIntakeIndexNeutral()
+        );
+
+        operator.a().onTrue(
+            new CommandAmperScoreNote(m_amper)
+        );
+
+
+        operator.y().onFalse(
+            new CommandAmperScoreAmp(m_amper)
+        );
         // operator.a().onTrue(
         //     new CommandAmperMotorReverse(m_amperMotor)
         // )
@@ -147,19 +180,24 @@ public class RobotContainer {
     }
 
     public void operatorControls(){
-        operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.AUTOAIM));
+        operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
-        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
+        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
         operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
         
         operator.leftBumper()
         .onTrue(
-            intakeNote()
+            new ParallelCommandGroup(
+                intakeNote(),
+                new CommandShooterReverse(m_shooter, 10, 10)
+            )
+            
         )
         .onFalse(
             new SequentialCommandGroup(
+                new CommandShooterStopNeutral(m_shooter),
                 new CommandIndexReverse(m_index),
-                new WaitCommand(0.125),
+                new WaitCommand(0.1),
                 stopIntakeIndexNeutral()
             )
         );
