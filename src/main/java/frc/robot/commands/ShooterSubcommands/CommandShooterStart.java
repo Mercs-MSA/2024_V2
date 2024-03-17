@@ -67,7 +67,7 @@ public class CommandShooterStart extends Command {
 
   @Override
   public boolean isFinished() {
-    return ((Math.abs(m_shooter.getshooterMotorSpeed() - motor1) <= 1) && (Math.abs(m_shooter.getshooterMotor1Speed() - motor2) <= 1));
+    return ((Math.abs(m_shooter.getshooterMotorSpeed() - motor1) <= 1.3) || (Math.abs(m_shooter.getshooterMotor1Speed() - motor2) <= 1.3));
   }
 }
 

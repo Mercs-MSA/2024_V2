@@ -10,50 +10,7 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of RedCenterLeave"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Red 3Piece"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.1
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
-        }
-      ]
+      "commands": []
     }
   },
   "folder": null,

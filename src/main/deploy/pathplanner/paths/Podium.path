@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 2.712631268506171,
+        "x": 2.71,
         "y": 4.188693806062381
       },
       "prevControl": {
-        "x": 2.7046491114310376,
-        "y": 4.188693806062381
+        "x": 2.2769872981077808,
+        "y": 4.438693806062381
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,16 +32,16 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Start Intake",
-      "waypointRelativePos": 0.55,
+      "name": "Reset",
+      "waypointRelativePos": 0,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Intake Note"
+                "name": "Reset"
               }
             }
           ]
@@ -58,7 +58,7 @@
   "goalEndState": {
     "velocity": 0,
     "rotation": -25.0,
-    "rotateFast": false
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,

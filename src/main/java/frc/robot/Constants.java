@@ -155,7 +155,7 @@ public final class Constants {
 
     public static final class SATConstants {
         public static final class SUB{
-            public static final double pivot = 79;
+            public static final double pivot = 71;
             public static final double shooter1 = -35;
             public static final double shooter2 = -35;
         }

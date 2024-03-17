@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -31,10 +32,13 @@ import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
 import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
 import frc.robot.commands.IndexSubcommands.CommandIndexStart;
+import frc.robot.commands.IndexSubcommands.CommandIndexStop;
 import frc.robot.commands.IndexSubcommands.CommandIndexStopNeutral;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
+import frc.robot.commands.PivotSubcommands.CommandPivotToNeutral;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterReverse;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
@@ -81,7 +85,50 @@ public class RobotContainer {
 
     Map<String, Command> autonomousCommands = new HashMap<String,Command>() {
         {
-            
+            put("Start Intake", new CommandIntakeStart(m_intake));
+            put("Start Index", new CommandIndexStart(m_index));
+    
+            put("Reset", new ParallelCommandGroup(
+                new CommandPivotToPose(m_pivot, Constants.SATConstants.START.pivot),
+                new CommandShooterStart(m_shooter, 0, 0),
+                new CommandIntakeStop(m_intake),
+                new CommandIndexStop(m_index)
+            ));
+
+            put("Intake Note", new SequentialCommandGroup(
+                new CommandIntakeStart(m_intake),
+                new CommandIndexStart(m_index)
+            ));
+
+            put("score sub note", new SequentialCommandGroup(
+                new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+                new ParallelCommandGroup(
+                    new CommandPivotToPose(m_pivot, Constants.SATConstants.SUB.pivot),
+                    new CommandShooterStart(m_shooter, Constants.SATConstants.SUB.shooter1, Constants.SATConstants.SUB.shooter2)
+                ),
+                new WaitCommand(.2),
+                new CommandIndexStart(m_index)
+            ));
+
+            put("score podium note", new SequentialCommandGroup(
+                new CommandChangeScoringMode(ScoringMode.PODIUM),
+                new ParallelCommandGroup(
+                    new CommandPivotToPose(m_pivot, Constants.SATConstants.PODIUM.pivot),
+                    new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
+                ),
+                new WaitCommand(.4),
+                new CommandIndexStart(m_index)
+            ));
+
+            put("score wing note", new SequentialCommandGroup(
+                new CommandChangeScoringMode(ScoringMode.WING),
+                new ParallelCommandGroup(
+                    new CommandPivotToPose(m_pivot, Constants.SATConstants.WING.pivot),
+                    new CommandShooterStart(m_shooter, Constants.SATConstants.WING.shooter1, Constants.SATConstants.WING.shooter2)
+                ),
+                new WaitCommand(.5),
+                new CommandIndexStart(m_index)
+            ));
         }  
     };
 
@@ -345,7 +392,7 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        return autoChooser.getSelected();
+        return autoChooser.getSelected(); 
     }
 
     // /**

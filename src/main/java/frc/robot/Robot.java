@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -86,6 +87,8 @@ public class Robot extends TimedRobot {
     }
   
     Constants.Vision.visionTurnedOn = false;
+
+    new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
   }
 
   /** This function is called periodically during autonomous. */
