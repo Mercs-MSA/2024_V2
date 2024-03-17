@@ -240,12 +240,12 @@ public final class Constants {
 
         public static class aprilTagBackLeft {
             public static String camera = "AprilTagBackLeft";
-            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.647), Units.inchesToMeters(8.923), Units.inchesToMeters(1.7 + 9.217), new Rotation3d(0, 0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.731732), Units.inchesToMeters(11.542972), Units.inchesToMeters(8.701325 + 2.75), new Rotation3d(0, 0.785398, -0.785398));
         }
         
         public static class aprilTagFrontRight {
             public static String camera = "AprilTagFrontRight";
-            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(5.668), -Units.inchesToMeters(10.631), Units.inchesToMeters(1.7 + 17.470), new Rotation3d(0, -0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(9.048893), -Units.inchesToMeters(12.252601), Units.inchesToMeters(8.841860 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
         }
 
         public static class gamePieceCamera {
