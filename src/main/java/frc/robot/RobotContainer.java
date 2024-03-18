@@ -250,6 +250,7 @@ public class RobotContainer {
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
         operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+        //don't do START position, use a on operator
         
         operator.leftBumper()
         .onTrue(
