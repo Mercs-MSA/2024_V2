@@ -106,6 +106,9 @@ public class Robot extends TimedRobot {
     }
 
     Constants.Vision.visionTurnedOn = true;
+
+    new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
+
   }
 
   /** This function is called periodically during operator control. */

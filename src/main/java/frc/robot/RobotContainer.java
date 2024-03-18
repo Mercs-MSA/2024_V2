@@ -7,6 +7,8 @@ import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,6 +24,8 @@ import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
+import frc.robot.commands.CommandDriveToPose;
+import frc.robot.commands.CommandRotateToPose;
 import frc.robot.commands.CommandScoreDriver;
 import frc.robot.commands.CommandScoreOperator;
 import frc.robot.commands.TeleopSwerve;
@@ -113,8 +117,8 @@ public class RobotContainer {
 
             put("score podium note", new SequentialCommandGroup(
                 new CommandIndexReverse(m_index),
+                new WaitCommand(0.2),
                 new CommandIntakeReverse(m_intake),
-                new WaitCommand(0.5),
                 new ParallelCommandGroup(
                     new CommandIndexStop(m_index),
                     new CommandIntakeStop(m_intake),
@@ -166,12 +170,22 @@ public class RobotContainer {
     public void driverControls(){
         driver.rightBumper().onTrue(
             new SequentialCommandGroup(
+                new CommandIndexReverse(m_index),
+                new CommandShooterReverse(m_shooter),
+                new WaitCommand(0.1),
+                new CommandShooterStopNeutral(m_shooter),
+                new CommandIndexStop(m_index),
                 new CommandScoreDriver(m_amper, m_shooter, m_amperMotor),
                 new CommandIndexStart(m_index)
             )
         )
         .onFalse(
-            stopIntakeIndexShooterAmperNeutral()
+            stopIntakeIndexNeutral()
+  
+        );
+
+        driver.leftBumper().onTrue(
+            new CommandRotateToPose(s_Swerve, new Pose2d(Swerve.poseEstimator.getEstimatedPosition().getX(), Swerve.poseEstimator.getEstimatedPosition().getY(), Rotation2d.fromDegrees(-23.9)))
         );
         // driver.getRightTriggerAxis().greaterTh(
         //    new CommandScoreDriver(m_pivot, m_amper, m_index, m_shooter, m_amperMotor); 
@@ -193,9 +207,9 @@ public class RobotContainer {
         )
         .onFalse(
             new SequentialCommandGroup(
-                new CommandShooterStopNeutral(m_shooter),
-                new CommandIndexReverse(m_index),
-                new WaitCommand(0.1),
+                // new CommandShooterStopNeutral(m_shooter),
+                // new CommandIndexReverse(m_index),
+                // new WaitCommand(0.1),
                 stopIntakeIndexNeutral()
             )
         );
