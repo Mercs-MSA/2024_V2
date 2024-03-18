@@ -10,6 +10,7 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
@@ -41,13 +42,9 @@ public class Robot extends TimedRobot {
     m_robotContainer.configureButtonBindings();
 
     Optional<Alliance> alliance = DriverStation.getAlliance();
-    if (alliance.isPresent()) {
-      Constants.Vision.isRedAlliance = (alliance.get() == DriverStation.Alliance.Red);
-    }
-    else {
-      Constants.Vision.isRedAlliance = false;
-    }
+    Constants.Vision.isRedAlliance = Constants.AllianceFlipUtil.shouldFlip();
     SmartDashboard.putBoolean("Are we red alliance?", Constants.Vision.isRedAlliance);
+
   }
 
   /**
@@ -82,13 +79,17 @@ public class Robot extends TimedRobot {
   public void autonomousInit() {
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    m_robotContainer.s_Swerve.zeroGyro();
+    
+    new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
+    
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
   
     Constants.Vision.visionTurnedOn = false;
 
-    new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
+    
   }
 
   /** This function is called periodically during autonomous. */
@@ -114,7 +115,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    
+    if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.AMP){
+      new CommandAmperScoreAmp(m_robotContainer.m_amper).schedule();
+    }
+    else {
+      new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
+    }
   }
 
   @Override
