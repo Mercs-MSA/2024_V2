@@ -310,7 +310,7 @@ public final class Constants {
 
         // This function takes the current robots pose (in meters X and Y) and generates the pivot motor command to aim the shooter at the speaker (in rotations)
         public static double pivotEncoderCalculator(Pose2d currentPose){
-            double legDistance = Math.sqrt(Math.pow(centerFace.getX() - currentPose.getX(), 2)) + Math.pow(centerFace.getY() - currentPose.getY(), 2);
+            double legDistance = Math.sqrt(Math.pow(currentPose.getX() + .0381, 2)) + Math.pow(currentPose.getY() - 5.5478, 2);
             double pivotAngle = Math.atan(1.7526/legDistance); //1.7526 is the height difference from pivot to speaker entrance.
             double pivotCommand = (pivotAngle - 9.282)/0.59; //9.282 is in degrees, this is the "b" in y = mx + b, m is .59
             if (pivotCommand > 80.0) {  // This acts as a clamp to prevent this function from trying to command the pivot to an angle beyond the usual range
