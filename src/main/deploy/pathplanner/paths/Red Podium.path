@@ -8,36 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 15.091699008369082,
-        "y": 5.536799448996757
+        "x": 14.910300861971198,
+        "y": 5.105924733960737
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 13.364470437928038,
-        "y": 5.536799448996757
+        "x": 13.868036409396641,
+        "y": 4.133925300660873
       },
       "prevControl": {
-        "x": 13.414470437928038,
-        "y": 5.536799448996757
-      },
-      "nextControl": {
-        "x": 13.314470437928037,
-        "y": 5.536799448996757
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 15.141699008369082,
-        "y": 5.536799448996757
-      },
-      "prevControl": {
-        "x": 15.191699008369083,
-        "y": 5.536799448996757
+        "x": 14.125674813403833,
+        "y": 4.344720358484939
       },
       "nextControl": null,
       "isLocked": false,
@@ -57,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake Note"
+                "name": "Reset"
               }
             }
           ]
@@ -73,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 180.0,
+    "rotation": -150.0,
     "rotateFast": false
   },
   "reversed": false,

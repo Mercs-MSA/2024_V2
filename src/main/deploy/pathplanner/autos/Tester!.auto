@@ -43,6 +43,12 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Reverse"
+          }
+        },
+        {
           "type": "wait",
           "data": {
             "waitTime": 0.2
