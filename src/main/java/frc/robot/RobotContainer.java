@@ -360,7 +360,7 @@ public class RobotContainer {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new ConditionalCommand(
-                    new CommandPivotToPose(m_pivot, Constants.Vision.pivotAngleCalculator(Swerve.poseEstimator.getEstimatedPosition())),
+                    new CommandPivotToPose(m_pivot, Constants.Vision.pivotEncoderCalculator(Swerve.poseEstimator.getEstimatedPosition())),
                     new CommandPivotToPose(m_pivot, pivotPos), 
                     () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AUTOAIM
                 ),
