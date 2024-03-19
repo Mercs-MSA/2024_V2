@@ -77,7 +77,7 @@ public class Swerve extends SubsystemBase {
             new ReplanningConfig() // Default path replanning config. See the API for the options here
                ),
                () -> {
-                    Optional<Alliance> alliance = DriverStation.getAlliance();
+                    var alliance = DriverStation.getAlliance();
                     if (alliance.isPresent()) {
                     return alliance.get() == DriverStation.Alliance.Red;
                     }
@@ -93,7 +93,7 @@ public class Swerve extends SubsystemBase {
         SmartDashboard.putData("Field", field);
         SmartDashboard.putNumber("Heading", getHeading().getDegrees());
     }
-
+    
     public void drive(Translation2d translation, double rotation, boolean fieldRelative, boolean isOpenLoop) {
         SwerveModuleState[] swerveModuleStates =
             Constants.Swerve.swerveKinematics.toSwerveModuleStates(

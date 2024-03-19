@@ -58,6 +58,8 @@ import frc.robot.subsystems.vision.ApriltagVision;
 // import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 
+import edu.wpi.first.hal.DriverStationJNI;
+
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
  * "declarative" paradigm, very little robot logic should actually be handled in the {@link Robot}
@@ -97,8 +99,8 @@ public class RobotContainer {
                 new CommandShooterStart(m_shooter, 0, 0)
             ));
 
-            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 35));
-            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 32));
+            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 39));
+            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 36));
 
             put("Intake Note", new SequentialCommandGroup(
                 new CommandIntakeStart(m_intake),
@@ -115,14 +117,18 @@ public class RobotContainer {
                 new CommandIndexStart(m_index)
             ));
 
-            put("score podium note", new SequentialCommandGroup(
+            put("Reverse", new SequentialCommandGroup(
                 new CommandIndexReverse(m_index),
-                new WaitCommand(0.2),
-                new CommandIntakeReverse(m_intake),
+                new WaitCommand(0.1),
+                new CommandIntakeReverse(m_intake))
+                );
+
+            put("score podium note", new SequentialCommandGroup(
+                new CommandChangeScoringMode(ScoringMode.PODIUM),
                 new ParallelCommandGroup(
                     new CommandIndexStop(m_index),
                     new CommandIntakeStop(m_intake),
-                    new CommandPivotToPose(m_pivot, Constants.SATConstants.PODIUM.pivot),
+                    new CommandPivotToPose(m_pivot, 43),
                     new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
                 ),
                 new WaitCommand(.3),
@@ -304,6 +310,15 @@ public class RobotContainer {
         
     }
 
+    public Command intakeNoteAuto(){
+        return new ParallelCommandGroup(
+                new CommandIntakeStart(m_intake),
+                new CommandIndexStart(m_index),
+                new CommandShooterReverse(m_shooter)
+        );
+        
+    }
+
     public Command expelNote(){
         return new ParallelCommandGroup(
                 new CommandIndexReverse(m_index),
@@ -360,7 +375,7 @@ public class RobotContainer {
         return new SequentialCommandGroup(
             new ParallelCommandGroup(
                 new ConditionalCommand(
-                    new CommandPivotToPose(m_pivot, Constants.Vision.pivotAngleCalculator(Swerve.poseEstimator.getEstimatedPosition())),
+                    new CommandPivotToPose(m_pivot, Constants.Vision.pivotEncoderCalculator(Swerve.poseEstimator.getEstimatedPosition())),
                     new CommandPivotToPose(m_pivot, pivotPos), 
                     () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AUTOAIM
                 ),
@@ -424,17 +439,63 @@ public class RobotContainer {
     //     return new SequentialCommandGroup(
     //         new InstantCommand(() -> s_Swerve.resetOdometry(new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0)))),
 
-    //         new CommandDriveToPose(s_Swerve, new Pose2d(2.85, 5.60, Rotation2d.fromDegrees(0))),
+    //         new CommandPivotToPose(m_pivot, Constants.SATConstants.SUB.pivot),
+    //         new CommandShooterStart(m_shooter, Constants.SATConstants.SUB.shooter1, Constants.SATConstants.SUB.shooter2),
+    //         new CommandIndexStart(m_index),
+    //         new WaitCommand(0.2),
+    //         new CommandShooterStopNeutral(m_shooter),
+
+
+    //         new ParallelCommandGroup(
+    //             intakeNoteAuto(),
+    //             new CommandDriveToPose(s_Swerve, new Pose2d(2.85, 5.60, Rotation2d.fromDegrees(0)))
+    //         ),
+    //         new WaitCommand(0.2),
+    //         new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+    //         new CommandIndexReverse(m_index),
+    //         new CommandShooterReverse(m_shooter),
+    //         new WaitCommand(0.1),
+    //         new CommandShooterStopNeutral(m_shooter),
+    //         new CommandIndexStop(m_index),
+    //         new CommandShooterStart(m_shooter, Constants.SATConstants.SUB.shooter1, Constants.SATConstants.SUB.shooter2),
+    //         new CommandIndexStart(m_index),
+    //         new WaitCommand(0.2),
+    //         new CommandShooterStopNeutral(m_shooter),
+
+            
+    //         new ParallelCommandGroup(
+    //             intakeNoteAuto(),
+    //             new CommandDriveToPose(s_Swerve, new Pose2d(2.67, 4.09, Rotation2d.fromDegrees(0)))
+    //         ),
+    //         new WaitCommand(0.2),
+    //         new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
+    //         new CommandIndexReverse(m_index),
+    //         new CommandShooterReverse(m_shooter),
+    //         new WaitCommand(0.1),
+    //         new CommandShooterStopNeutral(m_shooter),
+    //         new CommandIndexStop(m_index),
+    //         new CommandShooterStart(m_shooter, Constants.SATConstants.SUB.shooter1, Constants.SATConstants.SUB.shooter2),
+    //         new CommandIndexStart(m_index),
+    //         new WaitCommand(0.2),
+    //         new CommandShooterStopNeutral(m_shooter),
 
     //         new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
 
-    //         new CommandDriveToPose(s_Swerve, new Pose2d(2.67, 4.09, Rotation2d.fromDegrees(0))),
-
+    //         new ParallelCommandGroup(
+    //             intakeNoteAuto(),
+    //             new CommandDriveToPose(s_Swerve, new Pose2d(2.77, 7.09, Rotation2d.fromDegrees(0)))
+    //         ),
+    //         new WaitCommand(0.2),
     //         new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))), //sub
-
-    //         new CommandDriveToPose(s_Swerve, new Pose2d(2.77, 7.09, Rotation2d.fromDegrees(0))),
-
-    //         new CommandDriveToPose(s_Swerve, new Pose2d(1.38, 5.54, Rotation2d.fromDegrees(0))) //sub
+    //         new CommandIndexReverse(m_index),
+    //         new CommandShooterReverse(m_shooter),
+    //         new WaitCommand(0.1),
+    //         new CommandShooterStopNeutral(m_shooter),
+    //         new CommandIndexStop(m_index),
+    //         new CommandShooterStart(m_shooter, Constants.SATConstants.SUB.shooter1, Constants.SATConstants.SUB.shooter2),
+    //         new CommandIndexStart(m_index),
+    //         new WaitCommand(0.2),
+    //         new CommandShooterStopNeutral(m_shooter)
 
     //     );
     // }
