@@ -99,8 +99,8 @@ public class RobotContainer {
                 new CommandShooterStart(m_shooter, 0, 0)
             ));
 
-            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 39));
-            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 36));
+            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 40));
+            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 37));
 
             put("Intake Note", new SequentialCommandGroup(
                 new CommandIntakeStart(m_intake),
@@ -128,7 +128,7 @@ public class RobotContainer {
                 new ParallelCommandGroup(
                     new CommandIndexStop(m_index),
                     new CommandIntakeStop(m_intake),
-                    new CommandPivotToPose(m_pivot, 43),
+                    new CommandPivotToPose(m_pivot, 45),
                     new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
                 ),
                 new WaitCommand(.3),
@@ -420,6 +420,7 @@ public class RobotContainer {
             new CommandAmperMotorStopNeutral(m_amperMotor)
         );
     }
+    
 
     /**
      * Use this to pass the autonomous command to the main {@link Robot} class.
