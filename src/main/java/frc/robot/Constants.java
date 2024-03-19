@@ -309,7 +309,7 @@ public final class Constants {
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
         public static double pivotEncoderCalculator(Pose2d currentPose){
-            double legDistance = Math.sqrt(Math.pow(centerFace.getX() - currentPose.getX(), 2)) + Math.pow(centerFace.getY() - currentPose.getY(), 2);
+            double legDistance = Math.sqrt(Math.pow(currentPose.getX() + .0381, 2)) + Math.pow(currentPose.getY() - 5.5478, 2);
             double pivotAngle = Math.atan(1.7526/legDistance); //1.7526 is the height difference from pivot to speaker entrance.
             return (pivotAngle - 9.282)/.59; //9.282 is in degrees, this is the "b" in y = mx + b, m is .59
             // the returned value is the # of encoder counts needed to reach the pivot angle (it's the x in the y = mx + b equation)
