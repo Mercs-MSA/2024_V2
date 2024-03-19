@@ -26,6 +26,7 @@ import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.networktables.StructArrayPublisher;
+import edu.wpi.first.util.sendable.Sendable;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -41,6 +42,7 @@ public class Swerve extends SubsystemBase {
     public Pigeon2 gyro;
     private Field2d field = new Field2d();
     public static SwerveDrivePoseEstimator poseEstimator;
+    public static SwerveDrivePoseEstimator poseEstimator1;
     private final StructArrayPublisher<SwerveModuleState> publisher;
     Field2d poseEstimateField2d = new Field2d();
     Pose2d tempPose;
@@ -88,6 +90,7 @@ public class Swerve extends SubsystemBase {
 
 
         poseEstimator = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), getPose());
+        poseEstimator1 = new SwerveDrivePoseEstimator(Constants.Swerve.swerveKinematics, getGyroYaw(), getModulePositions(), getPose());
         // Set up custom logging to add the current path to a field 2d widget
         PathPlannerLogging.setLogActivePathCallback((poses) -> field.getObject("path").setPoses(poses));
         SmartDashboard.putData("Field", field);
@@ -147,9 +150,17 @@ public class Swerve extends SubsystemBase {
         return poseEstimator.getEstimatedPosition();
     }
 
+    public Pose2d getPose1() {
+        if (poseEstimator == null){
+            return swerveOdometry.getPoseMeters();
+        }
+        return poseEstimator1.getEstimatedPosition();
+    }
+
     public void resetOdometry(Pose2d pose) {
         swerveOdometry.resetPosition(getGyroYaw(), getModulePositions(), pose);
         poseEstimator.resetPosition(getGyroYaw(), getModulePositions(), pose);
+        poseEstimator1.resetPosition(getGyroYaw(), getModulePositions(), pose);
     }
 
     public Rotation2d getHeading(){
@@ -199,6 +210,7 @@ public class Swerve extends SubsystemBase {
     public void periodic(){
         swerveOdometry.update(getGyroYaw(), getModulePositions());
         poseEstimator.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
+        poseEstimator1.updateWithTime(Timer.getFPGATimestamp(), getGyroYaw(), getModulePositions());
         for(SwerveModule mod : mSwerveMods){
             SmartDashboard.putNumber("Mod " + mod.moduleNumber + " CANcoder", mod.getCANcoder().getDegrees());
             //SmartDashboard.putNumber("Mod " + mod.moduleNumber + " Angle", mod.getPosition().angle.getDegrees());
@@ -212,7 +224,8 @@ public class Swerve extends SubsystemBase {
         //SmartDashboard.putNumber("Magnetic North Heading (degrees)", Math.atan2(gyro.getMagneticFieldX().getValueAsDouble(), gyro.getMagneticFieldY().getValueAsDouble()) * 180 / Math.PI);        
         poseEstimateField2d.setRobotPose(poseEstimator.getEstimatedPosition());
         // SmartDashboard.putData("s_Swerve", this);
-        SmartDashboard.putData("Estimated Pose", poseEstimateField2d);
+        SmartDashboard.putData("Estimated Pose", (Sendable) poseEstimator1.getEstimatedPosition());
+        SmartDashboard.putData("Estimated Pose With Vision", poseEstimateField2d);
         SmartDashboard.putNumber("Estimated pose x", poseEstimator.getEstimatedPosition().getTranslation().getX());
         SmartDashboard.putNumber("Estimated pose y", poseEstimator.getEstimatedPosition().getTranslation().getY());
         SmartDashboard.putNumber("Estimated pose yaw", poseEstimator.getEstimatedPosition().getTranslation().getAngle().getDegrees());
