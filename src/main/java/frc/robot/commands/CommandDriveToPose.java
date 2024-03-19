@@ -15,11 +15,11 @@ public class CommandDriveToPose extends Command {
   private Pose2d desiredPose;
 
   private final ProfiledPIDController xController =
-      new ProfiledPIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(4, 3.0));
+      new ProfiledPIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(2.5, 1.5));
   private final ProfiledPIDController yController =
-      new ProfiledPIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(4, 3.0));
+      new ProfiledPIDController(4, Constants.Swerve.driveKI, Constants.Swerve.driveKD, new TrapezoidProfile.Constraints(2.5, 1.5));
   private final ProfiledPIDController thetaController =
-      new ProfiledPIDController(Constants.Swerve.angleKP, Constants.Swerve.angleKI, Constants.Swerve.angleKD, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
+      new ProfiledPIDController(6, Constants.Swerve.angleKI, Constants.Swerve.angleKD, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
 
   public CommandDriveToPose(Swerve swerve, Pose2d pose) {
     this.swerve = swerve;
