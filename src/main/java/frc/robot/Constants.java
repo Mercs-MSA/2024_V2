@@ -430,6 +430,11 @@ public class AllianceFlipUtil {
         return (Math.abs(targetPose - currentPose) <= tolerance);
     }
 
+    /*This function calculates the yaw of the robot based on the position it is on the field, pointing it towards the speaker. Input is meters and output is in radians */
+    public static double speakerYawCalculator(double xPosOnField, double yPosOnField) {
+        return (Math.atan((5.547868-yPosOnField)/(xPosOnField+.038)));
+    }
+
     public static boolean isPoseWithinTol(Pose2d targetPose, Pose2d currentPose, Pose2d tol) {
         return Math.abs(targetPose.getTranslation().getX() - currentPose.getTranslation().getX()) <= tol.getTranslation().getX() &&
                Math.abs(targetPose.getTranslation().getY() - currentPose.getTranslation().getY()) <= tol.getTranslation().getY() &&
