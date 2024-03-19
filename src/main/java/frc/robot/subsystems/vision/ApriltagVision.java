@@ -61,10 +61,10 @@ public class ApriltagVision extends SubsystemBase {
             if (this.mFrontRightCam != null){
                 mFrontRightAprilTagResult = mFrontRightCam.getLatestResult();
 
-                mFrontRight = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
+                mFrontRight = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator1.getEstimatedPosition(), mFrontRightAprilTagResult);
 
                 if (mFrontRight.isPresent()){
-                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mFrontRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds());
+                    Swerve.poseEstimator1.addVisionMeasurement(new Pose2d(mFrontRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds());
                 }
 
             }
@@ -72,10 +72,10 @@ public class ApriltagVision extends SubsystemBase {
             if (this.mBackLeftCam != null){
                 mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
 
-                mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
+                mBackLeft = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator1.getEstimatedPosition(), mBackLeftAprilTagResult);
 
                 if (mBackLeft.isPresent()){
-                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
+                    Swerve.poseEstimator1.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
                 }
 
             }

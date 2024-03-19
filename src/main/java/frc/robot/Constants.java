@@ -309,8 +309,8 @@ public final class Constants {
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
         
         // This function takes the current robots pose (in meters X and Y) and generates the pivot motor command to aim the shooter at the speaker (in rotations)
-        public static double pivotEncoderCalculator(Pose2d pose){
-            double legDistance = Math.sqrt(Math.pow(centerFace.getX() - pose.getX(), 2)) + Math.pow(centerFace.getY() - pose.getY(), 2);
+        public static double pivotEncoderCalculator(Pose2d currentPose){
+            double legDistance = Math.sqrt(Math.pow(centerFace.getX() - currentPose.getX(), 2)) + Math.pow(centerFace.getY() - currentPose.getY(), 2);
             double pivotAngle = Math.atan(1.7526/legDistance); //1.7526 is the height difference from pivot to speaker entrance.
             double pivotCommand = (pivotAngle - 9.282)/0.59; //9.282 is in degrees, this is the "b" in y = mx + b, m is .59
             if (pivotCommand > 80.0) {  // This acts as a clamp to prevent this function from trying to command the pivot to an angle beyond the usual range
