@@ -8,22 +8,22 @@ import org.photonvision.PhotonPoseEstimator;
 import org.photonvision.PhotonPoseEstimator.PoseStrategy;
 import org.photonvision.estimation.TargetModel;
 import org.photonvision.targeting.PhotonPipelineResult;
+import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Transform2d;
+import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.numbers.N1;
 import edu.wpi.first.math.numbers.N3;
-import edu.wpi.first.util.sendable.Sendable;
-import edu.wpi.first.wpilibj.Timer;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.networktables.StructArrayPublisher;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
-import frc.robot.RobotContainer;
 import frc.robot.subsystems.Swerve;
 
 public class ApriltagVision extends SubsystemBase {
@@ -33,6 +33,8 @@ public class ApriltagVision extends SubsystemBase {
     private AprilTagFieldLayout mFieldLayout  = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
     private PhotonPipelineResult mBackRightAprilTagResult, mBackLeftAprilTagResult;
     private Optional<EstimatedRobotPose> mBackRight, mBackLeft;
+    @SuppressWarnings("unchecked")
+    private final StructArrayPublisher<AprilTag> mApriltagPublisherBR, mApriltagPublisherBL;
 
     public ApriltagVision(){
         PhotonCamera.setVersionCheckEnabled(false);
@@ -52,6 +54,8 @@ public class ApriltagVision extends SubsystemBase {
         mBackRightEstimator.setRobotToCameraTransform(Constants.Vision.aprilTagBackRight.robotToCamera);
         mBackLeftEstimator.setRobotToCameraTransform(Constants.Vision.aprilTagBackLeft.robotToCamera);
 
+        mApriltagPublisherBR = NetworkTableInstance.getDefault().getStructArrayTopic("AprilTags-" + Constants.Vision.aprilTagBackRight.camera, new AprilTagStruct()).publish();
+        mApriltagPublisherBL = NetworkTableInstance.getDefault().getStructArrayTopic("AprilTags-" + Constants.Vision.aprilTagBackLeft.camera, new AprilTagStruct()).publish();
         
     }
 
@@ -64,9 +68,13 @@ public class ApriltagVision extends SubsystemBase {
                 mBackRight = getBackRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackRightAprilTagResult);
 
                 if (mBackRight.isPresent()){
-                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackRightAprilTagResult.getTimestampSeconds());
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackRightAprilTagResult.getTimestampSeconds(), getBREstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition()));
                 }
 
+                // Send the AprilTag(s) to NT for AdvantageScope
+                mApriltagPublisherBR.accept(mBackRightAprilTagResult.targets.stream().map(target ->
+                    getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mBackRightEstimator.getRobotToCameraTransform())
+                ).toArray(AprilTag[]::new));
             }
 
             if (this.mBackLeftCam != null){
@@ -75,12 +83,19 @@ public class ApriltagVision extends SubsystemBase {
                 mBackLeft = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
 
                 if (mBackLeft.isPresent()){
-                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds());
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds(), getBLEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition()));
                 }
+
+                // Send the AprilTag(s) to NT for AdvantageScope
+                mApriltagPublisherBL.accept(mBackLeftAprilTagResult.targets.stream().map(target ->
+                    getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mBackLeftEstimator.getRobotToCameraTransform())
+                ).toArray(AprilTag[]::new));
 
             }
 
             // SmartDashboard.putData("mFrontRightAprilTagResult", mFrontRightAprilTagResult.getLatestResult().targets);
+            mApriltagPublisherBR.close();
+            mApriltagPublisherBL.close();
 
         }
 
@@ -159,6 +174,20 @@ public class ApriltagVision extends SubsystemBase {
         else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
 
         return estStdDevs;
+    }
+
+    /**
+     * Transform a target from PhotonVision to a pose on the field
+     * @param target target data from PhotonVision
+     * @param robotPose current pose of the robot
+     * @param robotToCamera transform from robot to the camera that saw the target
+     * @return an AprilTag with an ID and pose
+     */
+    private static AprilTag getTargetPose(PhotonTrackedTarget target, Pose2d robotPose, Transform3d robotToCamera) {
+        var targetPose = new Pose3d(robotPose)
+            .transformBy(robotToCamera)
+            .transformBy(target.getBestCameraToTarget());
+        return new AprilTag(target.getFiducialId(), targetPose);
     }
 
     
