@@ -42,6 +42,7 @@ import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
+import frc.robot.commands.PivotSubcommands.CommandPivotDynamicPose;
 import frc.robot.commands.PivotSubcommands.CommandPivotToNeutral;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterReverse;
@@ -238,6 +239,10 @@ public class RobotContainer {
 
         operator.y().onFalse(
             new CommandAmperScoreAmp(m_amper)
+        );
+
+        operator.start().onTrue(
+            new CommandPivotDynamicPose(m_pivot)
         );
         // operator.a().onTrue(
         //     new CommandAmperMotorReverse(m_amperMotor)
