@@ -99,6 +99,11 @@ public class RobotContainer {
                 new CommandShooterStart(m_shooter, 0, 0)
             ));
 
+            put("Podium Pivot", new SequentialCommandGroup(
+                new CommandPivotToPose(m_pivot, 40), 
+                new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
+            ));
+
             put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 40));
             put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 37));
 
@@ -127,9 +132,7 @@ public class RobotContainer {
                 new CommandChangeScoringMode(ScoringMode.PODIUM),
                 new ParallelCommandGroup(
                     new CommandIndexStop(m_index),
-                    new CommandIntakeStop(m_intake),
-                    new CommandPivotToPose(m_pivot, 45),
-                    new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
+                    new CommandIntakeStop(m_intake)
                 ),
                 new WaitCommand(.3),
                 new CommandIndexStart(m_index)
