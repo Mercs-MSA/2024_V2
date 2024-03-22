@@ -2,44 +2,19 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.38,
-      "y": 5.54
+      "x": 1.4311279977766789,
+      "y": 3.4312751079139816
     },
-    "rotation": 0
+    "rotation": 0.0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "score sub note"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Podium"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Note"
-                }
-              }
-            ]
+            "pathName": "1CenterRight"
           }
         }
       ]

@@ -105,8 +105,13 @@ public class RobotContainer {
                 new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
             ));
 
-            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 40));
-            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 37));
+            put("Right Pivot", new SequentialCommandGroup(
+                new CommandPivotToPose(m_pivot, 27),
+                new CommandShooterStart(m_shooter, -65, -45)
+            ));
+
+            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 42));
+            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 39));
 
             put("Intake Note", new SequentialCommandGroup(
                 new CommandIntakeStart(m_intake),
@@ -135,7 +140,7 @@ public class RobotContainer {
                     new CommandIndexStop(m_index),
                     new CommandIntakeStop(m_intake)
                 ),
-                new WaitCommand(.3),
+                new WaitCommand(.2),
                 new CommandIndexStart(m_index)
             ));
 
@@ -183,7 +188,7 @@ public class RobotContainer {
                 new CommandIndexReverse(m_index),
                 new CommandShooterReverse(m_shooter),
                 new WaitCommand(0.1),
-                new CommandShooterStopNeutral(m_shooter),
+                //new CommandShooterStopNeutral(m_shooter),
                 new CommandIndexStop(m_index),
                 new CommandScoreDriver(m_amper, m_shooter, m_amperMotor),
                 new CommandIndexStart(m_index)
@@ -200,6 +205,14 @@ public class RobotContainer {
         // driver.getRightTriggerAxis().greaterTh(
         //    new CommandScoreDriver(m_pivot, m_amper, m_index, m_shooter, m_amperMotor); 
         // );
+
+        driver.a().onTrue(
+            new CommandDriveToPose(s_Swerve, new Pose2d(1.37, 5.52, Rotation2d.fromDegrees(0)))
+        );
+
+        driver.b().onTrue(
+             new CommandDriveToPose(s_Swerve, new Pose2d(1.43, 3.43, Rotation2d.fromDegrees(0)))
+        );
     }
 
     public void manualTesting(){

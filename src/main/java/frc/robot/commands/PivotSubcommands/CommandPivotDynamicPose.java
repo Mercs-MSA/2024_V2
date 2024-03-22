@@ -33,4 +33,3 @@ public class CommandPivotDynamicPose extends Command {
     return Constants.isWithinTol(pos, m_pivot.getLeaderPos(), Constants.ArmConstants.tol);
   }
 }
-

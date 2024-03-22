@@ -3,29 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 0.91,
-        "y": 4.496988732475729
+        "x": 1.43,
+        "y": 3.43
       },
       "prevControl": null,
       "nextControl": {
-        "x": 0.9100000000000001,
-        "y": 3.496988732475729
+        "x": 2.0975177293573277,
+        "y": 3.055253312913864
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 1.852718113424813,
-        "y": 1.862023010779259
+        "x": 7.33338961685056,
+        "y": 0.7377827023842345
       },
       "prevControl": {
-        "x": 0.9138417975382072,
-        "y": 2.206277659937682
+        "x": 7.2833896168505605,
+        "y": 0.7377827023842345
       },
       "nextControl": {
-        "x": 2.5553683061717036,
-        "y": 1.6043846067720653
+        "x": 7.83338961685056,
+        "y": 0.7377827023842345
       },
       "isLocked": false,
       "linkedName": null
@@ -36,11 +36,11 @@
         "y": 0.7377827023842345
       },
       "prevControl": {
-        "x": 9.289605781066056,
+        "x": 9.039605781066056,
         "y": 0.7377827023842344
       },
       "nextControl": {
-        "x": 7.969605781066058,
+        "x": 8.039605781066056,
         "y": 0.7377827023842346
       },
       "isLocked": false,
@@ -48,16 +48,16 @@
     },
     {
       "anchor": {
-        "x": 4.956089798056913,
-        "y": 1.6512279529551925
+        "x": 5.810980865898964,
+        "y": 1.428722058585343
       },
       "prevControl": {
-        "x": 5.495412224141002,
-        "y": 1.461964372894467
+        "x": 6.350303291983052,
+        "y": 1.2394584785246174
       },
       "nextControl": {
-        "x": 4.420463121372832,
-        "y": 1.8391945894277733
+        "x": 5.275354189214882,
+        "y": 1.6166886950579236
       },
       "isLocked": false,
       "linkedName": null
@@ -78,30 +78,52 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 2.0,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": -55.0,
       "rotateFast": true
-    }
-  ],
-  "constraintZones": [
+    },
     {
-      "name": "New Constraints Zone",
-      "minWaypointRelativePos": 3.5999999999999996,
-      "maxWaypointRelativePos": 4.0,
-      "constraints": {
-        "maxVelocity": 3.0,
-        "maxAcceleration": 3.0,
-        "maxAngularVelocity": 180.0,
-        "maxAngularAcceleration": 180.0
-      }
+      "waypointRelativePos": 1.05,
+      "rotationDegrees": 0,
+      "rotateFast": false
     }
   ],
+  "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 1.4,
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "sequential",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Right Pivot"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "score podium note"
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 0.2
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.8,
+      "command": {
+        "type": "parallel",
         "data": {
           "commands": [
             {
@@ -128,9 +150,6 @@
   },
   "reversed": false,
   "folder": null,
-  "previewStartingState": {
-    "rotation": -60.0,
-    "velocity": 0
-  },
+  "previewStartingState": null,
   "useDefaultConstraints": true
 }
