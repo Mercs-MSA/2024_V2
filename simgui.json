@@ -13,6 +13,7 @@
       "/FMSInfo": "FMSInfo",
       "/SmartDashboard/Auto Mode": "String Chooser",
       "/SmartDashboard/Estimated Pose": "Field2d",
+      "/SmartDashboard/Estimated Pose With Vision": "Field2d",
       "/SmartDashboard/Field": "Field2d",
       "/SmartDashboard/Intake": "Subsystem",
       "/SmartDashboard/SAT": "Subsystem",

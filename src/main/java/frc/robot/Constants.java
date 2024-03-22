@@ -230,12 +230,6 @@ public final class Constants {
          */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.05;
 
-        public static class gamePieceCameraInfo {
-            // public static Transform3d robotToCamera = new Transform3d(12.114, -8.874, 15.266, new Rotation3d(0, 0, 0));
-            // public static Transform3d robotToCamera = new Transform3d(10, -3.5, 16.966, new Rotation3d(0, 0, 0));
-            public static Transform3d robotToCamera = new Transform3d(10, -3.5, 16.966, new Rotation3d(0, 0, 0));
-        }
-
         public static Pose2d temp = new Pose2d();
 
         public static class aprilTagBackLeft {
@@ -248,9 +242,14 @@ public final class Constants {
             public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(9.048893), -Units.inchesToMeters(12.252601), Units.inchesToMeters(8.841860 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
         }
 
-        public static class gamePieceCamera {
-            public static String camera = "GamePieceCamera";
-            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(5.537), -Units.inchesToMeters(-10.120), Units.inchesToMeters(1.7 + 15.216), new Rotation3d(0, 0, 0));
+        public static class aprilTagFrontLeft {
+            public static String camera = "AprilTagFrontLeft";
+            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.731732), Units.inchesToMeters(11.542972), Units.inchesToMeters(8.701325 + 2.75), new Rotation3d(0, 0.785398, -0.785398));
+        }
+        
+        public static class aprilTagFrontRight {
+            public static String camera = "AprilTagFrontRight";
+            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(9.048893), -Units.inchesToMeters(12.252601), Units.inchesToMeters(8.841860 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
         }
 
         public static double getRobotHeading(double gamePieceYaw){
