@@ -3,25 +3,41 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.38,
-        "y": 5.54
+        "x": 3.0,
+        "y": 5.468960666879964
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4764181414529807,
-        "y": 5.425093333532153
+        "x": 2.7076091812668635,
+        "y": 5.5387163915839945
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9,
-        "y": 3.95
+        "x": 2.379705757984981,
+        "y": 6.265297551993107
       },
       "prevControl": {
-        "x": 2.4694407387102917,
-        "y": 4.219349240552976
+        "x": 2.180621536706695,
+        "y": 6.05450249416904
+      },
+      "nextControl": {
+        "x": 2.4925656723869056,
+        "y": 6.384796284889262
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 3.0,
+        "y": 6.885971888919526
+      },
+      "prevControl": {
+        "x": 2.78349364905389,
+        "y": 6.760971888919526
       },
       "nextControl": null,
       "isLocked": false,
@@ -41,7 +57,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Podium Pivot"
+                "name": "Move Pivot Lower 2"
               }
             }
           ]
@@ -57,8 +73,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
-    "rotateFast": false
+    "rotation": 35.0,
+    "rotateFast": true
   },
   "reversed": false,
   "folder": null,

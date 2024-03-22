@@ -95,7 +95,7 @@ public final class Constants {
 
         /* Drive Motor Characterization Values From SYSID */
         public static final double driveKS = 0.16;
-        public static final double driveKV = 5.647;
+        public static final double driveKV = 1.79;
         public static final double driveKA = 0.21;
 
 

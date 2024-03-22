@@ -16,6 +16,12 @@
           "data": {
             "pathName": "1CenterRight"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
         }
       ]
     }

@@ -94,6 +94,8 @@ public class RobotContainer {
         {
             put("Start Intake", new CommandIntakeStart(m_intake));
             put("Start Index", new CommandIndexStart(m_index));
+            put("Stop Intake", new CommandIntakeStop(m_intake));
+            put("Stop Index", new CommandIndexStop(m_index));
     
             put("Reset", new ParallelCommandGroup(
                 new CommandPivotToPose(m_pivot, Constants.SATConstants.START.pivot),
@@ -106,16 +108,24 @@ public class RobotContainer {
             ));
 
             put("Right Pivot", new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 27),
-                new CommandShooterStart(m_shooter, -65, -45)
+                new CommandPivotToPose(m_pivot, 27.2),
+                new CommandShooterStart(m_shooter, -75, -55)
             ));
 
-            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 42));
-            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 39));
+            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 43));
+            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 40));
 
             put("Intake Note", new SequentialCommandGroup(
                 new CommandIntakeStart(m_intake),
                 new CommandIndexStart(m_index)
+            ));
+
+            put("Reset II", new SequentialCommandGroup(
+                new CommandIndexReverse(m_index), 
+                new CommandIntakeReverse(m_intake),
+                new WaitCommand(0.07),
+                new CommandIntakeStop(m_intake), 
+                new CommandIndexStop(m_index)
             ));
 
             put("score sub note", new SequentialCommandGroup(

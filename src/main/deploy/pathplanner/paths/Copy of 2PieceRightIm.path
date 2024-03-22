@@ -3,32 +3,54 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.38,
-        "y": 5.54
+        "x": 2.74,
+        "y": 4.26
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.4764181414529807,
-        "y": 5.425093333532153
+        "x": 2.461681613805452,
+        "y": 4.438407050851191
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.9,
-        "y": 3.95
+        "x": 2.239175719435603,
+        "y": 5.199611426326989
       },
       "prevControl": {
-        "x": 2.4694407387102917,
-        "y": 4.219349240552976
+        "x": 1.9229831326995024,
+        "y": 4.953683858865578
+      },
+      "nextControl": {
+        "x": 2.2853955934093246,
+        "y": 5.235560217195439
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 2.883271729453586,
+        "y": 5.398695647605275
+      },
+      "prevControl": {
+        "x": 2.613922488900612,
+        "y": 5.398695647605275
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 0.5,
+      "rotationDegrees": 0,
+      "rotateFast": true
+    }
+  ],
   "constraintZones": [],
   "eventMarkers": [
     {
@@ -41,7 +63,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Podium Pivot"
+                "name": "Move Pivot Lower 1"
               }
             }
           ]
@@ -56,12 +78,15 @@
     "maxAngularAcceleration": 180.0
   },
   "goalEndState": {
-    "velocity": 0,
-    "rotation": -45.0,
+    "velocity": 0.0,
+    "rotation": -5.0,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
-  "previewStartingState": null,
+  "previewStartingState": {
+    "rotation": 0,
+    "velocity": 0
+  },
   "useDefaultConstraints": true
 }
