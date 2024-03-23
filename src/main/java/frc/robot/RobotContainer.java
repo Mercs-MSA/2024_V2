@@ -225,7 +225,7 @@ public class RobotContainer {
             )
         )
         .onFalse(
-            stopIntakeIndexNeutral()
+            stopIndexShooterAmperNeutral()
   
         );
 
@@ -465,7 +465,14 @@ public class RobotContainer {
     public Command stopIntakeIndexShooterAmperNeutral(){
         return new ParallelCommandGroup(
             new CommandIntakeStopNeutral(m_intake),
-            new PrintCommand("it ran stopIntakeIndexShooterAmperNeutral"),
+            new CommandIndexStopNeutral(m_index),
+            new CommandShooterStopNeutral(m_shooter),
+            new CommandAmperMotorStopNeutral(m_amperMotor)
+        );
+    }
+
+    public Command stopIndexShooterAmperNeutral(){
+        return new ParallelCommandGroup(
             new CommandIndexStopNeutral(m_index),
             new CommandShooterStopNeutral(m_shooter),
             new CommandAmperMotorStopNeutral(m_amperMotor)
