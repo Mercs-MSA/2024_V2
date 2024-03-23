@@ -233,12 +233,12 @@ public final class Constants {
         public static Pose2d temp = new Pose2d();
 
         public static class aprilTagBackLeft {
-            public static String camera = "AprilTagBackLeft";
+            public static String camera = "BL";
             public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.731732), Units.inchesToMeters(11.542972), Units.inchesToMeters(8.701325 + 2.75), new Rotation3d(0, 0.785398, -0.785398));
         }
         
         public static class aprilTagBackRight {
-            public static String camera = "AprilTagFrontRight";
+            public static String camera = "BR";
             public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(9.048893), -Units.inchesToMeters(12.252601), Units.inchesToMeters(8.841860 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
         }
 
@@ -304,7 +304,7 @@ public final class Constants {
 
         // The standard deviations of our vision estimated poses, which affect correction rate
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
-        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(4, 4, 8);
+        public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
         
         // This function takes the current robots pose (in meters X and Y) and generates the pivot motor command to aim the shooter at the speaker (in rotations)

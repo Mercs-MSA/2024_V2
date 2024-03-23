@@ -42,6 +42,9 @@ public class ApriltagVision extends SubsystemBase {
         mBackRightCam = new PhotonCamera(Constants.Vision.aprilTagBackRight.camera);
         mBackLeftCam = new PhotonCamera(Constants.Vision.aprilTagBackLeft.camera);
 
+        mBackRightCam.setDriverMode(false);
+        mBackLeftCam.setDriverMode(false);
+
         mBackRightEstimator = new PhotonPoseEstimator(mFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, mBackRightCam, Constants.Vision.aprilTagBackRight.robotToCamera);
         mBackLeftEstimator = new PhotonPoseEstimator(mFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, mBackLeftCam, Constants.Vision.aprilTagBackLeft.robotToCamera);
 
@@ -68,7 +71,8 @@ public class ApriltagVision extends SubsystemBase {
                 mBackRight = getBackRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackRightAprilTagResult);
 
                 if (mBackRight.isPresent()){
-                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackRight.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackRightAprilTagResult.getTimestampSeconds(), getBREstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition()));
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mBackRight.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagBackRight.robotToCamera).getTranslation()
+                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackRightAprilTagResult.getTimestampSeconds(), getBREstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition()));
                 }
 
                 // Send the AprilTag(s) to NT for AdvantageScope
@@ -77,13 +81,15 @@ public class ApriltagVision extends SubsystemBase {
                 ).toArray(AprilTag[]::new));
             }
 
-            if (this.mBackLeftCam != null){
+            if (this.mBackLeftCam != null && (mBackRightAprilTagResult.getTargets().size() == 1)){
                 mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
 
                 mBackLeft = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
 
+                
                 if (mBackLeft.isPresent()){
-                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(mBackLeft.get().estimatedPose.toPose2d().getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds(), getBLEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition()));
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mBackLeft.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagBackLeft.robotToCamera).getTranslation()
+                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds(), getBLEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition()));
                 }
 
                 // Send the AprilTag(s) to NT for AdvantageScope
@@ -110,6 +116,10 @@ public class ApriltagVision extends SubsystemBase {
     public Optional<EstimatedRobotPose> getBackLeftEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, PhotonPipelineResult mBackLeftAprilTagResult) {
         mBackLeftEstimator.setReferencePose(prevEstimatedRobotPose);
         return mBackLeftEstimator.update(mBackLeftAprilTagResult);
+    }
+
+    public Pose2d addCameraTransform(Pose2d a, Transform3d b){
+        return new Pose3d(a).transformBy(b).toPose2d();
     }
 
     /**
