@@ -28,37 +28,51 @@ import frc.robot.subsystems.Swerve;
 
 public class ApriltagVision extends SubsystemBase {
     
-    private PhotonCamera mBackRightCam, mBackLeftCam;
-    private PhotonPoseEstimator mBackRightEstimator, mBackLeftEstimator;
+    private PhotonCamera mBackRightCam, mBackLeftCam, mFrontRightCam, mFrontLeftCam;
+    private PhotonPoseEstimator mBackRightEstimator, mBackLeftEstimator, mFrontRightEstimator, mFrontLeftEstimator;
     private AprilTagFieldLayout mFieldLayout  = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
-    private PhotonPipelineResult mBackRightAprilTagResult, mBackLeftAprilTagResult;
-    private Optional<EstimatedRobotPose> mBackRight, mBackLeft;
+    private PhotonPipelineResult mBackRightAprilTagResult, mBackLeftAprilTagResult, mFrontRightAprilTagResult, mFrontLeftAprilTagResult;
+    private Optional<EstimatedRobotPose> mBackRight, mBackLeft, mFrontLeft, mFrontRight;
     @SuppressWarnings("unchecked")
-    private final StructArrayPublisher<AprilTag> mApriltagPublisherBR, mApriltagPublisherBL;
+    private final StructArrayPublisher<AprilTag> mApriltagPublisherBR, mApriltagPublisherBL, mApriltagPublisherFL, mApriltagPublisherFR;
 
     public ApriltagVision(){
         PhotonCamera.setVersionCheckEnabled(false);
 
         mBackRightCam = new PhotonCamera(Constants.Vision.aprilTagBackRight.camera);
         mBackLeftCam = new PhotonCamera(Constants.Vision.aprilTagBackLeft.camera);
+        mFrontRightCam = new PhotonCamera(Constants.Vision.aprilTagBackRight.camera);
+        mFrontLeftCam = new PhotonCamera(Constants.Vision.aprilTagBackLeft.camera);
 
         mBackRightCam.setDriverMode(false);
         mBackLeftCam.setDriverMode(false);
+        mFrontRightCam.setDriverMode(false);
+        mFrontLeftCam.setDriverMode(false);
 
         mBackRightEstimator = new PhotonPoseEstimator(mFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, mBackRightCam, Constants.Vision.aprilTagBackRight.robotToCamera);
         mBackLeftEstimator = new PhotonPoseEstimator(mFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, mBackLeftCam, Constants.Vision.aprilTagBackLeft.robotToCamera);
+        mFrontRightEstimator = new PhotonPoseEstimator(mFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, mFrontRightCam, Constants.Vision.aprilTagFrontRight.robotToCamera);
+        mFrontLeftEstimator = new PhotonPoseEstimator(mFieldLayout, PoseStrategy.MULTI_TAG_PNP_ON_COPROCESSOR, mFrontLeftCam, Constants.Vision.aprilTagFrontLeft.robotToCamera);
 
         mBackRightEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
         mBackLeftEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        mFrontRightEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
+        mFrontLeftEstimator.setMultiTagFallbackStrategy(PoseStrategy.LOWEST_AMBIGUITY);
 
         mBackRightEstimator.setTagModel(TargetModel.kAprilTag36h11);
         mBackLeftEstimator.setTagModel(TargetModel.kAprilTag36h11);
+        mFrontRightEstimator.setTagModel(TargetModel.kAprilTag36h11);
+        mFrontLeftEstimator.setTagModel(TargetModel.kAprilTag36h11);
 
         mBackRightEstimator.setRobotToCameraTransform(Constants.Vision.aprilTagBackRight.robotToCamera);
         mBackLeftEstimator.setRobotToCameraTransform(Constants.Vision.aprilTagBackLeft.robotToCamera);
+        mFrontRightEstimator.setRobotToCameraTransform(Constants.Vision.aprilTagFrontRight.robotToCamera);
+        mFrontLeftEstimator.setRobotToCameraTransform(Constants.Vision.aprilTagFrontLeft.robotToCamera);
 
         mApriltagPublisherBR = NetworkTableInstance.getDefault().getStructArrayTopic("AprilTags-" + Constants.Vision.aprilTagBackRight.camera, new AprilTagStruct()).publish();
         mApriltagPublisherBL = NetworkTableInstance.getDefault().getStructArrayTopic("AprilTags-" + Constants.Vision.aprilTagBackLeft.camera, new AprilTagStruct()).publish();
+        mApriltagPublisherFR = NetworkTableInstance.getDefault().getStructArrayTopic("AprilTags-" + Constants.Vision.aprilTagFrontRight.camera, new AprilTagStruct()).publish();
+        mApriltagPublisherFL = NetworkTableInstance.getDefault().getStructArrayTopic("AprilTags-" + Constants.Vision.aprilTagFrontLeft.camera, new AprilTagStruct()).publish();
         
     }
 
@@ -72,7 +86,7 @@ public class ApriltagVision extends SubsystemBase {
 
                 if (mBackRight.isPresent()){
                     Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mBackRight.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagBackRight.robotToCamera).getTranslation()
-                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackRightAprilTagResult.getTimestampSeconds(), getBREstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition()));
+                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackRightAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mBackRightAprilTagResult));
                 }
 
                 // Send the AprilTag(s) to NT for AdvantageScope
@@ -81,7 +95,7 @@ public class ApriltagVision extends SubsystemBase {
                 ).toArray(AprilTag[]::new));
             }
 
-            if (this.mBackLeftCam != null && (mBackRightAprilTagResult.getTargets().size() == 1)){
+            if (this.mBackLeftCam != null){
                 mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
 
                 mBackLeft = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
@@ -89,33 +103,77 @@ public class ApriltagVision extends SubsystemBase {
                 
                 if (mBackLeft.isPresent()){
                     Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mBackLeft.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagBackLeft.robotToCamera).getTranslation()
-                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds(), getBLEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition()));
+                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult));
                 }
 
                 // Send the AprilTag(s) to NT for AdvantageScope
                 mApriltagPublisherBL.accept(mBackLeftAprilTagResult.targets.stream().map(target ->
                     getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mBackLeftEstimator.getRobotToCameraTransform())
                 ).toArray(AprilTag[]::new));
-
             }
 
-            // SmartDashboard.putData("mFrontRightAprilTagResult", mFrontRightAprilTagResult.getLatestResult().targets);
+            if (this.mFrontRightCam != null){
+                mFrontRightAprilTagResult = mFrontRightCam.getLatestResult();
+
+                mFrontRight = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
+
+                if (mFrontRight.isPresent()){
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mFrontRight.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagFrontRight.robotToCamera).getTranslation()
+                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult));
+                }
+
+                // Send the AprilTag(s) to NT for AdvantageScope
+                mApriltagPublisherFR.accept(mFrontRightAprilTagResult.targets.stream().map(target ->
+                    getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mFrontRightEstimator.getRobotToCameraTransform())
+                ).toArray(AprilTag[]::new));
+            }
+
+            if (this.mFrontLeft != null){
+                mFrontLeftAprilTagResult = mFrontLeftCam.getLatestResult();
+
+                mFrontLeft = getFrontLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontLeftAprilTagResult);
+
+                if (mFrontLeft.isPresent()){
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mFrontLeft.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagFrontLeft.robotToCamera).getTranslation()
+                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontLeftAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mFrontLeftAprilTagResult));
+                }
+
+                // Send the AprilTag(s) to NT for AdvantageScope
+                mApriltagPublisherFL.accept(mFrontLeftAprilTagResult.targets.stream().map(target ->
+                    getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mFrontLeftEstimator.getRobotToCameraTransform())
+                ).toArray(AprilTag[]::new));
+            }
+
+
             mApriltagPublisherBR.close();
             mApriltagPublisherBL.close();
+            mApriltagPublisherFR.close();
+            mApriltagPublisherFL.close();
+
 
         }
 
 
     }
 
-    public Optional<EstimatedRobotPose> getBackRightEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, PhotonPipelineResult mFrontRightAprilTagResult) {
+    public Optional<EstimatedRobotPose> getBackRightEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, PhotonPipelineResult mBackRightAprilTagResult) {
         mBackRightEstimator.setReferencePose(prevEstimatedRobotPose);
-        return mBackRightEstimator.update(mFrontRightAprilTagResult);
+        return mBackRightEstimator.update(mBackRightAprilTagResult);
     }
 
     public Optional<EstimatedRobotPose> getBackLeftEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, PhotonPipelineResult mBackLeftAprilTagResult) {
         mBackLeftEstimator.setReferencePose(prevEstimatedRobotPose);
         return mBackLeftEstimator.update(mBackLeftAprilTagResult);
+    }
+
+    public Optional<EstimatedRobotPose> getFrontLeftEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, PhotonPipelineResult mFrontLeftAprilTagResult) {
+        mFrontLeftEstimator.setReferencePose(prevEstimatedRobotPose);
+        return mFrontLeftEstimator.update(mFrontLeftAprilTagResult);
+    }
+
+    public Optional<EstimatedRobotPose> getFrontRightEstimatedGlobalPose(Pose2d prevEstimatedRobotPose, PhotonPipelineResult mFrontRightAprilTagResult) {
+        mFrontRightEstimator.setReferencePose(prevEstimatedRobotPose);
+        return mFrontRightEstimator.update(mFrontRightAprilTagResult);
     }
 
     public Pose2d addCameraTransform(Pose2d a, Transform3d b){
@@ -130,41 +188,9 @@ public class ApriltagVision extends SubsystemBase {
      * @param estimatedPose The estimated pose to guess standard deviations for.
      */
     //FT --> BR
-    public Matrix<N3, N1> getBREstimationStdDevs(Pose2d estimatedPose) {
+    public Matrix<N3, N1> getEstimationStdDevs(Pose2d estimatedPose, PhotonPipelineResult a) {
         var estStdDevs = Constants.Vision.kSingleTagStdDevs;
-        var targets = mBackRightAprilTagResult;
-        int numTags = 0;
-        double avgDist = 0;
-        for (var tgt : targets.targets) {
-            var tagPose = mBackRightEstimator.getFieldTags().getTagPose(tgt.getFiducialId());
-            if (tagPose.isEmpty()) continue;
-            numTags++;
-            avgDist +=
-                    tagPose.get().toPose2d().getTranslation().getDistance(estimatedPose.getTranslation());
-        }
-        if (numTags == 0) return estStdDevs;
-        avgDist /= numTags;
-        // Decrease std devs if multiple targets are visible
-        if (numTags > 1) estStdDevs = Constants.Vision.kMultiTagStdDevs;
-        // Increase std devs based on (average) distance
-        if (numTags == 1 && avgDist > 4)
-            estStdDevs = VecBuilder.fill(Double.MAX_VALUE, Double.MAX_VALUE, Double.MAX_VALUE);
-        else estStdDevs = estStdDevs.times(1 + (avgDist * avgDist / 30));
-
-        return estStdDevs;
-    }
-
-
-    /**
-     * The standard deviations of the estimated pose from {@link #getEstimatedGlobalPose()}, for use
-     * with {@link edu.wpi.first.math.estimator.SwerveDrivePoseEstimator SwerveDrivePoseEstimator}.
-     * This should only be used when there are targets visible.
-     *
-     * @param estimatedPose The estimated pose to guess standard deviations for.
-     */
-    public Matrix<N3, N1> getBLEstimationStdDevs(Pose2d estimatedPose) {
-        var estStdDevs = Constants.Vision.kSingleTagStdDevs;
-        var targets = mBackLeftAprilTagResult;
+        var targets = a;
         int numTags = 0;
         double avgDist = 0;
         for (var tgt : targets.targets) {
