@@ -34,6 +34,12 @@
           "data": {
             "name": "score podium note"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Reset "
+          }
         }
       ]
     }

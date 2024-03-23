@@ -28,6 +28,12 @@
           "data": {
             "pathName": "2CenterRight"
           }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
         }
       ]
     }

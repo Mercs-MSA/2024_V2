@@ -32,7 +32,7 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "New Event Marker",
+      "name": "Pivot ",
       "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
@@ -57,7 +57,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -45.0,
+    "rotation": -50.0,
     "rotateFast": true
   },
   "reversed": false,
