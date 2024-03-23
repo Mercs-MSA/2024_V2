@@ -1,0 +1,37 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.43,
+      "y": 3.43
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Preload"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2CenterRight"
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}

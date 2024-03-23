@@ -10,20 +10,7 @@
   "command": {
     "type": "sequential",
     "data": {
-      "commands": [
-        {
-          "type": "path",
-          "data": {
-            "pathName": "1CenterRight"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "score podium note"
-          }
-        }
-      ]
+      "commands": []
     }
   },
   "folder": null,

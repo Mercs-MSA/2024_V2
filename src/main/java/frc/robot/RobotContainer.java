@@ -107,6 +107,21 @@ public class RobotContainer {
                 new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
             ));
 
+            put("Left Pivot Preload", new SequentialCommandGroup(
+                new CommandPivotToPose(m_pivot, 51), 
+                new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
+            ));
+
+            put("Left Pivot Wing", new SequentialCommandGroup(
+                new CommandPivotToPose(m_pivot, 41), 
+                new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2) 
+            ));
+
+            put("Left Pivot Line", new SequentialCommandGroup(
+                new CommandPivotToPose(m_pivot, 30), 
+                new CommandShooterStart(m_shooter, -60, -40) 
+            ));
+
             put("Right Pivot", new SequentialCommandGroup(
                 new CommandPivotToPose(m_pivot, 27.2),
                 new CommandShooterStart(m_shooter, -75, -55)
