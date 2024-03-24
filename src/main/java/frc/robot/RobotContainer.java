@@ -248,10 +248,8 @@ public class RobotContainer {
         )
         .onFalse(
             new SequentialCommandGroup(
-                // new CommandShooterStopNeutral(m_shooter),
-                // new CommandIndexReverse(m_index),
-                // new WaitCommand(0.1),
-                stopIntakeIndexNeutral()
+                stopIntakeIndexNeutral(),
+                new CommandShooterStopNeutral(m_shooter)
             )
         );
 
@@ -295,9 +293,7 @@ public class RobotContainer {
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
         operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
-        
-        //don't do START position, use a on operator
-        
+                
         operator.leftBumper()
         .onTrue(
             new ParallelCommandGroup(
@@ -309,8 +305,6 @@ public class RobotContainer {
         .onFalse(
             new SequentialCommandGroup(
                 new CommandShooterStopNeutral(m_shooter),
-                new CommandIndexReverse(m_index),
-                new WaitCommand(0.1),
                 stopIntakeIndexNeutral()
             )
         );

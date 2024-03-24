@@ -10,15 +10,18 @@ import frc.robot.subsystems.pivot.Pivot;
 public class CommandPivotToPose extends Command {
   private final Pivot m_pivot;
   private double pivotPos;
+  private boolean useStateSystem;
   
   public CommandPivotToPose(Pivot i, double pos) {
     this.m_pivot = i;
     this.pivotPos = pos;
+    this.useStateSystem = false;
     addRequirements(m_pivot);
   }
 
   public CommandPivotToPose(Pivot i) {
     this.m_pivot = i;
+    this.useStateSystem = true;
     addRequirements(m_pivot);
   }
 
@@ -27,25 +30,28 @@ public class CommandPivotToPose extends Command {
     
     SmartDashboard.putNumber("pivot is trying to go to this pos", pivotPos);
 
-    switch (ScoringConstants.currentScoringMode) {
-            case PODIUM:
-                pivotPos = SATConstants.PODIUM.pivot;
-                break;
-            case SUBWOOFER:
-                pivotPos = SATConstants.SUB.pivot;
-                break;
-            case WING:
-                pivotPos = SATConstants.WING.pivot;
-                break;
-            case AMP:
-                pivotPos = SATConstants.AMP.pivot;
-                break;
-            case START:
-                pivotPos = SATConstants.START.pivot;
-                break;
-            default:
-                break;
+    if (useStateSystem){
+      switch (ScoringConstants.currentScoringMode) {
+        case PODIUM:
+          pivotPos = SATConstants.PODIUM.pivot;
+          break;
+        case SUBWOOFER:
+          pivotPos = SATConstants.SUB.pivot;
+          break;
+        case WING:
+          pivotPos = SATConstants.WING.pivot;
+          break;
+        case AMP:
+          pivotPos = SATConstants.AMP.pivot;
+          break;
+        case START:
+          pivotPos = SATConstants.START.pivot;
+          break;
+        default:
+          break;
+      }
     }
+
     m_pivot.leaderGoToPosition(pivotPos);
 
   }
