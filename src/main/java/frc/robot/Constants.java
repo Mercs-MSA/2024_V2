@@ -89,19 +89,19 @@ public final class Constants {
         /* Drive Motor PID Values */
         public static final double driveKP = 0.3;
         public static final double driveKI = 0.0;
-        public static final double driveKD = 0.0;
+        public static final double driveKD = 0.03;
         public static final double driveKF = 0.0;
 
 
         /* Drive Motor Characterization Values From SYSID */
-        public static final double driveKS = 0.16;
-        public static final double driveKV = 1.79;
+        public static final double driveKS = 0.15;
+        public static final double driveKV = 1.65562;
         public static final double driveKA = 0.21;
 
 
         /* Swerve Profiling Values */
         /** Meters per Second */
-        public static final double maxSpeed = 5.0;
+        public static final double maxSpeed = 8.5;
         /** Radians per Second */
         public static final double maxAngularVelocity = 10;
 
@@ -117,7 +117,7 @@ public final class Constants {
             public static final int driveMotorID = 14;
             public static final int angleMotorID = 15;
             public static final int canCoderID = 4;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(60.29296875000001);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(52.559);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -127,7 +127,7 @@ public final class Constants {
             public static final int driveMotorID = 11;
             public static final int angleMotorID = 13;
             public static final int canCoderID = 1;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-60.292969); //-98.525390625 or //83.232421875 - 180
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(-62.754); //-98.525390625 or //83.232421875 - 180
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -137,7 +137,7 @@ public final class Constants {
             public static final int driveMotorID = 8;
             public static final int angleMotorID = 12;
             public static final int canCoderID = 2;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(264.287109);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(274.1);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -147,7 +147,7 @@ public final class Constants {
             public static final int driveMotorID = 10;
             public static final int angleMotorID = 6;
             public static final int canCoderID = 3;
-            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(46.669219);
+            public static final Rotation2d angleOffset = Rotation2d.fromDegrees(43.121);
             public static final SwerveModuleConstants constants =
                 new SwerveModuleConstants(driveMotorID, angleMotorID, canCoderID, angleOffset);
         }
@@ -158,30 +158,35 @@ public final class Constants {
             public static final double pivot = 71;
             public static final double shooter1 = -35;
             public static final double shooter2 = -35;
+            public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
         }
 
         public static final class AMP{
             public static final double pivot = 166.4291992;
             public static final double shooter1 = -15;
             public static final double shooter2 = -15;
+            public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)));
         }
 
         public static final class PODIUM{
             public static final double pivot = 40;
             public static final double shooter1 = -55.0;
             public static final double shooter2 = -35.0;
+            public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-23.9)));
         }
         
         public static final class WING{
             public static final double pivot = 25;
             public static final double shooter1 = -100.0;
             public static final double shooter2 = -60.0;
+            public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d());   
         }
 
         public static final class START{
             public static final double pivot = 0.2;
             public static final double shooter1 = 0.0;
             public static final double shooter2 = 0.0;
+            public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d());
         }
     }
 
@@ -244,31 +249,16 @@ public final class Constants {
 
         public static class aprilTagFrontLeft {
             public static String camera = "FL";
-            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.731732), Units.inchesToMeters(11.542972), Units.inchesToMeters(8.701325 + 2.75), new Rotation3d(0, 0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(13.127925), Units.inchesToMeters(8.361007), Units.inchesToMeters(13.238730 + 2.75), new Rotation3d(0, 0.785398, -0.785398));
         }
         
         public static class aprilTagFrontRight {
             public static String camera = "FR";
-            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(9.048893), -Units.inchesToMeters(12.252601), Units.inchesToMeters(8.841860 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
+            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(13.127925), -Units.inchesToMeters(8.061007), Units.inchesToMeters(13.158730 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
         }
 
         public static double getRobotHeading(double gamePieceYaw){
             return ((gamePieceYaw*0.501) + 11.3);
-        }
-
-        public static class Sub{
-            public static Pose2d bluePose = new Pose2d(new Translation2d(1.38, 5.54), Rotation2d.fromDegrees(0));
-            public static Pose2d redPose = convertToRedSide(bluePose);
-        }
-
-        public static class SubRight{
-            public static Pose2d bluePose = new Pose2d(new Translation2d(0.75, 4.48), Rotation2d.fromDegrees(-60));
-            public static Pose2d redPose = convertToRedSide(bluePose);
-        }
-
-        public static class Podium{
-            public static Pose2d bluePose = new Pose2d(new Translation2d(2.977, 4.082), Rotation2d.fromDegrees(-32.61));
-            public static Pose2d redPose = convertToRedSide(bluePose);
         }
 
         public static double fieldWidth = 16.541;
@@ -276,30 +266,6 @@ public final class Constants {
 
         public static final Pose2d convertToRedSide(Pose2d pose) {
             return new Pose2d(fieldWidth - pose.getX(), pose.getY(), Rotation2d.fromDegrees(180).minus(pose.getRotation()));
-        }
-
-        public static Pose2d getPose(String a){
-            a = a.toLowerCase();
-            if (a == "sub"){
-                if (isRedAlliance){
-                    return Sub.redPose;
-                }
-                return Sub.bluePose;
-            }
-            else if (a == "podium"){
-                if (isRedAlliance){
-                    return Podium.redPose;
-                }
-                return Podium.bluePose;
-            }
-            else if (a == "subright"){
-                if (isRedAlliance){
-                    return SubRight.redPose;
-                }
-                return SubRight.bluePose;
-            }
-
-            return null;
         }
 
         // The standard deviations of our vision estimated poses, which affect correction rate
@@ -323,10 +289,6 @@ public final class Constants {
             }
             // the returned value is the # of motor rotations needed to reach the pivot angle (it's the x in the y = mx + b equation)
         }
-
-
-        
-        
     }
 
     public static class ArmConstants{

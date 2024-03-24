@@ -22,8 +22,9 @@ public class TeleopSwerve extends Command {
     private DoubleSupplier rotationSup;
     private BooleanSupplier robotCentricSup;
     private Rotation2d goodStraightGyro = new Rotation2d();
+    private double multiplier;
     private ProfiledPIDController thetaController =
-      new ProfiledPIDController(1.4, 0, 0.1, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
+      new ProfiledPIDController(2.25, 0.01, 0.1, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
 
     private double thetaVelocity = 0.0;
 
@@ -37,8 +38,15 @@ public class TeleopSwerve extends Command {
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.robotCentricSup = robotCentricSup;
-            this.thetaController.setTolerance(Units.degreesToRadians(2.5));
-            this.thetaController.enableContinuousInput(-Math.PI, Math.PI);
+        this.thetaController.setTolerance(Units.degreesToRadians(2));
+        this.thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+        if (Constants.AllianceFlipUtil.shouldFlip()){
+            multiplier = -1;
+        }
+        else {
+            multiplier = 1;
+        }
 
         addRequirements(s_Swerve);
     }
@@ -46,21 +54,21 @@ public class TeleopSwerve extends Command {
     @Override
     public void execute() { 
         /* Get Values, Deadband*/
-        double translationVal = MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
-        double strafeVal = MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
-        double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
+        double translationVal = multiplier * MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
+        double strafeVal = multiplier * MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
+        double rotationVal = multiplier * MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
         thetaVelocity = (thetaController.calculate(Swerve.poseEstimator.getEstimatedPosition().getRotation().getRadians(), goodStraightGyro.getRadians()) / Math.PI) * 10;
 
-        // if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/8)){
-        //     s_Swerve.drive(
-        //         new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-        //         thetaVelocity, 
-        //         !robotCentricSup.getAsBoolean(), 
-        //         false //was originally true
-        //     );
-        // }
-        // else {
+        if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/8)){
+            s_Swerve.drive(
+                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
+                thetaVelocity, 
+                !robotCentricSup.getAsBoolean(), 
+                false //was originally true
+            );
+        }
+        else {
             s_Swerve.drive(
                 new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
                 rotationVal * Constants.Swerve.maxAngularVelocity, 
@@ -68,7 +76,7 @@ public class TeleopSwerve extends Command {
                 false //was originally true
             );
             goodStraightGyro = Swerve.poseEstimator.getEstimatedPosition().getRotation();
-        // }
+        }
 
 
 

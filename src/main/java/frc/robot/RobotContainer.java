@@ -56,7 +56,6 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.ApriltagVision;
-// import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.vision.CustomGamePieceVision;
 
 import edu.wpi.first.hal.DriverStationJNI;
@@ -82,7 +81,6 @@ public class RobotContainer {
     public static final Amper m_amper = new Amper();
     public static final AmperMotor m_amperMotor = new AmperMotor();
 
-    public CustomGamePieceVision m_GamePieceVision = new CustomGamePieceVision("note_yaw", "note_dist");
     public ApriltagVision m_ApriltagVision = new ApriltagVision();
 
     /* AutoChooser */
@@ -236,13 +234,6 @@ public class RobotContainer {
         //    new CommandScoreDriver(m_pivot, m_amper, m_index, m_shooter, m_amperMotor); 
         // );
 
-        driver.a().onTrue(
-            new CommandDriveToPose(s_Swerve, new Pose2d(1.37, 5.52, Rotation2d.fromDegrees(0)))
-        );
-
-        driver.b().onTrue(
-             new CommandDriveToPose(s_Swerve, new Pose2d(1.43, 3.43, Rotation2d.fromDegrees(0)))
-        );
     }
 
     public void manualTesting(){

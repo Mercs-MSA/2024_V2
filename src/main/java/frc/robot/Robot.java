@@ -77,6 +77,12 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    // if (Constants.AllianceFlipUtil.shouldFlip()){
+    //   m_robotContainer.s_Swerve.gyro.setYaw(180);
+    // }
+    // else {
+    //   m_robotContainer.s_Swerve.gyro.setYaw(0);
+    // }
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     m_robotContainer.s_Swerve.zeroGyro();
@@ -109,6 +115,7 @@ public class Robot extends TimedRobot {
     Constants.Vision.visionTurnedOn = true;
 
     new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
+    m_robotContainer.stopIndexShooterAmperNeutral();
 
   }
 
