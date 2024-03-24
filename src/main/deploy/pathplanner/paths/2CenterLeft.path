@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 8.351433129515565,
-        "y": 6.808366515640728
+        "x": 8.303581383276772,
+        "y": 7.423528359752032
       },
       "prevControl": {
-        "x": 8.47313343471305,
-        "y": 6.899316102897251
+        "x": 8.42560844704158,
+        "y": 7.514039063076178
       },
       "nextControl": {
-        "x": 7.571733407456957,
-        "y": 6.225678018761579
+        "x": 7.690594492010744,
+        "y": 6.96885975636824
       },
       "isLocked": false,
       "linkedName": null
@@ -36,8 +36,8 @@
         "y": 7.064046419184041
       },
       "prevControl": {
-        "x": 5.943969102998969,
-        "y": 7.620632533474268
+        "x": 5.0711774136221885,
+        "y": 7.098584930170439
       },
       "nextControl": null,
       "isLocked": false,
@@ -47,7 +47,7 @@
   "rotationTargets": [
     {
       "waypointRelativePos": 0.1,
-      "rotationDegrees": 20.0,
+      "rotationDegrees": 25.0,
       "rotateFast": true
     },
     {
@@ -74,7 +74,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Podium Pivot"
+                "name": "Left Pivot Wing"
               }
             }
           ]
@@ -130,7 +130,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 27.0,
+    "rotation": 25.0,
     "rotateFast": false
   },
   "reversed": false,

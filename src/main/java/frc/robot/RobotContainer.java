@@ -103,7 +103,7 @@ public class RobotContainer {
             ));
 
             put("Podium Pivot", new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 40), 
+                new CommandPivotToPose(m_pivot, 42), 
                 new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
             ));
 
@@ -113,22 +113,22 @@ public class RobotContainer {
             ));
 
             put("Left Pivot Wing", new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 41), 
+                new CommandPivotToPose(m_pivot, 38), 
                 new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2) 
             ));
 
             put("Left Pivot Line", new SequentialCommandGroup(
                 new CommandPivotToPose(m_pivot, 30), 
-                new CommandShooterStart(m_shooter, -60, -40) 
+                new CommandShooterStart(m_shooter, -70, -50) 
             ));
 
             put("Right Pivot", new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 30),
+                new CommandPivotToPose(m_pivot, 31),
                 new CommandShooterStart(m_shooter, -75, -55)
             ));
 
             put("Right Pivot Line", new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 23),
+                new CommandPivotToPose(m_pivot, 27),
                 new CommandShooterStart(m_shooter, -90, -70)
             ));
 
@@ -143,7 +143,7 @@ public class RobotContainer {
             put("Reset II", new SequentialCommandGroup(
                 new CommandIndexReverse(m_index), 
                 new CommandIntakeReverse(m_intake),
-                new WaitCommand(0.07),
+                new WaitCommand(0.02),
                 new CommandIntakeStop(m_intake), 
                 new CommandIndexStop(m_index)
             ));

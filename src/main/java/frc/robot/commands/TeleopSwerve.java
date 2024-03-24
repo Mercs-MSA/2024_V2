@@ -53,30 +53,34 @@ public class TeleopSwerve extends Command {
 
     @Override
     public void execute() { 
-        /* Get Values, Deadband*/
-        double translationVal = multiplier * MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
-        double strafeVal = multiplier * MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
-        double rotationVal = multiplier * MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
-        thetaVelocity = (thetaController.calculate(Swerve.poseEstimator.getEstimatedPosition().getRotation().getRadians(), goodStraightGyro.getRadians()) / Math.PI) * 10;
+        if (Constants.Vision.autoRunning == false){
+            /* Get Values, Deadband*/
+            double translationVal = multiplier * MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
+            double strafeVal = multiplier * MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
+            double rotationVal = multiplier * MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
-        if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4) && !Constants.Vision.autoAlignActice){
-            s_Swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-                thetaVelocity, 
-                !robotCentricSup.getAsBoolean(), 
-                false //was originally true
-            );
+            thetaVelocity = (thetaController.calculate(Swerve.poseEstimator.getEstimatedPosition().getRotation().getRadians(), goodStraightGyro.getRadians()) / Math.PI) * 10;
+
+            if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4) && !Constants.Vision.autoAlignActice){
+                s_Swerve.drive(
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
+                    thetaVelocity, 
+                    !robotCentricSup.getAsBoolean(), 
+                    false //was originally true
+                );
+            }
+            else {
+                s_Swerve.drive(
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
+                    rotationVal * Constants.Swerve.maxAngularVelocity, 
+                    !robotCentricSup.getAsBoolean(), 
+                    false //was originally true
+                );
+                goodStraightGyro = Swerve.poseEstimator.getEstimatedPosition().getRotation();
+            }
         }
-        else {
-            s_Swerve.drive(
-                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
-                rotationVal * Constants.Swerve.maxAngularVelocity, 
-                !robotCentricSup.getAsBoolean(), 
-                false //was originally true
-            );
-            goodStraightGyro = Swerve.poseEstimator.getEstimatedPosition().getRotation();
-        }
+
 
 
 

@@ -98,6 +98,8 @@ public class Robot extends TimedRobot {
     Constants.Vision.visionTurnedOn = false;
     m_robotContainer.m_pivot.setBrakeMode(true);
 
+    Constants.Vision.autoRunning = true;
+
     
   }
 
@@ -120,6 +122,7 @@ public class Robot extends TimedRobot {
     new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
     m_robotContainer.stopIndexShooterAmperNeutral();
     m_robotContainer.m_pivot.setBrakeMode(true);
+    Constants.Vision.autoRunning = false;
 
   }
 

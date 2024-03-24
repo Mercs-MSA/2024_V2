@@ -13,6 +13,9 @@ public class Amper extends SubsystemBase{
     
         m_servo1.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
         m_servo2.setBoundsMicroseconds(2000, 1800, 1500, 1200, 1000);
+
+        m_servo1.set(1);
+        m_servo2.set(1);
     }
 
     public void setServo(double a, double b){

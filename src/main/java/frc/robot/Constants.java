@@ -223,6 +223,8 @@ public final class Constants {
 
         public static boolean isRedAlliance = false;
 
+        public static boolean autoRunning = true;
+
         public static double gamePieceYawOffset = -56.088;
 
         public static final Pose2d centerFace =
