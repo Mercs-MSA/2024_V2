@@ -3,45 +3,29 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.67,
-        "y": 3.06
+        "x": 4.28,
+        "y": 2.22
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.223018656396109,
-        "y": 2.3593719591229694
+        "x": 5.275937532705505,
+        "y": 1.3498004174104414
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 4.750917462917101,
-        "y": 1.304800977078806
+        "x": 8.252742788399349,
+        "y": 2.3983206880620935
       },
       "prevControl": {
-        "x": 4.3174718155715235,
-        "y": 1.4926068562351245
+        "x": 7.649498987705602,
+        "y": 1.6568633750273931
       },
       "nextControl": {
-        "x": 5.225280683717919,
-        "y": 1.0992660910613854
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.427546272410254,
-        "y": 0.5087821539213683
-      },
-      "prevControl": {
-        "x": 8.258419747471862,
-        "y": 0.5030572927318119
-      },
-      "nextControl": {
-        "x": 8.658628517054488,
-        "y": 0.5166041899647461
+        "x": 8.380842314853034,
+        "y": 2.555770015475217
       },
       "isLocked": false,
       "linkedName": null
@@ -49,11 +33,11 @@
     {
       "anchor": {
         "x": 4.28,
-        "y": 2.2210592475293747
+        "y": 2.22
       },
       "prevControl": {
-        "x": 5.085860855934675,
-        "y": 1.4956428825618067
+        "x": 5.386584547185299,
+        "y": 0.8909531023633811
       },
       "nextControl": null,
       "isLocked": false,
@@ -62,18 +46,18 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 2.0,
-      "rotationDegrees": 0,
+      "waypointRelativePos": 0.8,
+      "rotationDegrees": 35.0,
       "rotateFast": false
     }
   ],
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Intake",
-      "waypointRelativePos": 1.35,
+      "name": "Reset",
+      "waypointRelativePos": 0.15,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
@@ -87,8 +71,8 @@
       }
     },
     {
-      "name": "Start Intake",
-      "waypointRelativePos": 1.6,
+      "name": "Intake",
+      "waypointRelativePos": 0.65,
       "command": {
         "type": "parallel",
         "data": {
@@ -104,10 +88,10 @@
       }
     },
     {
-      "name": "Pivot Up",
-      "waypointRelativePos": 2.35,
+      "name": "Spin Up Shooter",
+      "waypointRelativePos": 1.4,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
@@ -115,18 +99,7 @@
               "data": {
                 "name": "Reset II"
               }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "New Event Marker",
-      "waypointRelativePos": 2.4000000000000004,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
+            },
             {
               "type": "named",
               "data": {
@@ -140,7 +113,7 @@
   ],
   "globalConstraints": {
     "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxAcceleration": 2.0,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0
   },

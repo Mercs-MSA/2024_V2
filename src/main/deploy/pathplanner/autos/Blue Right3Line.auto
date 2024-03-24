@@ -34,6 +34,18 @@
           "data": {
             "name": "score podium note"
           }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3CenterRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
         }
       ]
     }
