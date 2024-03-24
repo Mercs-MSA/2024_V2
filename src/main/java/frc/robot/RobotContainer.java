@@ -19,6 +19,7 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
+import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
@@ -212,23 +213,19 @@ public class RobotContainer {
 
     public void driverControls(){
         driver.rightBumper().onTrue(
-            new SequentialCommandGroup(
-                new CommandIndexReverse(m_index),
-                new CommandShooterReverse(m_shooter),
-                new WaitCommand(0.1),
-                //new CommandShooterStopNeutral(m_shooter),
-                new CommandIndexStop(m_index),
-                new CommandScoreDriver(m_amper, m_shooter, m_amperMotor),
-                new CommandIndexStart(m_index)
-            )
+            new CommandIndexStart(m_index)
+            
         )
         .onFalse(
-            stopIndexShooterAmperNeutral()
-  
+            new SequentialCommandGroup(
+                new CommandIndexStopNeutral(m_index),
+                new WaitCommand(0.1),
+                new CommandShooterStopNeutral(m_shooter)
+            )
         );
 
         driver.leftBumper().onTrue(
-            new CommandRotateToPose(s_Swerve, new Pose2d(Swerve.poseEstimator.getEstimatedPosition().getX(), Swerve.poseEstimator.getEstimatedPosition().getY(), Rotation2d.fromDegrees(-23.9)))
+            new CommandRotateToPose(s_Swerve)
         );
         // driver.getRightTriggerAxis().greaterTh(
         //    new CommandScoreDriver(m_pivot, m_amper, m_index, m_shooter, m_amperMotor); 
@@ -296,8 +293,9 @@ public class RobotContainer {
     public void operatorControls(){
         operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
-        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.WING));
         operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+        operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
+        
         //don't do START position, use a on operator
         
         operator.leftBumper()
@@ -327,19 +325,19 @@ public class RobotContainer {
 
         operator.x()
         .onTrue(
-            new CommandScoreOperator(m_pivot, m_amper, m_index, m_shooter, m_amperMotor)
-        )
-        .onFalse(
-            stopIntakeIndexShooterAmperNeutral()
-        );
-
-        operator.a().onTrue(
-            new CommandPivotToPose(m_pivot, 0.2)
-
+            new CommandPivotToPose(m_pivot).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
         );
 
         operator.y().onTrue(
-            shootNote(0, -35)
+            new SequentialCommandGroup(
+                new CommandIndexReverse(m_index),
+                new CommandShooterReverse(m_shooter),
+                new WaitCommand(0.1),
+                //new CommandShooterStopNeutral(m_shooter),
+                new CommandIndexStop(m_index),
+                new CommandShooterStopNeutral(m_shooter),
+                new CommandScoreDriver(m_amper, m_shooter, m_amperMotor)
+            )
         );
 
     }

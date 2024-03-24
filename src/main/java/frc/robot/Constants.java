@@ -217,6 +217,8 @@ public final class Constants {
     public static class Vision {
         public static boolean isNoteDetected = false;
 
+        public static boolean autoAlignActice = false;
+        
         public static boolean visionTurnedOn = false;
 
         public static boolean isRedAlliance = false;
@@ -244,7 +246,7 @@ public final class Constants {
         
         public static class aprilTagBackRight {
             public static String camera = "BR";
-            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(9.048893), -Units.inchesToMeters(12.252601), Units.inchesToMeters(8.841860 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
+            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.048893), -Units.inchesToMeters(12.252601), Units.inchesToMeters(8.841860 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
         }
 
         public static class aprilTagFrontLeft {
