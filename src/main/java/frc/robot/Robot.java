@@ -72,7 +72,9 @@ public class Robot extends TimedRobot {
   }
 
   @Override
-  public void disabledPeriodic() {}
+  public void disabledPeriodic() {
+    m_robotContainer.m_pivot.setBrakeMode(false);
+  }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
@@ -94,6 +96,7 @@ public class Robot extends TimedRobot {
     }
   
     Constants.Vision.visionTurnedOn = false;
+    m_robotContainer.m_pivot.setBrakeMode(true);
 
     
   }
@@ -116,6 +119,7 @@ public class Robot extends TimedRobot {
 
     new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
     m_robotContainer.stopIndexShooterAmperNeutral();
+    m_robotContainer.m_pivot.setBrakeMode(true);
 
   }
 
