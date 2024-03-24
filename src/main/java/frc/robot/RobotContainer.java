@@ -27,6 +27,7 @@ import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.CommandDriveToPose;
 import frc.robot.commands.CommandRotateToPose;
+import frc.robot.commands.CommandScore;
 import frc.robot.commands.CommandScoreDriver;
 import frc.robot.commands.CommandScoreOperator;
 import frc.robot.commands.TeleopSwerve;
@@ -213,12 +214,13 @@ public class RobotContainer {
 
     public void driverControls(){
         driver.rightBumper().onTrue(
-            new CommandIndexStart(m_index)
+            new CommandScoreDriver(m_shooter, m_amperMotor, m_index)
             
         )
         .onFalse(
             new SequentialCommandGroup(
                 new CommandIndexStopNeutral(m_index),
+                new CommandAmperMotorStopNeutral(m_amperMotor),
                 new WaitCommand(0.1),
                 new CommandShooterStopNeutral(m_shooter)
             )
@@ -227,9 +229,6 @@ public class RobotContainer {
         driver.leftBumper().onTrue(
             new CommandRotateToPose(s_Swerve)
         );
-        // driver.getRightTriggerAxis().greaterTh(
-        //    new CommandScoreDriver(m_pivot, m_amper, m_index, m_shooter, m_amperMotor); 
-        // );
 
     }
 
@@ -293,7 +292,7 @@ public class RobotContainer {
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
         operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
-                
+        
         operator.leftBumper()
         .onTrue(
             new ParallelCommandGroup(
@@ -330,7 +329,7 @@ public class RobotContainer {
                 //new CommandShooterStopNeutral(m_shooter),
                 new CommandIndexStop(m_index),
                 new CommandShooterStopNeutral(m_shooter),
-                new CommandScoreDriver(m_amper, m_shooter, m_amperMotor)
+                new CommandScore(m_amper, m_shooter, m_amperMotor)
             )
         );
 

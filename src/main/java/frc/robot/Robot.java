@@ -122,12 +122,12 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    // if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.AMP){
-    //   new CommandAmperScoreAmp(m_robotContainer.m_amper).schedule();
-    // }
-    // else {
-    //   new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
-    // }
+    if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.AMP){
+      new CommandAmperScoreAmp(m_robotContainer.m_amper).schedule();
+    }
+    else {
+      new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
+    }
   }
 
   @Override
