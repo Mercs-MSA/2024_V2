@@ -16,11 +16,17 @@ import edu.wpi.first.math.numbers.N3;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.units.Distance;
+import edu.wpi.first.units.Measure;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import static edu.wpi.first.units.Units.Meters;
+
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 public final class Constants {
     public static final double stickDeadband = 0.1;
@@ -225,6 +231,8 @@ public final class Constants {
 
         public static boolean autoRunning = true;
 
+        public static int manualDriveInvert = 1;
+
         public static double gamePieceYawOffset = -56.088;
 
         public static final Pose2d centerFace =
@@ -261,12 +269,20 @@ public final class Constants {
             public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(13.127925), -Units.inchesToMeters(8.061007), Units.inchesToMeters(13.158730 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
         }
 
+        public static String[] cameraNames = {aprilTagBackLeft.camera, aprilTagBackRight.camera, aprilTagFrontLeft.camera, aprilTagFrontRight.camera};
+        public static Transform3d[] robotToCameras = {aprilTagBackLeft.robotToCamera, aprilTagBackRight.robotToCamera, aprilTagFrontLeft.robotToCamera, aprilTagFrontRight.robotToCamera};
+
+        
+
         public static double getRobotHeading(double gamePieceYaw){
             return ((gamePieceYaw*0.501) + 11.3);
         }
 
         public static double fieldWidth = 16.541;
         public static double fieldHeight = 8.211;
+
+        public static final Measure<Distance> FIELD_LENGTH = Meters.of(16.54175);
+        public static final Measure<Distance> FIELD_WIDTH = Meters.of(8.0137);
 
         public static final Pose2d convertToRedSide(Pose2d pose) {
             return new Pose2d(fieldWidth - pose.getX(), pose.getY(), Rotation2d.fromDegrees(180).minus(pose.getRotation()));

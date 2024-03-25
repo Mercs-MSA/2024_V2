@@ -2,20 +2,19 @@ package frc.robot;
 
 import java.util.HashMap;
 import java.util.Map;
+import java.util.function.BiConsumer;
+import java.util.function.Supplier;
 
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
-import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
-import edu.wpi.first.wpilibj2.command.PrintCommand;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
@@ -25,13 +24,10 @@ import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
-import frc.robot.commands.CommandDriveToPose;
 import frc.robot.commands.CommandRotateToPose;
 import frc.robot.commands.CommandScore;
 import frc.robot.commands.CommandScoreDriver;
-import frc.robot.commands.CommandScoreOperator;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorReverse;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStart;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStopNeutral;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
@@ -45,7 +41,6 @@ import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
 import frc.robot.commands.PivotSubcommands.CommandPivotDynamicPose;
-import frc.robot.commands.PivotSubcommands.CommandPivotToNeutral;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterReverse;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
@@ -58,9 +53,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.ApriltagVision;
-import frc.robot.subsystems.vision.CustomGamePieceVision;
 
-import edu.wpi.first.hal.DriverStationJNI;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -82,13 +75,16 @@ public class RobotContainer {
     public static final Shooter m_shooter = new Shooter();
     public static final Amper m_amper = new Amper();
     public static final AmperMotor m_amperMotor = new AmperMotor();
-
-    public ApriltagVision m_ApriltagVision = new ApriltagVision();
+    BiConsumer<Pose2d, Double> poseConsumer = (visionRobotPoseMeters, timestampSeconds) -> {
+        Swerve.poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
+    };
+    Supplier<Pose2d> poseSupplier = () -> Swerve.poseEstimator.getEstimatedPosition();
+    // public ApriltagVision m_ApriltagVision = new ApriltagVision(Constants.Vision.cameraNames, Constants.Vision.robotToCameras, poseConsumer, poseSupplier);
+    
 
     /* AutoChooser */
     private final SendableChooser<Command> autoChooser;
 
-    // public CommandSwerveToNote commandSwerveToNote = new CommandSwerveToNote(s_Swerve, m_GamePieceVision);
 
     Map<String, Command> autonomousCommands = new HashMap<String,Command>() {
         {
@@ -228,6 +224,10 @@ public class RobotContainer {
 
         driver.leftBumper().onTrue(
             new CommandRotateToPose(s_Swerve)
+        );
+
+        driver.b().onTrue(
+            new InstantCommand(() -> Constants.Vision.manualDriveInvert = -1)
         );
 
     }
