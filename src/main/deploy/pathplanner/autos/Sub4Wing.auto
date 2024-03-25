@@ -5,37 +5,12 @@
       "x": 1.38,
       "y": 5.54
     },
-    "rotation": 0.0
+    "rotation": 0
   },
   "command": {
     "type": "sequential",
     "data": {
       "commands": [
-        {
-          "type": "named",
-          "data": {
-            "name": "score sub note"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Copy of Podium"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Note"
-                }
-              }
-            ]
-          }
-        },
         {
           "type": "wait",
           "data": {
@@ -45,7 +20,13 @@
         {
           "type": "named",
           "data": {
-            "name": "score podium note"
+            "name": "score sub note"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.2
           }
         },
         {
@@ -55,7 +36,38 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of 2PieceRightIm"
+                  "pathName": "Podium"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Intake Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Note"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "path",
+                "data": {
+                  "pathName": "2PieceRightIm"
                 }
               },
               {
@@ -74,13 +86,38 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "Copy of 2PieceLeftIm"
+                  "pathName": "2PieceLeftIm"
                 }
               },
               {
                 "type": "named",
                 "data": {
                   "name": "Intake Note"
+                }
+              }
+            ]
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Reset"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Index"
                 }
               }
             ]

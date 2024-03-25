@@ -55,13 +55,19 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Note"
+          }
+        },
+        {
           "type": "parallel",
           "data": {
             "commands": [
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2PieceRightIm"
+                  "pathName": "Copy of 2PieceRightIm"
                 }
               },
               {
@@ -80,7 +86,7 @@
               {
                 "type": "path",
                 "data": {
-                  "pathName": "2PieceLeftIm"
+                  "pathName": "Copy of 2PieceLeftIm"
                 }
               },
               {
