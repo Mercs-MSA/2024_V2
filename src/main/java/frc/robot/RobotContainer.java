@@ -75,11 +75,12 @@ public class RobotContainer {
     public static final Shooter m_shooter = new Shooter();
     public static final Amper m_amper = new Amper();
     public static final AmperMotor m_amperMotor = new AmperMotor();
-    BiConsumer<Pose2d, Double> poseConsumer = (visionRobotPoseMeters, timestampSeconds) -> {
-        Swerve.poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
-    };
-    Supplier<Pose2d> poseSupplier = () -> Swerve.poseEstimator.getEstimatedPosition();
+    // BiConsumer<Pose2d, Double> poseConsumer = (visionRobotPoseMeters, timestampSeconds) -> {
+    //     Swerve.poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
+    // };
+    // Supplier<Pose2d> poseSupplier = () -> Swerve.poseEstimator.getEstimatedPosition();
     // public ApriltagVision m_ApriltagVision = new ApriltagVision(Constants.Vision.cameraNames, Constants.Vision.robotToCameras, poseConsumer, poseSupplier);
+    // public ApriltagVision m_ApriltagVision = new ApriltagVision();
     
 
     /* AutoChooser */
