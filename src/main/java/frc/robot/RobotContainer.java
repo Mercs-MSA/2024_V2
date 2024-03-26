@@ -80,7 +80,7 @@ public class RobotContainer {
     // };
     // Supplier<Pose2d> poseSupplier = () -> Swerve.poseEstimator.getEstimatedPosition();
     // public ApriltagVision m_ApriltagVision = new ApriltagVision(Constants.Vision.cameraNames, Constants.Vision.robotToCameras, poseConsumer, poseSupplier);
-    // public ApriltagVision m_ApriltagVision = new ApriltagVision();
+    public ApriltagVision m_ApriltagVision = new ApriltagVision();
     
 
     /* AutoChooser */

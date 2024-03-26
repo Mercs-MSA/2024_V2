@@ -125,54 +125,54 @@ public class ApriltagVision extends SubsystemBase {
                 ).toArray(AprilTag[]::new));
             }
 
-            // if (this.mBackLeftCam != null){
-            //     mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
+            if (this.mBackLeftCam != null){
+                mBackLeftAprilTagResult = mBackLeftCam.getLatestResult();
 
-            //     mBackLeft = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
+                mBackLeft = getBackLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult);
 
                 
-            //     if (mBackLeft.isPresent() && seesMoreThanOneTag()){
-            //         Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mBackLeft.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagBackLeft.robotToCamera).getTranslation()
-            //             , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult));
-            //     }
+                if (mBackLeft.isPresent() && seesMoreThanOneTag()){
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mBackLeft.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagBackLeft.robotToCamera).getTranslation()
+                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mBackLeftAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mBackLeftAprilTagResult));
+                }
 
-            //     // Send the AprilTag(s) to NT for AdvantageScope
-            //     mApriltagPublisherBL.accept(mBackLeftAprilTagResult.targets.stream().map(target ->
-            //         getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mBackLeftEstimator.getRobotToCameraTransform())
-            //     ).toArray(AprilTag[]::new));
-            // }
+                // Send the AprilTag(s) to NT for AdvantageScope
+                mApriltagPublisherBL.accept(mBackLeftAprilTagResult.targets.stream().map(target ->
+                    getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mBackLeftEstimator.getRobotToCameraTransform())
+                ).toArray(AprilTag[]::new));
+            }
 
-            // if (this.mFrontRightCam != null){
-            //     mFrontRightAprilTagResult = mFrontRightCam.getLatestResult();
+            if (this.mFrontRightCam != null){
+                mFrontRightAprilTagResult = mFrontRightCam.getLatestResult();
 
-            //     mFrontRight = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
+                mFrontRight = getFrontRightEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult);
 
-            //     if (mFrontRight.isPresent() && seesMoreThanOneTag()){
-            //         Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mFrontRight.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagFrontRight.robotToCamera).getTranslation()
-            //             , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult));
-            //     }
+                if (mFrontRight.isPresent() && seesMoreThanOneTag()){
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mFrontRight.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagFrontRight.robotToCamera).getTranslation()
+                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontRightAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mFrontRightAprilTagResult));
+                }
 
-            //     // Send the AprilTag(s) to NT for AdvantageScope
-            //     mApriltagPublisherFR.accept(mFrontRightAprilTagResult.targets.stream().map(target ->
-            //         getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mFrontRightEstimator.getRobotToCameraTransform())
-            //     ).toArray(AprilTag[]::new));
-            // }
+                // Send the AprilTag(s) to NT for AdvantageScope
+                mApriltagPublisherFR.accept(mFrontRightAprilTagResult.targets.stream().map(target ->
+                    getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mFrontRightEstimator.getRobotToCameraTransform())
+                ).toArray(AprilTag[]::new));
+            }
 
-            // if (this.mFrontLeft != null){
-            //     mFrontLeftAprilTagResult = mFrontLeftCam.getLatestResult();
+            if (this.mFrontLeft != null){
+                mFrontLeftAprilTagResult = mFrontLeftCam.getLatestResult();
 
-            //     mFrontLeft = getFrontLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontLeftAprilTagResult);
+                mFrontLeft = getFrontLeftEstimatedGlobalPose(Swerve.poseEstimator.getEstimatedPosition(), mFrontLeftAprilTagResult);
 
-            //     if (mFrontLeft.isPresent() && seesMoreThanOneTag()){
-            //         Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mFrontLeft.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagFrontLeft.robotToCamera).getTranslation()
-            //             , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontLeftAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mFrontLeftAprilTagResult));
-            //     }
+                if (mFrontLeft.isPresent() && seesMoreThanOneTag()){
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(addCameraTransform(mFrontLeft.get().estimatedPose.toPose2d(), Constants.Vision.aprilTagFrontLeft.robotToCamera).getTranslation()
+                        , Swerve.poseEstimator.getEstimatedPosition().getRotation()), mFrontLeftAprilTagResult.getTimestampSeconds(), getEstimationStdDevs(Swerve.poseEstimator.getEstimatedPosition(), mFrontLeftAprilTagResult));
+                }
 
-            //     // Send the AprilTag(s) to NT for AdvantageScope
-            //     mApriltagPublisherFL.accept(mFrontLeftAprilTagResult.targets.stream().map(target ->
-            //         getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mFrontLeftEstimator.getRobotToCameraTransform())
-            //     ).toArray(AprilTag[]::new));
-            // }
+                // Send the AprilTag(s) to NT for AdvantageScope
+                mApriltagPublisherFL.accept(mFrontLeftAprilTagResult.targets.stream().map(target ->
+                    getTargetPose(target, Swerve.poseEstimator.getEstimatedPosition(), mFrontLeftEstimator.getRobotToCameraTransform())
+                ).toArray(AprilTag[]::new));
+            }
 
 
             mApriltagPublisherBR.close();

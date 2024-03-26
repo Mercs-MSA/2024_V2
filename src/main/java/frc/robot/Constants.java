@@ -169,8 +169,8 @@ public final class Constants {
 
         public static final class AMP{
             public static final double pivot = 166.4291992;
-            public static final double shooter1 = -15;
-            public static final double shooter2 = -15;
+            public static final double shooter1 = -22.5;
+            public static final double shooter2 = -22.5;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)));
         }
 
@@ -251,22 +251,22 @@ public final class Constants {
 
         public static class aprilTagBackLeft {
             public static String camera = "BL";
-            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.731732), Units.inchesToMeters(11.542972), Units.inchesToMeters(8.701325 + 2.75), new Rotation3d(0, 0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.731732), Units.inchesToMeters(11.542972), Units.inchesToMeters(8.701325 + 2.75), new Rotation3d(0, -0.785398, 2.356195));
         }
         
         public static class aprilTagBackRight {
             public static String camera = "BR";
-            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.048893), -Units.inchesToMeters(12.252601), Units.inchesToMeters(8.841860 + 2.75), new Rotation3d(0, -0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(-Units.inchesToMeters(9.048893), -Units.inchesToMeters(12.252601), Units.inchesToMeters(8.841860 + 2.75), new Rotation3d(0, -0.785398, -2.356195));
         }
 
         public static class aprilTagFrontLeft {
             public static String camera = "FL";
-            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(13.127925), Units.inchesToMeters(8.361007), Units.inchesToMeters(13.238730 + 2.75), new Rotation3d(0, 0.785398, -0.785398));
+            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(13.127925), Units.inchesToMeters(8.361007), Units.inchesToMeters(13.238730 + 2.75), new Rotation3d(0, -0.785398, 0.785398));
         }
         
         public static class aprilTagFrontRight {
             public static String camera = "FR";
-            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(13.127925), -Units.inchesToMeters(8.061007), Units.inchesToMeters(13.158730 + 2.75), new Rotation3d(0, 0.785398, 0.785398));
+            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(13.127925), -Units.inchesToMeters(8.061007), Units.inchesToMeters(13.158730 + 2.75), new Rotation3d(0, -0.785398, -0.785398));
         }
 
         public static String[] cameraNames = {aprilTagBackLeft.camera, aprilTagBackRight.camera, aprilTagFrontLeft.camera, aprilTagFrontRight.camera};
@@ -344,7 +344,7 @@ public final class Constants {
         public static int kAmperMotorId = 16;
         public static int kServoID1 = 9;
         public static int kServoID2 = 8;
-        public static int kAmperMotorSpeed = 30;
+        public static int kAmperMotorSpeed = 45;
     }
 
     public static class ShooterConstants{
