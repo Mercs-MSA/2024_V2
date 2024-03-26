@@ -58,7 +58,7 @@ public class TeleopSwerve extends Command {
             /* Get Values, Deadband*/
             double translationVal = Constants.Vision.manualDriveInvert * multiplier * MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
             double strafeVal = Constants.Vision.manualDriveInvert * multiplier * MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
-            double rotationVal = Constants.Vision.manualDriveInvert * multiplier * MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
+            double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
             thetaVelocity = (thetaController.calculate(Swerve.poseEstimator.getEstimatedPosition().getRotation().getRadians(), goodStraightGyro.getRadians()) / Math.PI) * 10;
 
