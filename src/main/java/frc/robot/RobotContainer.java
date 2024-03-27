@@ -8,6 +8,7 @@ import java.util.function.Supplier;
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
+import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -53,6 +54,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.ApriltagVision;
+import frc.robot.subsystems.vision.TempApriltagVision;
 
 
 /**
@@ -80,7 +82,7 @@ public class RobotContainer {
     // };
     // Supplier<Pose2d> poseSupplier = () -> Swerve.poseEstimator.getEstimatedPosition();
     // public ApriltagVision m_ApriltagVision = new ApriltagVision(Constants.Vision.cameraNames, Constants.Vision.robotToCameras, poseConsumer, poseSupplier);
-    public ApriltagVision m_ApriltagVision = new ApriltagVision();
+    // public ApriltagVision m_ApriltagVision = new ApriltagVision("BR");
     
 
     /* AutoChooser */
@@ -211,11 +213,15 @@ public class RobotContainer {
 
     public void driverControls(){
         driver.rightBumper().onTrue(
-            new CommandScoreDriver(m_shooter, m_amperMotor, m_index)
+            new ParallelCommandGroup(
+                new CommandScoreDriver(m_shooter, m_amperMotor, m_index),
+                new CommandIntakeStart(m_intake)
+            )
             
         )
         .onFalse(
             new SequentialCommandGroup(
+                new CommandIntakeStopNeutral(m_intake),
                 new CommandIndexStopNeutral(m_index),
                 new CommandAmperMotorStopNeutral(m_amperMotor),
                 new WaitCommand(0.1),
