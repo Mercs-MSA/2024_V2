@@ -467,6 +467,28 @@ public class RobotContainer {
             new CommandAmperMotorStopNeutral(m_amperMotor)
         );
     }
+
+    public static Command prepShooter(){
+        return new SequentialCommandGroup(
+                new CommandIndexReverse(m_index),
+                new CommandShooterReverse(m_shooter),
+                new WaitCommand(0.1),
+                //new CommandShooterStopNeutral(m_shooter),
+                new CommandIndexStop(m_index),
+                new CommandShooterStopNeutral(m_shooter),
+                new CommandScore(m_amper, m_shooter, m_amperMotor)
+        );
+    }
+
+    public static Command stopEverything(){
+        return new SequentialCommandGroup(
+            new WaitCommand(0.1),
+            new CommandIntakeStopNeutral(m_intake),
+            new CommandIndexStopNeutral(m_index),
+            new CommandShooterStopNeutral(m_shooter),
+            new CommandAmperMotorStopNeutral(m_amperMotor)
+        );
+    }
     
 
     /**

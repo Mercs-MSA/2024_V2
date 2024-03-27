@@ -20,6 +20,7 @@ import edu.wpi.first.units.Distance;
 import edu.wpi.first.units.Measure;
 import frc.lib.util.COTSTalonFXSwerveConstants;
 import frc.lib.util.SwerveModuleConstants;
+import frc.robot.Constants.AllianceFlipUtil;
 import edu.wpi.first.math.geometry.Translation3d;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -352,6 +353,10 @@ public final class Constants {
         public static int kshooterMotor1Id = 18;
 
         public static double tol = 3.5;
+    }
+
+    public static class BeamBreakConstants{
+        public static int port = 1;
     }
 
 
