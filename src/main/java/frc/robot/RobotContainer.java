@@ -131,8 +131,8 @@ public class RobotContainer {
                 new CommandShooterStart(m_shooter, -90, -70)
             ));
 
-            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 43));
-            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 40));
+            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 41));
+            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 38));
 
             put("Intake Note", new SequentialCommandGroup(
                 new CommandIntakeStart(m_intake),
