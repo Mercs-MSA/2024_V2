@@ -176,7 +176,7 @@ public final class Constants {
         }
 
         public static final class PODIUM{
-            public static final double pivot = 40;
+            public static final double pivot = 42;
             public static final double shooter1 = -55.0;
             public static final double shooter2 = -35.0;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-23.9)));
