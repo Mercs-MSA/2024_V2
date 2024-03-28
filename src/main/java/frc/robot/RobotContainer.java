@@ -26,7 +26,7 @@ import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
-import frc.robot.commands.CommandRotateToPose;
+// import frc.robot.commands.CommandRotateToPose;
 import frc.robot.commands.CommandScore;
 import frc.robot.commands.CommandScoreDriver;
 import frc.robot.commands.IntakeNote;
@@ -233,9 +233,9 @@ public class RobotContainer {
             )
         );
 
-        driver.leftBumper().onTrue(
-            new CommandRotateToPose(s_Swerve, m_ApriltagVision)
-        );
+        // driver.leftBumper().onTrue(
+        //     new CommandRotateToPose(s_Swerve, m_ApriltagVision)
+        // );
 
         driver.b().onTrue(
             new InstantCommand(() -> Constants.Vision.manualDriveInvert = -1)

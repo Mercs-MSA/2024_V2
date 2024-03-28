@@ -85,6 +85,7 @@ public class Robot extends TimedRobot {
     // else {
     //   m_robotContainer.s_Swerve.gyro.setYaw(0);
     // }
+    m_robotContainer.m_BeamBreak.disableAsynchronousInterrupt();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
     m_robotContainer.s_Swerve.zeroGyro();

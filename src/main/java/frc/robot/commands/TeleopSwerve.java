@@ -62,7 +62,7 @@ public class TeleopSwerve extends Command {
 
             thetaVelocity = (thetaController.calculate(Swerve.poseEstimator.getEstimatedPosition().getRotation().getRadians(), goodStraightGyro.getRadians()) / Math.PI) * 10;
 
-            if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4)){
+            if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4) && !Constants.Vision.autoAlignActice){
                 s_Swerve.drive(
                     new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
                     thetaVelocity, 
@@ -72,7 +72,7 @@ public class TeleopSwerve extends Command {
             }
             else {
                 s_Swerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),To
                     rotationVal * Constants.Swerve.maxAngularVelocity, 
                     !robotCentricSup.getAsBoolean(), 
                     false //was originally true
