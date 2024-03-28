@@ -21,7 +21,7 @@ public class TeleopSwerve extends Command {
     private DoubleSupplier strafeSup;
     private DoubleSupplier rotationSup;
     private BooleanSupplier robotCentricSup;
-    private Rotation2d goodStraightGyro = new Rotation2d();
+    public static Rotation2d goodStraightGyro = new Rotation2d();
     private double multiplier;
     private ProfiledPIDController thetaController =
       new ProfiledPIDController(2.25, 0.01, 0.1, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
@@ -55,14 +55,14 @@ public class TeleopSwerve extends Command {
     public void execute() { 
 
         if (Constants.Vision.autoRunning == false){
-            /* Get Values, Deadband*/
+            // /* Get Values, Deadband*/
             double translationVal = Constants.Vision.manualDriveInvert * multiplier * MathUtil.applyDeadband(translationSup.getAsDouble(), Constants.stickDeadband);
             double strafeVal = Constants.Vision.manualDriveInvert * multiplier * MathUtil.applyDeadband(strafeSup.getAsDouble(), Constants.stickDeadband);
             double rotationVal = MathUtil.applyDeadband(rotationSup.getAsDouble(), Constants.stickDeadband);
 
             thetaVelocity = (thetaController.calculate(Swerve.poseEstimator.getEstimatedPosition().getRotation().getRadians(), goodStraightGyro.getRadians()) / Math.PI) * 10;
 
-            if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4) && !Constants.Vision.autoAlignActice){
+            if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4)){
                 s_Swerve.drive(
                     new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
                     thetaVelocity, 

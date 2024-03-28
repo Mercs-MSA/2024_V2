@@ -10,6 +10,7 @@ import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -28,6 +29,7 @@ import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.CommandRotateToPose;
 import frc.robot.commands.CommandScore;
 import frc.robot.commands.CommandScoreDriver;
+import frc.robot.commands.IntakeNote;
 import frc.robot.commands.TeleopSwerve;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStart;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStopNeutral;
@@ -52,6 +54,7 @@ import frc.robot.subsystems.amperMotor.AmperMotor;
 import frc.robot.subsystems.index.Index;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.sensors.BeamBreak;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.ApriltagVision;
 import frc.robot.subsystems.vision.TempApriltagVision;
@@ -82,7 +85,8 @@ public class RobotContainer {
     // };
     // Supplier<Pose2d> poseSupplier = () -> Swerve.poseEstimator.getEstimatedPosition();
     // public ApriltagVision m_ApriltagVision = new ApriltagVision(Constants.Vision.cameraNames, Constants.Vision.robotToCameras, poseConsumer, poseSupplier);
-    // public ApriltagVision m_ApriltagVision = new ApriltagVision("BR");
+    public ApriltagVision m_ApriltagVision = new ApriltagVision("FR");
+    public BeamBreak m_BeamBreak = new BeamBreak();
     
 
     /* AutoChooser */
@@ -230,7 +234,7 @@ public class RobotContainer {
         );
 
         driver.leftBumper().onTrue(
-            new CommandRotateToPose(s_Swerve)
+            new CommandRotateToPose(s_Swerve, m_ApriltagVision)
         );
 
         driver.b().onTrue(
@@ -254,6 +258,7 @@ public class RobotContainer {
         )
         .onFalse(
             new SequentialCommandGroup(
+                new InstantCommand(() -> m_BeamBreak.disableAsynchronousInterrupt()),
                 stopIntakeIndexNeutral(),
                 new CommandShooterStopNeutral(m_shooter)
             )
@@ -302,9 +307,12 @@ public class RobotContainer {
         
         operator.leftBumper()
         .onTrue(
-            new ParallelCommandGroup(
-                intakeNote(),
-                new CommandShooterReverse(m_shooter, 10, 10)
+            new SequentialCommandGroup(
+                // new InstantCommand(() -> m_BeamBreak.enableAsynchronousInterrupt()),
+                // intakeNote(),
+                // new CommandShooterReverse(m_shooter, 10, 10)
+                new IntakeNote(m_intake, m_index, m_BeamBreak)
+                // new CommandScore(m_amper, m_shooter, m_amperMotor)
             )
             
         )
@@ -330,12 +338,12 @@ public class RobotContainer {
 
         operator.y().onTrue(
             new SequentialCommandGroup(
-                new CommandIndexReverse(m_index),
-                new CommandShooterReverse(m_shooter),
-                new WaitCommand(0.1),
-                //new CommandShooterStopNeutral(m_shooter),
-                new CommandIndexStop(m_index),
-                new CommandShooterStopNeutral(m_shooter),
+                // new CommandIndexReverse(m_index),
+                // new CommandShooterReverse(m_shooter),
+                // new WaitCommand(0.1),
+                // //new CommandShooterStopNeutral(m_shooter),
+                // new CommandIndexStop(m_index),
+                // new CommandShooterStopNeutral(m_shooter),
                 new CommandScore(m_amper, m_shooter, m_amperMotor)
             )
         );
@@ -482,7 +490,7 @@ public class RobotContainer {
 
     public static Command stopEverything(){
         return new SequentialCommandGroup(
-            new WaitCommand(0.1),
+            // new WaitCommand(0.1),
             new CommandIntakeStopNeutral(m_intake),
             new CommandIndexStopNeutral(m_index),
             new CommandShooterStopNeutral(m_shooter),

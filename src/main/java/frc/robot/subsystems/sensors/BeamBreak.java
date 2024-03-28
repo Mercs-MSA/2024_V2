@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj.AsynchronousInterrupt;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.RobotContainer;
 import frc.robot.Constants.BeamBreakConstants;
 
 public class BeamBreak extends SubsystemBase{
@@ -18,8 +19,10 @@ public class BeamBreak extends SubsystemBase{
         }
         if (fallingEdge){
             this.detectsNote = true;
+            RobotContainer.stopEverything();
             // RobotContainer.prepShooter();
         }
+        // RobotContainer.stopEverything();
     };
     private AsynchronousInterrupt asynchronousInterrupt = new AsynchronousInterrupt(beamBreak, callback);
 
@@ -29,6 +32,7 @@ public class BeamBreak extends SubsystemBase{
 
     @Override
     public void periodic() {
+        this.detectsNote = !beamBreak.get();
         SmartDashboard.putBoolean("Beam Break Detects Note", beamBreak.get());
     }
 

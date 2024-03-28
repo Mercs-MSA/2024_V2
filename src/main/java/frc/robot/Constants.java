@@ -356,7 +356,7 @@ public final class Constants {
     }
 
     public static class BeamBreakConstants{
-        public static int port = 1;
+        public static int port = 7;
     }
 
 
