@@ -106,7 +106,7 @@ public class RobotContainer {
             ));
 
             put("Podium Pivot", new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 42), 
+                new CommandPivotToPose(m_pivot, 49), 
                 new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
             ));
 
@@ -121,7 +121,7 @@ public class RobotContainer {
             ));
 
             put("Left Pivot Line", new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 30), 
+                new CommandPivotToPose(m_pivot, 32), 
                 new CommandShooterStart(m_shooter, -70, -50) 
             ));
 
@@ -135,8 +135,8 @@ public class RobotContainer {
                 new CommandShooterStart(m_shooter, -90, -70)
             ));
 
-            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 41));
-            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 38));
+            put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 48));
+            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 45));
 
             put("Intake Note", new SequentialCommandGroup(
                 new CommandIntakeStart(m_intake),
@@ -233,15 +233,19 @@ public class RobotContainer {
             )
         );
 
-        driver.leftBumper().onTrue(
-            // new CommandRotateToPose(s_Swerve, m_ApriltagVision)
-            new InstantCommand(() -> {Constants.Vision.autoAimActive = true; TeleopSwerve.ranInitForAutoAim = false;})
-        ).onFalse(
-            new InstantCommand(() -> Constants.Vision.autoAimActive = false)
-        );
+        // driver.leftBumper().onTrue(
+        //     // new CommandRotateToPose(s_Swerve, m_ApriltagVision)
+        //     new InstantCommand(() -> {Constants.Vision.autoAimActive = true; TeleopSwerve.ranInitForAutoAim = false;})
+        // ).onFalse(
+        //     new InstantCommand(() -> Constants.Vision.autoAimActive = false)
+        // );
 
         driver.b().onTrue(
             new InstantCommand(() -> Constants.Vision.manualDriveInvert = -1)
+        );
+
+        driver.a().onTrue(
+            new InstantCommand(() -> Constants.Vision.manualDriveInvert = 1)
         );
 
     }
