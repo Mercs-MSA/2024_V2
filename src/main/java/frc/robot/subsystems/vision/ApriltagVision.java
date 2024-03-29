@@ -24,7 +24,7 @@ public class ApriltagVision extends SubsystemBase {
     private boolean aprilTagHasTargets;
     private int fiducialID;
     private double aprilTagX, aprilTagY, aprilTagZAngle, aprilTagZ, distance;
-    private double yaw;
+    public static double yaw;
     private double pitch = -1;
     private PhotonTrackedTarget specificTags;
     
@@ -55,13 +55,19 @@ public class ApriltagVision extends SubsystemBase {
                     }
                 }
 
-                fiducialID = specificTags.getFiducialId();
-                aprilTagX = specificTags.getBestCameraToTarget().getX();
-                aprilTagY = specificTags.getBestCameraToTarget().getY();
-                aprilTagZ = specificTags.getBestCameraToTarget().getZ();
-                aprilTagZAngle = specificTags.getBestCameraToTarget().getRotation().getAngle();
-                yaw = specificTags.getYaw();
-                pitch = specificTags.getPitch();
+                if (specificTags != null){
+                    fiducialID = specificTags.getFiducialId();
+                    aprilTagX = specificTags.getBestCameraToTarget().getX();
+                    aprilTagY = specificTags.getBestCameraToTarget().getY();
+                    aprilTagZ = specificTags.getBestCameraToTarget().getZ();
+                    aprilTagZAngle = specificTags.getBestCameraToTarget().getRotation().getAngle();
+                    yaw = specificTags.getYaw();
+                    pitch = specificTags.getPitch();
+                }
+   
+            }
+            else {
+                yaw = -1;
             } 
 
 
@@ -121,7 +127,7 @@ public class ApriltagVision extends SubsystemBase {
      * Gets the X coordinate of the AprilTag in meters.
      * @return The X coordinate.
      */
-    public double getYaw(){
+    public static double getYaw(){
         return yaw;
     }
 

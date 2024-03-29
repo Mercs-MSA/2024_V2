@@ -233,9 +233,12 @@ public class RobotContainer {
             )
         );
 
-        // driver.leftBumper().onTrue(
-        //     new CommandRotateToPose(s_Swerve, m_ApriltagVision)
-        // );
+        driver.leftBumper().onTrue(
+            // new CommandRotateToPose(s_Swerve, m_ApriltagVision)
+            new InstantCommand(() -> {Constants.Vision.autoAimActive = true; TeleopSwerve.ranInitForAutoAim = false;})
+        ).onFalse(
+            new InstantCommand(() -> Constants.Vision.autoAimActive = false)
+        );
 
         driver.b().onTrue(
             new InstantCommand(() -> Constants.Vision.manualDriveInvert = -1)

@@ -228,6 +228,8 @@ public final class Constants {
         
         public static boolean visionTurnedOn = false;
 
+        public static boolean autoAimActive = false;
+
         public static boolean isRedAlliance = false;
 
         public static boolean autoRunning = true;

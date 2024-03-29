@@ -13,6 +13,7 @@ import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
 import frc.robot.subsystems.Swerve;
+import frc.robot.subsystems.vision.ApriltagVision;
 
 
 public class TeleopSwerve extends Command {    
@@ -27,6 +28,7 @@ public class TeleopSwerve extends Command {
       new ProfiledPIDController(2.25, 0.01, 0.1, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
 
     private double thetaVelocity = 0.0;
+    public static boolean ranInitForAutoAim = false;
 
 
     public TeleopSwerve(Swerve s_Swerve, DoubleSupplier translationSup, DoubleSupplier strafeSup, DoubleSupplier rotationSup, BooleanSupplier robotCentricSup) {
@@ -38,7 +40,7 @@ public class TeleopSwerve extends Command {
         this.strafeSup = strafeSup;
         this.rotationSup = rotationSup;
         this.robotCentricSup = robotCentricSup;
-        this.thetaController.setTolerance(Units.degreesToRadians(2));
+        this.thetaController.setTolerance(Units.degreesToRadians(0.5));
         this.thetaController.enableContinuousInput(-Math.PI, Math.PI);
 
         if (Constants.AllianceFlipUtil.shouldFlip()){
@@ -62,7 +64,7 @@ public class TeleopSwerve extends Command {
 
             thetaVelocity = (thetaController.calculate(Swerve.poseEstimator.getEstimatedPosition().getRotation().getRadians(), goodStraightGyro.getRadians()) / Math.PI) * 10;
 
-            if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4) && !Constants.Vision.autoAlignActice){
+            if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4)){
                 s_Swerve.drive(
                     new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
                     thetaVelocity, 
@@ -71,14 +73,26 @@ public class TeleopSwerve extends Command {
                 );
             }
             else {
+                goodStraightGyro = Swerve.poseEstimator.getEstimatedPosition().getRotation();
+
                 s_Swerve.drive(
                     new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
                     rotationVal * Constants.Swerve.maxAngularVelocity, 
                     !robotCentricSup.getAsBoolean(), 
                     false //was originally true
-                );
-                goodStraightGyro = Swerve.poseEstimator.getEstimatedPosition().getRotation();
+                ); 
             }
+
+            if (Constants.Vision.autoAimActive){
+                goodStraightGyro = Rotation2d.fromDegrees(Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees() - ApriltagVision.getYaw());
+                ranInitForAutoAim = true;
+                // check that yaw is also in deg
+                // check that - is the right sign 
+                // pray
+            }
+        }
+        else {
+            goodStraightGyro = Swerve.poseEstimator.getEstimatedPosition().getRotation();
         }
 
 
@@ -88,6 +102,7 @@ public class TeleopSwerve extends Command {
         if (goodStraightGyro != null){
             SmartDashboard.putNumber("goodStraightGyro teleop swerve", goodStraightGyro.getRadians());
             SmartDashboard.putNumber("rotationVal teleop swerve", -(goodStraightGyro.getRadians() - Swerve.poseEstimator.getEstimatedPosition().getRotation().getRadians()));
+            SmartDashboard.putNumber("auto aim angle", Rotation2d.fromDegrees(Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees() - ApriltagVision.getYaw()).getDegrees());
         }
     }
 }
