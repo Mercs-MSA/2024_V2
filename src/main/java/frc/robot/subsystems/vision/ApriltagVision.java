@@ -10,8 +10,6 @@ import edu.wpi.first.apriltag.AprilTagFieldLayout;
 import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
-import edu.wpi.first.math.geometry.Transform2d;
-import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -26,8 +24,9 @@ public class ApriltagVision extends SubsystemBase {
     private PhotonPipelineResult aprilTagResult;
     private boolean aprilTagHasTargets;
     private int fiducialID;
-    private double aprilTagX, aprilTagY, aprilTagZAngle, aprilTagZ, distance;
+    private double aprilTagX, aprilTagY, aprilTagZAngle, aprilTagZ;
     public static double yaw;
+    public double distance;
     private double pitch = -1;
     private PhotonTrackedTarget specificTags;
     private Pose2d estimatedRobotPose; 
@@ -69,9 +68,9 @@ public class ApriltagVision extends SubsystemBase {
 
                 if (specificTags != null){
                     fiducialID = specificTags.getFiducialId();
-                    aprilTagX = specificTags.getBestCameraToTarget().getX();
-                    aprilTagY = specificTags.getBestCameraToTarget().getY();
-                    aprilTagZ = specificTags.getBestCameraToTarget().getZ();
+                    // aprilTagX = specificTags.getBestCameraToTarget().getX();
+                    // aprilTagY = specificTags.getBestCameraToTarget().getY();
+                    // aprilTagZ = specificTags.getBestCameraToTarget().getZ();
                     aprilTagZAngle = specificTags.getBestCameraToTarget().getRotation().getAngle();
                     yaw = specificTags.getYaw();
                     pitch = specificTags.getPitch();
@@ -91,12 +90,12 @@ public class ApriltagVision extends SubsystemBase {
                 if (fiducialID == 4){
                      aprilTagZAngle = 180 - aprilTagZAngle;
                 }
-                distance = PhotonUtils.calculateDistanceToTargetMeters(Units.inchesToMeters(8.75), 1.45, Units.degreesToRadians(30), pitch);
+                distance = PhotonUtils.calculateDistanceToTargetMeters(Units.inchesToMeters(8.75), 1.45, Units.degreesToRadians(30), Units.degreesToRadians(pitch));
                 SmartDashboard.putNumber(cameraName + " Fiducial ID", fiducialID);
-                SmartDashboard.putNumber(cameraName + " AprilTag X (m)", aprilTagX);
-                SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
-                SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
-                SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
+                // SmartDashboard.putNumber(cameraName + " AprilTag X (m)", aprilTagX);
+                // SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
+                // SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
+                // SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
                 SmartDashboard.putNumber(cameraName + " AprilTag Distance", distance); //Math.sqrt((aprilTagX*aprilTagX) + (aprilTagY*aprilTagY))
                 SmartDashboard.putNumber(cameraName + " AprilTag Yaw", yaw);
                 SmartDashboard.putNumber(cameraName + " AprilTag Pitch", pitch);

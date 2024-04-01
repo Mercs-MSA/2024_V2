@@ -177,8 +177,8 @@ public final class Constants {
 
         public static final class PODIUM{
             public static final double pivot = 42;
-            public static final double shooter1 = -55.0;
-            public static final double shooter2 = -35.0;
+            public static final double shooter1 = -75.0;
+            public static final double shooter2 = -55.0;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-23.9)));
         }
         
@@ -250,6 +250,18 @@ public final class Constants {
          */
         public static final double APRILTAG_AMBIGUITY_THRESHOLD = 0.05;
 
+        public static double pivotAngleCalculator(double distance) {
+            double pivot = (5.45255 * distance * distance) - (39.0362*distance) + 98.5685;
+            // double pivot = 67.7276 - 12.0793*distance;
+        
+            if (pivot > 0 && pivot < 150) {
+                return pivot;
+            } else {
+                return 0.2;
+            }
+        }
+        
+
         public static Pose2d temp = new Pose2d();
 
         public static class aprilTagBackLeft {
@@ -296,22 +308,22 @@ public final class Constants {
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
         
-        // This function takes the current robots pose (in meters X and Y) and generates the pivot motor command to aim the shooter at the speaker (in rotations)
-        public static double pivotEncoderCalculator(Pose2d currentPose){
-            double legDistance = Math.sqrt(Math.pow(centerFace.getX() - currentPose.getX(), 2)) + Math.pow(centerFace.getY() - currentPose.getY(), 2);
-            double pivotAngle = Math.atan(1.7526/legDistance); //1.7526 is the height difference from pivot to speaker entrance.
-            double pivotCommand = (pivotAngle - 9.282)/0.59; //9.282 is in degrees, this is the "b" in y = mx + b, m is .59
-            if (pivotCommand > 80.0) {  // This acts as a clamp to prevent this function from trying to command the pivot to an angle beyond the usual range
-                return(80.0);
-            }
-            else if (pivotCommand < 0.2) {
-                return(0.2);
-            }
-            else {
-                return(pivotCommand);
-            }
-            // the returned value is the # of motor rotations needed to reach the pivot angle (it's the x in the y = mx + b equation)
-        }
+        // // This function takes the current robots pose (in meters X and Y) and generates the pivot motor command to aim the shooter at the speaker (in rotations)
+        // public static double pivotEncoderCalculator(Pose2d currentPose){
+        //     double legDistance = Math.sqrt(Math.pow(centerFace.getX() - currentPose.getX(), 2)) + Math.pow(centerFace.getY() - currentPose.getY(), 2);
+        //     double pivotAngle = Math.atan(1.7526/legDistance); //1.7526 is the height difference from pivot to speaker entrance.
+        //     double pivotCommand = (pivotAngle - 9.282)/0.59; //9.282 is in degrees, this is the "b" in y = mx + b, m is .59
+        //     if (pivotCommand > 80.0) {  // This acts as a clamp to prevent this function from trying to command the pivot to an angle beyond the usual range
+        //         return(80.0);
+        //     }
+        //     else if (pivotCommand < 0.2) {
+        //         return(0.2);
+        //     }
+        //     else {
+        //         return(pivotCommand);
+        //     }
+        //     // the returned value is the # of motor rotations needed to reach the pivot angle (it's the x in the y = mx + b equation)
+        // }
     }
 
     public static class ArmConstants{

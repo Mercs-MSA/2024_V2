@@ -64,7 +64,7 @@ public class CommandScoreOperator extends Command {
         }
 
         if (ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AUTOAIM){
-            m_pivot.leaderGoToPosition(Constants.Vision.pivotEncoderCalculator(Swerve.poseEstimator.getEstimatedPosition()));
+            // m_pivot.leaderGoToPosition(Constants.Vision.pivotEncoderCalculator(Swerve.poseEstimator.getEstimatedPosition()));
         }
         else {
             m_pivot.leaderGoToPosition(pivotPos);

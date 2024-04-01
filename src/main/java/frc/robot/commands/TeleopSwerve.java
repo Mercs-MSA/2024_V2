@@ -25,7 +25,7 @@ public class TeleopSwerve extends Command {
     public static Rotation2d goodStraightGyro = new Rotation2d();
     private double multiplier;
     private ProfiledPIDController thetaController =
-      new ProfiledPIDController(2.25, 0.01, 0.1, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
+      new ProfiledPIDController(2.5, 0.01, 0.1, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
 
     private double thetaVelocity = 0.0;
     public static boolean ranInitForAutoAim = false;
@@ -74,7 +74,17 @@ public class TeleopSwerve extends Command {
                     false //was originally true
                 );
             }
-            else if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4)){
+            else if (Constants.Vision.autoAimActive == false && rotationVal != 0){
+                goodStraightGyro = Swerve.poseEstimator.getEstimatedPosition().getRotation();
+                
+                s_Swerve.drive(
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
+                    rotationVal * Constants.Swerve.maxAngularVelocity, 
+                    !robotCentricSup.getAsBoolean(), 
+                    false //was originally true
+                ); 
+            }
+            else if (rotationVal == 0){
 
                 s_Swerve.drive(
                     new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
@@ -84,13 +94,18 @@ public class TeleopSwerve extends Command {
                 );
             }
             else {
+                goodStraightGyro = Swerve.poseEstimator.getEstimatedPosition().getRotation();
+
                 s_Swerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-                    rotationVal * Constants.Swerve.maxAngularVelocity, 
-                    !robotCentricSup.getAsBoolean(), 
-                    false //was originally true
-                ); 
+                new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
+                rotationVal * Constants.Swerve.maxAngularVelocity, 
+                !robotCentricSup.getAsBoolean(), 
+                true
+            );
             }
+
+
+
 
 
         }

@@ -6,11 +6,15 @@ import frc.robot.Constants;
 import frc.robot.Constants.SATConstants;
 import frc.robot.Constants.ScoringConstants;
 import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.vision.ApriltagVision;
+
 
 public class CommandPivotToPose extends Command {
   private final Pivot m_pivot;
+  private ApriltagVision m_ApriltagVision;
   private double pivotPos;
   private boolean useStateSystem;
+  private double distance;
   
   public CommandPivotToPose(Pivot i, double pos) {
     this.m_pivot = i;
@@ -22,6 +26,13 @@ public class CommandPivotToPose extends Command {
   public CommandPivotToPose(Pivot i) {
     this.m_pivot = i;
     this.useStateSystem = true;
+    addRequirements(m_pivot);
+  }
+
+  public CommandPivotToPose(Pivot i, ApriltagVision v) {
+    this.m_pivot = i;
+    this.useStateSystem = true;
+    this.m_ApriltagVision = v;
     addRequirements(m_pivot);
   }
 
@@ -46,6 +57,9 @@ public class CommandPivotToPose extends Command {
           break;
         case START:
           pivotPos = SATConstants.START.pivot;
+          break;
+        case AUTOAIM:
+          pivotPos = Constants.Vision.pivotAngleCalculator(m_ApriltagVision.distance);
           break;
         default:
           break;

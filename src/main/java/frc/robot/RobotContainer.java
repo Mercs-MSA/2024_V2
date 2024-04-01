@@ -31,7 +31,6 @@ import frc.robot.commands.CommandScore;
 import frc.robot.commands.CommandScoreDriver;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.TeleopSwerve;
-import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStart;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStopNeutral;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
@@ -43,7 +42,6 @@ import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
-import frc.robot.commands.PivotSubcommands.CommandPivotDynamicPose;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterReverse;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
@@ -57,7 +55,6 @@ import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.sensors.BeamBreak;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.ApriltagVision;
-import frc.robot.subsystems.vision.TempApriltagVision;
 
 
 /**
@@ -80,6 +77,11 @@ public class RobotContainer {
     public static final Shooter m_shooter = new Shooter();
     public static final Amper m_amper = new Amper();
     public static final AmperMotor m_amperMotor = new AmperMotor();
+    // BiConsumer<Pose2d, Double> poseConsumer = (visionRobotPoseMeters, timestampSeconds) -> {
+    //     Swerve.poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
+    // };
+    // Supplier<Pose2d> poseSupplier = () -> Swerve.poseEstimator.getEstimatedPosition();
+    // public ApriltagVision m_ApriltagVision = new ApriltagVision(Constants.Vision.cameraNames, Constants.Vision.robotToCameras, poseConsumer, poseSupplier);
     public ApriltagVision m_ApriltagVision = new ApriltagVision("FR");
     public BeamBreak m_BeamBreak = new BeamBreak();
     
@@ -101,7 +103,7 @@ public class RobotContainer {
             ));
 
             put("Podium Pivot", new SequentialCommandGroup(
-                new CommandPivotToPose(m_pivot, 49), 
+                new CommandPivotToPose(m_pivot, 44), 
                 new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
             ));
 
@@ -131,7 +133,7 @@ public class RobotContainer {
             ));
 
             put("Move Pivot Lower 1", new CommandPivotToPose(m_pivot, 48));
-            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 45));
+            put("Move Pivot Lower 2", new CommandPivotToPose(m_pivot, 42));
 
             put("Intake Note", new SequentialCommandGroup(
                 new CommandIntakeStart(m_intake),
@@ -228,12 +230,12 @@ public class RobotContainer {
             )
         );
 
-        // driver.leftBumper().onTrue(
-        //     // new CommandRotateToPose(s_Swerve, m_ApriltagVision)
-        //     new InstantCommand(() -> {Constants.Vision.autoAimActive = true; TeleopSwerve.ranInitForAutoAim = false;})
-        // ).onFalse(
-        //     new InstantCommand(() -> Constants.Vision.autoAimActive = false)
-        // );
+        driver.leftBumper().onTrue(
+            // new CommandRotateToPose(s_Swerve, m_ApriltagVision)
+            new InstantCommand(() -> Constants.Vision.autoAimActive = true)
+        ).onFalse(
+            new InstantCommand(() -> Constants.Vision.autoAimActive = false)
+        );
 
         driver.b().onTrue(
             new InstantCommand(() -> Constants.Vision.manualDriveInvert = -1)
@@ -283,9 +285,17 @@ public class RobotContainer {
             new CommandAmperScoreAmp(m_amper)
         );
 
-        operator.start().onTrue(
-            new CommandPivotDynamicPose(m_pivot)
+
+        driver.x().onTrue(
+            new CommandShooterStart(m_shooter, -75, -55)
         );
+
+        driver.y().onTrue(
+            // new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)
+            new CommandShooterStopNeutral(m_shooter)
+        );
+
+        
         // operator.a().onTrue(
         //     new CommandAmperMotorReverse(m_amperMotor)
         // )
@@ -306,7 +316,11 @@ public class RobotContainer {
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
         operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
-        operator.a().onTrue(new CommandChangeScoringMode(ScoringMode.AUTOAIM));
+        operator.a().whileTrue(
+            new SequentialCommandGroup(
+                new CommandChangeScoringMode(ScoringMode.AUTOAIM),
+                new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+            ));
         
         operator.leftBumper()
         .onTrue(
@@ -321,12 +335,12 @@ public class RobotContainer {
         )
         .onFalse(
             new SequentialCommandGroup(
-                new CommandShooterStopNeutral(m_shooter),
-                stopIntakeIndexNeutral(),
-                new ConditionalCommand(
-                    new InstantCommand(() -> m_shooter.setBothShooterMotor(Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)), 
-                    null, 
-                    () -> m_BeamBreak.detectsNote())
+                // new CommandShooterStopNeutral(m_shooter),
+                stopIntakeIndexNeutral()
+                // new ConditionalCommand(
+                // new CommandShooterStart(m_shooter, -75, -55), 
+                // getAutonomousCommand(), 
+                // () -> m_BeamBreak.detectsNote())
             )
         );
 
@@ -340,7 +354,7 @@ public class RobotContainer {
 
         operator.x()
         .onTrue(
-            new CommandPivotToPose(m_pivot).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+            new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
         );
 
         operator.y().onTrue(
@@ -387,65 +401,6 @@ public class RobotContainer {
 
     public void periodic(){
 
-    }
-
-    public Command scoreNote(){
-        double pivotPos = 0.0;
-        double shooterMotorSpeed1 = 0.0;
-        double shooterMotorSpeed2 = 0.0;
-        SmartDashboard.putNumber("pivotPosVariable", pivotPos);
-        switch (ScoringConstants.currentScoringMode) {
-            case PODIUM:
-                pivotPos = SATConstants.PODIUM.pivot;
-                shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
-                shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
-                break;
-            case SUBWOOFER:
-                pivotPos = SATConstants.SUB.pivot;
-                shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
-                shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
-                break;
-            case WING:
-                pivotPos = SATConstants.WING.pivot;
-                shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
-                shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
-                break;
-            case AMP:
-                pivotPos = SATConstants.AMP.pivot;
-                shooterMotorSpeed1 = SATConstants.AMP.shooter1;
-                shooterMotorSpeed2 = SATConstants.AMP.shooter2;
-                break;
-            case START:
-                pivotPos = SATConstants.START.pivot;
-                shooterMotorSpeed1 = SATConstants.START.shooter1;
-                shooterMotorSpeed2 = SATConstants.START.shooter2;
-                break;
-            default:
-                pivotPos = SATConstants.SUB.pivot;
-                shooterMotorSpeed1 = SATConstants.SUB.shooter1;
-                shooterMotorSpeed2 = SATConstants.SUB.shooter2;
-                break;
-        }
-
-        return new SequentialCommandGroup(
-            new ParallelCommandGroup(
-                new ConditionalCommand(
-                    new CommandPivotToPose(m_pivot, Constants.Vision.pivotEncoderCalculator(Swerve.poseEstimator.getEstimatedPosition())),
-                    new CommandPivotToPose(m_pivot, pivotPos), 
-                    () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AUTOAIM
-                ),
-                new ConditionalCommand(
-                    new ParallelCommandGroup(
-                        new CommandAmperScoreAmp(m_amper),
-                        new CommandAmperMotorStart(m_amperMotor)
-                    ),   
-                    new CommandAmperScoreNote(m_amper), 
-                    () -> ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AMP)
-            ),
-            shootNote(shooterMotorSpeed1, shooterMotorSpeed2)
-            // new WaitCommand(1),
-            
-        );
     }
 
     public Command shootNote(double shooterMotorSpeed1, double shooterMotorSpeed2){
@@ -501,7 +456,8 @@ public class RobotContainer {
             new CommandIntakeStopNeutral(m_intake),
             new CommandIndexStopNeutral(m_index),
             new CommandShooterStopNeutral(m_shooter),
-            new CommandAmperMotorStopNeutral(m_amperMotor)
+            new CommandAmperMotorStopNeutral(m_amperMotor),
+            new CommandShooterStart(m_shooter, -75, -55)
         );
     }
     

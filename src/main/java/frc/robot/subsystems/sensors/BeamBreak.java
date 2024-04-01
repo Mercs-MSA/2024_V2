@@ -19,7 +19,7 @@ public class BeamBreak extends SubsystemBase{
         }
         if (fallingEdge){
             this.detectsNote = true;
-            RobotContainer.stopEverything();
+            RobotContainer.stopEverything().schedule();
             // RobotContainer.prepShooter();
         }
         // RobotContainer.stopEverything();
