@@ -66,16 +66,16 @@ public class TeleopSwerve extends Command {
 
             if (Constants.Vision.autoAimActive){
                 goodStraightGyro = Rotation2d.fromDegrees(Swerve.poseEstimator.getEstimatedPosition().getRotation().getDegrees() - ApriltagVision.getYaw());
-                ranInitForAutoAim = true;
 
                 s_Swerve.drive(
-                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed),
-                    rotationVal * Constants.Swerve.maxAngularVelocity, 
+                    new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
+                    thetaVelocity, 
                     !robotCentricSup.getAsBoolean(), 
                     false //was originally true
-                ); 
+                );
             }
             else if (rotationVal == 0 && Math.abs(s_Swerve.getRobotRelativeSpeeds().omegaRadiansPerSecond) < (Math.PI/4)){
+
                 s_Swerve.drive(
                     new Translation2d(translationVal, strafeVal).times(Constants.Swerve.maxSpeed), 
                     thetaVelocity, 

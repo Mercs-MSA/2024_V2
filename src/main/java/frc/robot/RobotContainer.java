@@ -80,11 +80,6 @@ public class RobotContainer {
     public static final Shooter m_shooter = new Shooter();
     public static final Amper m_amper = new Amper();
     public static final AmperMotor m_amperMotor = new AmperMotor();
-    // BiConsumer<Pose2d, Double> poseConsumer = (visionRobotPoseMeters, timestampSeconds) -> {
-    //     Swerve.poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
-    // };
-    // Supplier<Pose2d> poseSupplier = () -> Swerve.poseEstimator.getEstimatedPosition();
-    // public ApriltagVision m_ApriltagVision = new ApriltagVision(Constants.Vision.cameraNames, Constants.Vision.robotToCameras, poseConsumer, poseSupplier);
     public ApriltagVision m_ApriltagVision = new ApriltagVision("FR");
     public BeamBreak m_BeamBreak = new BeamBreak();
     
@@ -311,6 +306,7 @@ public class RobotContainer {
         operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
         operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
         operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
+        operator.a().onTrue(new CommandChangeScoringMode(ScoringMode.AUTOAIM));
         
         operator.leftBumper()
         .onTrue(
@@ -326,7 +322,11 @@ public class RobotContainer {
         .onFalse(
             new SequentialCommandGroup(
                 new CommandShooterStopNeutral(m_shooter),
-                stopIntakeIndexNeutral()
+                stopIntakeIndexNeutral(),
+                new ConditionalCommand(
+                    new InstantCommand(() -> m_shooter.setBothShooterMotor(Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2)), 
+                    null, 
+                    () -> m_BeamBreak.detectsNote())
             )
         );
 

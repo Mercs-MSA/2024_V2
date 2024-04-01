@@ -1,20 +1,23 @@
 package frc.robot.subsystems.vision;
-
-import java.io.IOException;
-import java.util.List;
-import java.util.stream.Collectors;
+import java.util.Optional;
 
 import org.photonvision.PhotonCamera;
 import org.photonvision.PhotonUtils;
 import org.photonvision.targeting.PhotonPipelineResult;
 import org.photonvision.targeting.PhotonTrackedTarget;
 
+import edu.wpi.first.apriltag.AprilTagFieldLayout;
+import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Pose3d;
+import edu.wpi.first.math.geometry.Transform2d;
 import edu.wpi.first.math.geometry.Transform3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import frc.robot.Constants;
+import frc.robot.subsystems.Swerve;
+
 
 public class ApriltagVision extends SubsystemBase {
 
@@ -27,6 +30,10 @@ public class ApriltagVision extends SubsystemBase {
     public static double yaw;
     private double pitch = -1;
     private PhotonTrackedTarget specificTags;
+    private Pose2d estimatedRobotPose; 
+    private Optional<Pose3d> fieldRelativeTagPose;
+    AprilTagFieldLayout aprilTagFieldLayout = AprilTagFields.k2024Crescendo.loadAprilTagLayoutField();
+    
     
 
     public ApriltagVision(String cameraName) {
@@ -47,7 +54,12 @@ public class ApriltagVision extends SubsystemBase {
 
 
             if (aprilTagHasTargets) {
+                fieldRelativeTagPose = aprilTagFieldLayout.getTagPose(aprilTagResult.getBestTarget().getFiducialId());
+                if (fieldRelativeTagPose.isPresent()){
+                    estimatedRobotPose = PhotonUtils.estimateFieldToRobotAprilTag(aprilTagResult.getBestTarget().getBestCameraToTarget(), fieldRelativeTagPose.get(), Constants.Vision.aprilTagFrontRight.robotToCamera).toPose2d();
+                    Swerve.poseEstimator.addVisionMeasurement(new Pose2d(estimatedRobotPose.getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), aprilTagX);
 
+                }
                 for (int i = 0; i < aprilTagResult.getTargets().size(); i++){
                     if (aprilTagResult.targets.get(i).getFiducialId() == 7 || aprilTagResult.targets.get(i).getFiducialId() == 4){
                         specificTags = aprilTagResult.targets.get(i);
@@ -85,7 +97,7 @@ public class ApriltagVision extends SubsystemBase {
                 SmartDashboard.putNumber(cameraName + " AprilTag Y (m)", aprilTagY);
                 SmartDashboard.putNumber(cameraName + " AprilTag Z (m)", aprilTagZ);
                 SmartDashboard.putNumber(cameraName + " AprilTag Z Angle", aprilTagZAngle);
-                SmartDashboard.putNumber(cameraName + " AprilTag Distance", Math.sqrt((aprilTagX*aprilTagX) + (aprilTagY*aprilTagY)));
+                SmartDashboard.putNumber(cameraName + " AprilTag Distance", distance); //Math.sqrt((aprilTagX*aprilTagX) + (aprilTagY*aprilTagY))
                 SmartDashboard.putNumber(cameraName + " AprilTag Yaw", yaw);
                 SmartDashboard.putNumber(cameraName + " AprilTag Pitch", pitch);
             }
