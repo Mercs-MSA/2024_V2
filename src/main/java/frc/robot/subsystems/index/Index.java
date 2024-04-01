@@ -78,7 +78,7 @@ public class Index extends SubsystemBase {
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIndexStart
     // IndexMotor.setControl(IndexMotor_dutyCycleOut.withOutput(-IndexConstants.kIndexMotorSpeed));
-    IndexMotor.setControl(IndexMotor_voltageVelocity.withVelocity(IndexConstants.kIndexMotorSpeed));
+    IndexMotor.setControl(IndexMotor_voltageVelocity.withVelocity(-IndexConstants.kIndexMotorSpeed));
   }
 
   public void reverseIndexMotor() {
@@ -86,7 +86,7 @@ public class Index extends SubsystemBase {
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIndexStart
     // IndexMotor.setControl(IndexMotor_dutyCycleOut.withOutput(IndexConstants.kIndexMotorSpeed));
-    IndexMotor.setControl(IndexMotor_voltageVelocity.withVelocity(-IndexConstants.kIndexMotorSpeed));
+    IndexMotor.setControl(IndexMotor_voltageVelocity.withVelocity(IndexConstants.kIndexMotorSpeed));
   }
 
 
