@@ -220,6 +220,30 @@ public final class Constants {
                 Constants.AutoConstants.kMaxAccelerationMetersPerSecondSquared)
             .setKinematics(Constants.Swerve.swerveKinematics);
     }
+    public static final class climberConstants
+    {
+ 
+      public static final int climberMotor_Left_ID = 0;    //  please change to actual id
+      public static final int climberMotor_Right_ID = 0;   //  please change to actual id
+
+
+      public static final double LEFT_BOTTOM_POSITION = 0;  //  please change to actual pos
+      public static final double RIGHT_BOTTOM_POSITION = 0; //  please change to actual pos
+
+      public static final double LEFT_TOP_POSITION = 0;     //  please change to actual pos
+      public static final double RIGHT_TOP_POSITION = 0;    //  please change to actual pos
+
+      public static final double climber_Increment = 0;     //  please change to actual increment    
+
+    public static ClimberMode climberMode = ClimberMode.DOWN;
+        public enum ClimberMode {
+            DOWN,
+            UP,
+            NONE,
+            ERROR
+    }
+}
+
 
     public static class Vision {
         public static boolean isNoteDetected = false;
@@ -427,6 +451,11 @@ public class AllianceFlipUtil {
             START
         }
     }
+
+
+
+
+
 
     public static boolean isWithinTol(double targetPose, double currentPose, double tolerance) {
         return (Math.abs(targetPose - currentPose) <= tolerance);

@@ -48,12 +48,14 @@ import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterReverse;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
+import frc.robot.commands.climber.CommandClimbing;
 import frc.robot.subsystems.Swerve;
 import frc.robot.subsystems.amper.Amper;
 import frc.robot.subsystems.amperMotor.AmperMotor;
 import frc.robot.subsystems.index.Index;
 import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.pivot.Pivot;
+import frc.robot.subsystems.climber.climber;
 import frc.robot.subsystems.sensors.BeamBreak;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.vision.ApriltagVision;
@@ -80,6 +82,7 @@ public class RobotContainer {
     public static final Shooter m_shooter = new Shooter();
     public static final Amper m_amper = new Amper();
     public static final AmperMotor m_amperMotor = new AmperMotor();
+    // public static final climber m_climber = new climber();
     // BiConsumer<Pose2d, Double> poseConsumer = (visionRobotPoseMeters, timestampSeconds) -> {
     //     Swerve.poseEstimator.addVisionMeasurement(visionRobotPoseMeters, timestampSeconds);
     // };
@@ -354,7 +357,6 @@ public class RobotContainer {
                 new CommandScore(m_amper, m_shooter, m_amperMotor)
             )
         );
-
     }
 
     public Command intakeNote(){
