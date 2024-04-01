@@ -34,7 +34,7 @@ public final class Constants {
 
     public static final class Swerve {
         public static final int pigeonID = 16;
-
+        public static String canNameSwerve = "canivore";
 
         public static final COTSTalonFXSwerveConstants chosenModule = COTSTalonFXSwerveConstants.WCP.SwerveXFlipped.KrakenX60(COTSTalonFXSwerveConstants.WCP.SwerveXFlipped.driveRatios.X3_12);
 
