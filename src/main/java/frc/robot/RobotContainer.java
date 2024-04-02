@@ -67,7 +67,7 @@ public class RobotContainer {
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController driverJoystick = new CommandXboxController(0); 
   private final CommandXboxController operator = new CommandXboxController(1); 
-  public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  public static final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
@@ -119,15 +119,14 @@ public class RobotContainer {
     driveAngle.HeadingController = turnPID;
     driveAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
-    driverJoystick.x().whileTrue(
+    driverJoystick.leftBumper().whileTrue(
         drivetrain.applyRequest(() -> {
             double currentYawInRadians = MathUtil.angleModulus(drivetrain.getState().Pose.getRotation().getRadians());
             
-            // TODO: IF NO TAG IS SEEN, THIS TURNS INTO '-1' FOR SOME REASON, WHICH IS A BAD IDEA
             double radiansToTarget = MathUtil.angleModulus(Units.degreesToRadians(ApriltagVision.getYaw()));
 
             // TODO: IM NOT SURE IF THESE ANGLES SHOULD BE ADDED OR SUBTRACTED BASED ON WHETHER THEY'RE SIGNS ARE THE SAME DIRECTION
-            Rotation2d desiredAngle = Rotation2d.fromRadians(currentYawInRadians + radiansToTarget);
+            Rotation2d desiredAngle = Rotation2d.fromRadians(currentYawInRadians - radiansToTarget);
 
             return driveAngle.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
                 .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed)

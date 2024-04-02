@@ -11,7 +11,9 @@ import edu.wpi.first.apriltag.AprilTagFields;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
 
@@ -55,7 +57,7 @@ public class ApriltagVision extends SubsystemBase {
                 fieldRelativeTagPose = aprilTagFieldLayout.getTagPose(aprilTagResult.getBestTarget().getFiducialId());
                 if (fieldRelativeTagPose.isPresent()){
                     estimatedRobotPose = PhotonUtils.estimateFieldToRobotAprilTag(aprilTagResult.getBestTarget().getBestCameraToTarget(), fieldRelativeTagPose.get(), Constants.Vision.aprilTagFrontRight.robotToCamera).toPose2d();
-                    // Swerve.poseEstimator.addVisionMeasurement(new Pose2d(estimatedRobotPose.getTranslation(), Swerve.poseEstimator.getEstimatedPosition().getRotation()), aprilTagX);
+                    // RobotContainer.drivetrain.addVisionMeasurement(new Pose2d(estimatedRobotPose.getTranslation(), RobotContainer.drivetrain.getState().Pose.getRotation()), Timer.getFPGATimestamp() - aprilTagResult.getLatencyMillis());
 
                 }
                 for (int i = 0; i < aprilTagResult.getTargets().size(); i++){
@@ -77,8 +79,7 @@ public class ApriltagVision extends SubsystemBase {
    
             }
             else {
-                // TODO: THIS SEEMS LIKE A VERY BAD ANGLE TO HAVE FOR 'NO TAG SEEN'. PERHAPS ZERO WOULD BE A SAFER CHOICE?
-                yaw = -1;
+                yaw = 0;
             } 
 
 
