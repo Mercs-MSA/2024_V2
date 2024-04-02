@@ -2,8 +2,8 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 4.061722123444247,
-      "y": 5.038789506150441
+      "x": 1.38,
+      "y": 5.54
     },
     "rotation": 0
   },
@@ -14,7 +14,19 @@
         {
           "type": "path",
           "data": {
-            "pathName": "SimplePath"
+            "pathName": "AlexPodium"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AlexCenter"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "AlexAmp"
           }
         }
       ]
