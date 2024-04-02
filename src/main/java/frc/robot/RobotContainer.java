@@ -105,7 +105,7 @@ public class RobotContainer {
                                                                                            // negative Y (forward)
             .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-driverJoystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
-        ).ignoringDisable(true));
+        ).ignoringDisable(false));
 
 
     // reset the field-centric heading on left bumper press
