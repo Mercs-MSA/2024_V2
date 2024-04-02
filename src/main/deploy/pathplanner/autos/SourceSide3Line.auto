@@ -1,0 +1,80 @@
+{
+  "version": 1.0,
+  "startingPose": {
+    "position": {
+      "x": 1.43,
+      "y": 3.43
+    },
+    "rotation": 0
+  },
+  "command": {
+    "type": "sequential",
+    "data": {
+      "commands": [
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Right Preload"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "2CenterRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3CenterRight"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "score podium note"
+          }
+        },
+        {
+          "type": "parallel",
+          "data": {
+            "commands": [
+              {
+                "type": "named",
+                "data": {
+                  "name": "Reset"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Intake"
+                }
+              },
+              {
+                "type": "named",
+                "data": {
+                  "name": "Stop Index"
+                }
+              }
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "folder": null,
+  "choreoAuto": false
+}
