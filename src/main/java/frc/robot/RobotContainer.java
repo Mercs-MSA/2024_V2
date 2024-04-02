@@ -5,6 +5,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.mechanisms.swerve.SwerveRequest;
+import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -24,6 +25,8 @@ import com.pathplanner.lib.auto.NamedCommands;
 import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -70,9 +73,16 @@ public class RobotContainer {
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
+  private final SwerveRequest.FieldCentricFacingAngle driveAngle = new SwerveRequest.FieldCentricFacingAngle()
+      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
+                                                               // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
   private final SwerveRequest.RobotCentric forwardStraight = new SwerveRequest.RobotCentric().withDriveRequestType(DriveRequestType.OpenLoopVoltage);
   private final SwerveRequest.PointWheelsAt point = new SwerveRequest.PointWheelsAt();
+
+  // TODO: THIS PROPORTIONAL GAIN VALUE IS PROBABLY TOO HIGH AND NEEDS TO BE TESTED/TUNED
+  private final PhoenixPIDController turnPID = new PhoenixPIDController(3.2, 0.0, 0.0);                                                             
 
   /* Subsystems */
   public static final Intake m_intake = new Intake();
@@ -106,7 +116,24 @@ public class RobotContainer {
     driverJoystick.pov(0).whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
     driverJoystick.pov(180).whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
 
+    driveAngle.HeadingController = turnPID;
+    driveAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
+    driverJoystick.x().whileTrue(
+        drivetrain.applyRequest(() -> {
+            double currentYawInRadians = MathUtil.angleModulus(drivetrain.getState().Pose.getRotation().getRadians());
+            
+            // TODO: IF NO TAG IS SEEN, THIS TURNS INTO '-1' FOR SOME REASON, WHICH IS A BAD IDEA
+            double radiansToTarget = MathUtil.angleModulus(Units.degreesToRadians(ApriltagVision.getYaw()));
+
+            // TODO: IM NOT SURE IF THESE ANGLES SHOULD BE ADDED OR SUBTRACTED BASED ON WHETHER THEY'RE SIGNS ARE THE SAME DIRECTION
+            Rotation2d desiredAngle = Rotation2d.fromRadians(currentYawInRadians + radiansToTarget);
+
+            return driveAngle.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
+                .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed)
+                .withTargetDirection(desiredAngle);
+        }
+    ));
   }
 
   public void driverControls(){

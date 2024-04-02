@@ -77,6 +77,7 @@ public class ApriltagVision extends SubsystemBase {
    
             }
             else {
+                // TODO: THIS SEEMS LIKE A VERY BAD ANGLE TO HAVE FOR 'NO TAG SEEN'. PERHAPS ZERO WOULD BE A SAFER CHOICE?
                 yaw = -1;
             } 
 
