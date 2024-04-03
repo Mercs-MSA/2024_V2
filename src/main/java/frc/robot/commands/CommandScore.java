@@ -49,8 +49,8 @@ public class CommandScore extends Command {
                 shooterMotorSpeed2 = SATConstants.START.shooter2;
                 break;
             default:
-                shooterMotorSpeed1 = SATConstants.SUB.shooter1;
-                shooterMotorSpeed2 = SATConstants.SUB.shooter2;
+                shooterMotorSpeed1 = SATConstants.PODIUM.shooter1;
+                shooterMotorSpeed2 = SATConstants.PODIUM.shooter2;
                 break;
         }
 
