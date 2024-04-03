@@ -146,7 +146,7 @@ public final class Constants {
         
         public static class aprilTagFrontRight {
             public static String camera = "FR";
-            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(0), -Units.inchesToMeters(13.243183), Units.inchesToMeters(9.084748), new Rotation3d(0, -0.785398, Math.PI));
+            public static Transform3d robotToCamera = new Transform3d(Units.inchesToMeters(0), -Units.inchesToMeters(13.243183), Units.inchesToMeters(9.084748), new Rotation3d(0, -Math.PI/6, Math.PI));
         }
 
         public static String[] cameraNames = {aprilTagBackLeft.camera, aprilTagBackRight.camera, aprilTagFrontLeft.camera, aprilTagFrontRight.camera};

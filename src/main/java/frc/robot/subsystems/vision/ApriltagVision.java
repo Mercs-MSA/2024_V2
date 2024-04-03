@@ -13,9 +13,9 @@ import edu.wpi.first.math.geometry.Pose3d;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
-import frc.robot.RobotContainer;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants;
+import frc.robot.RobotContainer;
 
 
 public class ApriltagVision extends SubsystemBase {
@@ -57,7 +57,9 @@ public class ApriltagVision extends SubsystemBase {
                 fieldRelativeTagPose = aprilTagFieldLayout.getTagPose(aprilTagResult.getBestTarget().getFiducialId());
                 if (fieldRelativeTagPose.isPresent()){
                     estimatedRobotPose = PhotonUtils.estimateFieldToRobotAprilTag(aprilTagResult.getBestTarget().getBestCameraToTarget(), fieldRelativeTagPose.get(), Constants.Vision.aprilTagFrontRight.robotToCamera).toPose2d();
-                    // RobotContainer.drivetrain.addVisionMeasurement(new Pose2d(estimatedRobotPose.getTranslation(), RobotContainer.drivetrain.getState().Pose.getRotation()), Timer.getFPGATimestamp() - aprilTagResult.getLatencyMillis());
+                    if (!Constants.Vision.autoRunning){
+                        RobotContainer.drivetrain.addVisionMeasurement(new Pose2d(estimatedRobotPose.getTranslation(), RobotContainer.drivetrain.getState().Pose.getRotation()), Timer.getFPGATimestamp() - aprilTagResult.getLatencyMillis());
+                    }
 
                 }
                 for (int i = 0; i < aprilTagResult.getTargets().size(); i++){
@@ -167,3 +169,4 @@ public class ApriltagVision extends SubsystemBase {
         return aprilTagZAngle;
     }
 }
+
