@@ -218,9 +218,9 @@ public class RobotContainer {
 
   private void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
-        drivetrain.applyRequest(() -> drive.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed) // Drive forward with
+        drivetrain.applyRequest(() -> drive.withVelocityX(Constants.Vision.manualDriveInvert * -driverJoystick.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
-            .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+            .withVelocityY(Constants.Vision.manualDriveInvert * -driverJoystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-driverJoystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ).ignoringDisable(false));
 
@@ -249,8 +249,8 @@ public class RobotContainer {
             Rotation2d desiredAngle = Rotation2d.fromDegrees(currentYawInRadians - radiansToTarget);
 
 
-            return driveRobotCentric.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
-                .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed)
+            return driveRobotCentric.withVelocityX(Constants.Vision.manualDriveInvert * -driverJoystick.getLeftY() * MaxSpeed)
+                .withVelocityY(Constants.Vision.manualDriveInvert * -driverJoystick.getLeftX() * MaxSpeed)
                 .withRotationalRate(thetaController.calculate(drivetrain.getState().Pose.getRotation().getRadians(), desiredAngle.getRadians()));
                 // .withTargetDirection(Rotation2d.fromDegrees(90));
 
