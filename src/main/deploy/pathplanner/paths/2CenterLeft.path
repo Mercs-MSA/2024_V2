@@ -74,7 +74,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Left Pivot Wing"
+                "name": "Amp Pivot Wing"
               }
             }
           ]
@@ -91,7 +91,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Reset"
+                "name": "Reset SAT"
               }
             }
           ]
@@ -108,13 +108,13 @@
             {
               "type": "named",
               "data": {
-                "name": "Reset II"
+                "name": "Reset I+I"
               }
             },
             {
               "type": "named",
               "data": {
-                "name": "Left Pivot Line"
+                "name": "Amp Pivot Line"
               }
             }
           ]

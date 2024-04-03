@@ -196,9 +196,7 @@ public class RobotContainer {
         /* Score Note */
         put("Score", new SequentialCommandGroup(
             new WaitCommand(0.2), 
-            new CommandIndexStart(m_index),
-            new WaitCommand(1),
-            new CommandIndexStop(m_index)
+            new CommandIndexStart(m_index)
         ));
     }
   };
@@ -392,6 +390,6 @@ public static Command stopEverything(){
 
   public Command getAutonomousCommand() {
     /* First put the drivetrain into auto run mode, then run the auto */
-    return runAuto;
+    return autoChooser.getSelected();
   }
 }

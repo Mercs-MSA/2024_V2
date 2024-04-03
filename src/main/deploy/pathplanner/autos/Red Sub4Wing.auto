@@ -20,7 +20,13 @@
         {
           "type": "named",
           "data": {
-            "name": "score sub note"
+            "name": "Sub Pivot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score"
           }
         },
         {
@@ -49,78 +55,15 @@
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "score podium note"
+            "pathName": "Copy of 2PieceRightIm"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Intake Note"
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Copy of 2PieceRightIm"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "path",
-                "data": {
-                  "pathName": "Copy of 2PieceLeftIm"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Intake Note"
-                }
-              }
-            ]
-          }
-        },
-        {
-          "type": "parallel",
-          "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Reset"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop Intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop Index"
-                }
-              }
-            ]
+            "pathName": "Copy of 2PieceLeftIm"
           }
         }
       ]

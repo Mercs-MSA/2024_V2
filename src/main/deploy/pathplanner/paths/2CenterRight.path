@@ -79,7 +79,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Reset"
+                "name": "Reset SAT"
               }
             }
           ]
@@ -113,7 +113,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Reset II"
+                "name": "Reset I+I"
               }
             }
           ]
@@ -130,7 +130,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Right Pivot Line"
+                "name": "Source Pivot Line"
               }
             }
           ]

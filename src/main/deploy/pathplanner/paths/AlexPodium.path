@@ -16,16 +16,16 @@
     },
     {
       "anchor": {
-        "x": 2.813006710178897,
-        "y": 4.11050362756931
+        "x": 2.7427416909042077,
+        "y": 4.098792791023527
       },
       "prevControl": {
-        "x": 2.1689107001609136,
-        "y": 4.122214464115091
+        "x": 2.098645680886224,
+        "y": 4.110503627569308
       },
       "nextControl": {
-        "x": 3.0059774074876553,
-        "y": 4.106995069436423
+        "x": 2.935712388212966,
+        "y": 4.0952842328906405
       },
       "isLocked": false,
       "linkedName": null
@@ -46,7 +46,42 @@
   ],
   "rotationTargets": [],
   "constraintZones": [],
-  "eventMarkers": [],
+  "eventMarkers": [
+    {
+      "name": "Intake w Beam",
+      "waypointRelativePos": 0.8,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake Note w/ Beam"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Sub Pivot",
+      "waypointRelativePos": 1.3,
+      "command": {
+        "type": "parallel",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Sub Pivot"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
   "globalConstraints": {
     "maxVelocity": 2.0,
     "maxAcceleration": 2.0,

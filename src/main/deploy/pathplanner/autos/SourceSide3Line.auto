@@ -20,7 +20,7 @@
         {
           "type": "named",
           "data": {
-            "name": "score podium note"
+            "name": "Score"
           }
         },
         {
@@ -32,7 +32,7 @@
         {
           "type": "named",
           "data": {
-            "name": "score podium note"
+            "name": "Score"
           }
         },
         {
@@ -44,32 +44,13 @@
         {
           "type": "named",
           "data": {
-            "name": "score podium note"
+            "name": "Score"
           }
         },
         {
-          "type": "parallel",
+          "type": "named",
           "data": {
-            "commands": [
-              {
-                "type": "named",
-                "data": {
-                  "name": "Reset"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop Intake"
-                }
-              },
-              {
-                "type": "named",
-                "data": {
-                  "name": "Stop Index"
-                }
-              }
-            ]
+            "name": "Reset All"
           }
         }
       ]
