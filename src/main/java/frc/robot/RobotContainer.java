@@ -166,7 +166,11 @@ public class RobotContainer {
         put("Center Pivot", new CommandPivotToPose(m_pivot, 41));
         put("AMP Pivot", new CommandPivotToPose(m_pivot, 40));
 
-        put("Auto Pivot Test", new CommandPivotToPose(m_pivot, m_ApriltagVision));
+        put("Auto Pivot Test", 
+        new SequentialCommandGroup(
+          new CommandChangeScoringMode(ScoringMode.AUTOAIM),
+          new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+      ));
 
         //Pivot Positions for AMPSIDE
         put("Amp Pivot Preload", new ParallelCommandGroup(
