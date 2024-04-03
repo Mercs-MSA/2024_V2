@@ -149,7 +149,7 @@ public class RobotContainer {
         /* Pivot Positions */
 
         put("Podium Pivot", new ParallelCommandGroup(
-            new CommandPivotToPose(m_pivot, Constants.SATConstants.PODIUM.pivot), 
+            new CommandPivotToPose(m_pivot, 42), 
             new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter1)
         ));
         
@@ -164,8 +164,9 @@ public class RobotContainer {
         ));
 
         //Pivot Positions for CENTER
-        put("Center Pivot", new CommandPivotToPose(m_pivot, 41));
-        put("AMP Pivot", new CommandPivotToPose(m_pivot, 40));
+        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 40));
+        put("Center Pivot", new CommandPivotToPose(m_pivot, 42));
+        put("AMP Pivot", new CommandPivotToPose(m_pivot, 38));
 
         put("Auto Pivot Test", 
         new SequentialCommandGroup(
