@@ -44,9 +44,12 @@ import frc.robot.commands.CommandScoreDriver;
 import frc.robot.commands.IntakeNote;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStopNeutral;
 import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
+import frc.robot.commands.IndexSubcommands.CommandIndexStart;
+import frc.robot.commands.IndexSubcommands.CommandIndexStop;
 import frc.robot.commands.IndexSubcommands.CommandIndexStopNeutral;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
+import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
@@ -96,6 +99,109 @@ public class RobotContainer {
 
   /* Path follower */
   private Command runAuto = drivetrain.getAutoPath("Tests");
+
+  /* AutoChooser */
+  private final SendableChooser<Command> autoChooser;
+
+  /* NamedCommands */
+  Map<String, Command> autonomousCommands = new HashMap<String, Command>() {
+    {
+        /* Single Commands Each Subsystem */
+        put("Start Intake", new CommandIntakeStart(m_intake));
+        put("Start Index", new CommandIndexStart(m_index));
+
+        /* Reset Commands */
+        put("Reset All", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, Constants.SATConstants.START.pivot), 
+            new CommandShooterStart(m_shooter, 0, 0), 
+            new CommandIntakeStop(m_intake), 
+            new CommandIndexStop(m_index)
+        ));
+
+        put("Reset SAT", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, Constants.SATConstants.START.pivot), 
+            new CommandShooterStart(m_shooter, 0, 0)
+        ));
+
+        put("Reset II", new SequentialCommandGroup(
+            new CommandIndexReverse(m_index), 
+            new CommandIntakeReverse(m_intake), 
+            new WaitCommand(0.01),
+            new CommandIntakeStop(m_intake),
+            new CommandIndexStop(m_index)
+        ));
+
+        put("Stop Intake", new CommandIntakeStop(m_intake));
+        put("Stop Index", new CommandIndexStop(m_index));
+        put("Stop Shooter", new CommandShooterStart(m_shooter, 0, 0));
+        put("Reset Pivot", new CommandPivotToPose(m_pivot, Constants.SATConstants.START.pivot));
+
+        /* Pivot Positions */
+
+        put("Podium Pivot", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, Constants.SATConstants.PODIUM.pivot), 
+            new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter1)
+        ));
+        
+        put("Sub Pivot", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, Constants.SATConstants.SUB.pivot), 
+            new CommandShooterStart(m_shooter, Constants.SATConstants.SUB.shooter1, Constants.SATConstants.SUB.shooter1)
+        ));
+
+        put("Wing Pivot", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, Constants.SATConstants.WING.pivot), 
+            new CommandShooterStart(m_shooter, Constants.SATConstants.WING.shooter1, Constants.SATConstants.WING.shooter1)
+        ));
+
+        //Pivot Positions for CENTER
+        put("Center Pivot", new CommandPivotToPose(m_pivot, 41));
+        put("AMP Pivot", new CommandPivotToPose(m_pivot, 40));
+
+        put("Auto Pivot Test", new CommandPivotToPose(m_pivot, m_ApriltagVision));
+
+        //Pivot Positions for AMPSIDE
+        put("Amp Pivot Preload", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, 51), 
+            new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter1)
+        ));
+
+        put("Amp Pivot Wing", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, 51), 
+            new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter1)
+        ));
+
+        put("Amp Pivot Line", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, 32), 
+            new CommandShooterStart(m_shooter, -70, -50)
+        ));
+
+        //Pivot Positions for SOURCESIDE
+        put("Source Pivot Preload", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, 31), 
+            new CommandShooterStart(m_shooter, -75, -55)
+        ));
+
+        put("Source Pivot Line", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, 31), 
+            new CommandShooterStart(m_shooter, -75, -55)
+        ));
+
+        /* Intake */
+        put("Intake Note w/ Beam", new IntakeNote(m_intake, m_index, m_BeamBreak));
+        put("Intake Note", new ParallelCommandGroup(
+            new CommandIntakeStart(m_intake), 
+            new CommandIndexStart(m_index)
+        ));
+
+        /* Score Note */
+        put("Score", new SequentialCommandGroup(
+            new WaitCommand(0.2), 
+            new CommandIndexStart(m_index),
+            new WaitCommand(1),
+            new CommandIndexStop(m_index)
+        ));
+    }
+  };
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
@@ -277,6 +383,11 @@ public static Command stopEverything(){
     configureBindings();
     driverControls();
     operatorControls();
+
+    NamedCommands.registerCommands(autonomousCommands);
+
+    autoChooser = AutoBuilder.buildAutoChooser("Do Nothing");
+    SmartDashboard.putData("Auto Mode", autoChooser);
   }
 
   public Command getAutonomousCommand() {
