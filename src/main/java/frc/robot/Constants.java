@@ -295,6 +295,7 @@ public class AllianceFlipUtil {
     public static class ScoringConstants {
         public static ScoringMode currentScoringMode = ScoringMode.PODIUM;
         public enum ScoringMode {
+            INTAKE,
             WING,
             AMP,
             SUBWOOFER,

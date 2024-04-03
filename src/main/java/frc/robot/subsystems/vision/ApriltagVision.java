@@ -20,7 +20,7 @@ import frc.robot.RobotContainer;
 
 public class ApriltagVision extends SubsystemBase {
 
-    private String cameraName = "FR";
+    private String cameraName = "FL";
     private PhotonCamera camera;
     private PhotonPipelineResult aprilTagResult;
     private boolean aprilTagHasTargets;
@@ -137,10 +137,6 @@ public class ApriltagVision extends SubsystemBase {
         return aprilTagX;
     }
 
-    /**
-     * Gets the X coordinate of the AprilTag in meters.
-     * @return The X coordinate.
-     */
     public static double getYaw(){
         return yaw;
     }

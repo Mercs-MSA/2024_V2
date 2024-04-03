@@ -9,6 +9,7 @@ import com.ctre.phoenix6.mechanisms.swerve.utility.PhoenixPIDController;
 import com.ctre.phoenix6.mechanisms.swerve.SwerveModule.DriveRequestType;
 
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
@@ -26,6 +27,7 @@ import edu.wpi.first.apriltag.AprilTag;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.MathUtil;
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -72,12 +74,19 @@ public class RobotContainer {
   private final CommandXboxController operator = new CommandXboxController(1); 
   public static final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
+   public ProfiledPIDController thetaController =
+      new ProfiledPIDController(10, 0.01, 0.1, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
+
+  private final SwerveRequest.RobotCentric driveRobotCentric = new SwerveRequest.RobotCentric()
+      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDriveRequestType(DriveRequestType.OpenLoopVoltage);
+
   private final SwerveRequest.FieldCentric drive = new SwerveRequest.FieldCentric()
       .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
   private final SwerveRequest.FieldCentricFacingAngle driveAngle = new SwerveRequest.FieldCentricFacingAngle()
-      .withDeadband(MaxSpeed * 0.1).withRotationalDeadband(MaxAngularRate * 0.1) // Add a 10% deadband
+      .withDeadband(MaxSpeed * 0.1) // Add a 10% deadband
       .withDriveRequestType(DriveRequestType.OpenLoopVoltage); // I want field-centric
                                                                // driving in open loop
   private final SwerveRequest.SwerveDriveBrake brake = new SwerveRequest.SwerveDriveBrake();
@@ -94,7 +103,7 @@ public class RobotContainer {
   public static final Shooter m_shooter = new Shooter();
   public static final Amper m_amper = new Amper();
   public static final AmperMotor m_amperMotor = new AmperMotor();
-  public ApriltagVision m_ApriltagVision = new ApriltagVision("FR");
+  public ApriltagVision m_ApriltagVision = new ApriltagVision("FL");
   public BeamBreak m_BeamBreak = new BeamBreak();
 
   /* Path follower */
@@ -220,21 +229,27 @@ public class RobotContainer {
     driverJoystick.pov(0).whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(0.5).withVelocityY(0)));
     driverJoystick.pov(180).whileTrue(drivetrain.applyRequest(() -> forwardStraight.withVelocityX(-0.5).withVelocityY(0)));
 
-    driveAngle.HeadingController = turnPID;
+    thetaController.setTolerance(Units.degreesToRadians(0.5));
+    thetaController.enableContinuousInput(-Math.PI, Math.PI);
+
+    driveAngle.HeadingController = new PhoenixPIDController(12.5, 0.0, 0.0);  ;
     driveAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
     driverJoystick.leftBumper().whileTrue(
         drivetrain.applyRequest(() -> {
-            double currentYawInRadians = MathUtil.angleModulus(drivetrain.getState().Pose.getRotation().getRadians());
+            double currentYawInRadians = (drivetrain.getState().Pose.getRotation().getDegrees());
             
-            double radiansToTarget = MathUtil.angleModulus(Units.degreesToRadians(ApriltagVision.getYaw()));
+            double radiansToTarget = (ApriltagVision.getYaw());
 
             // TODO: IM NOT SURE IF THESE ANGLES SHOULD BE ADDED OR SUBTRACTED BASED ON WHETHER THEY'RE SIGNS ARE THE SAME DIRECTION
-            Rotation2d desiredAngle = Rotation2d.fromRadians(currentYawInRadians - radiansToTarget);
+            Rotation2d desiredAngle = Rotation2d.fromDegrees(currentYawInRadians - radiansToTarget);
 
-            return driveAngle.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
+
+            return driveRobotCentric.withVelocityX(-driverJoystick.getLeftY() * MaxSpeed)
                 .withVelocityY(-driverJoystick.getLeftX() * MaxSpeed)
-                .withTargetDirection(desiredAngle);
+                .withRotationalRate(thetaController.calculate(drivetrain.getState().Pose.getRotation().getRadians(), desiredAngle.getRadians()));
+                // .withTargetDirection(Rotation2d.fromDegrees(90));
+
         }
     ));
   }

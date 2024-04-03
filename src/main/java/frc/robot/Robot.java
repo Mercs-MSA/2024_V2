@@ -5,12 +5,16 @@
 package frc.robot;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
+import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
+import frc.robot.subsystems.vision.ApriltagVision;
 
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
@@ -80,6 +84,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    Constants.ScoringConstants.currentScoringMode =Constants.ScoringConstants.ScoringMode.INTAKE;
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
@@ -95,12 +100,19 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopPeriodic() {
+    SmartDashboard.putNumber("current heading", m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees());
+    SmartDashboard.putNumber("desiredAngle", m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees() - ApriltagVision.getYaw());
 
     if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.AMP){
       new CommandAmperScoreAmp(m_robotContainer.m_amper).schedule();
+      // new CommandShooterStart(m_robotContainer.m_shooter, Constants.SATConstants.AMP.shooter1, Constants.SATConstants.AMP.shooter2).schedule();
+    }
+    else if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.INTAKE){
+      //nothing
     }
     else {
       new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
+      // new CommandShooterStart(m_robotContainer.m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2).schedule();
     }
 
   }
