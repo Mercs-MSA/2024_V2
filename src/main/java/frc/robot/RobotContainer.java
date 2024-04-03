@@ -107,7 +107,7 @@ public class RobotContainer {
   public BeamBreak m_BeamBreak = new BeamBreak();
 
   /* Path follower */
-  private Command runAuto = drivetrain.getAutoPath("Tests");
+  //private Command runAuto = drivetrain.getAutoPath("Tests");
 
   /* AutoChooser */
   private final SendableChooser<Command> autoChooser;
@@ -148,18 +148,21 @@ public class RobotContainer {
 
         /* Pivot Positions */
 
-        put("Podium Pivot", new ParallelCommandGroup(
-            new CommandPivotToPose(m_pivot, 42), 
+        put("Podium Pivot", new SequentialCommandGroup(
+            new CommandChangeScoringMode(ScoringMode.PODIUM),
+            new CommandPivotToPose(m_pivot), 
             new CommandShooterStart(m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter1)
         ));
         
-        put("Sub Pivot", new ParallelCommandGroup(
-            new CommandPivotToPose(m_pivot, Constants.SATConstants.SUB.pivot), 
+        put("Sub Pivot", new SequentialCommandGroup(
+            new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+            new CommandPivotToPose(m_pivot), 
             new CommandShooterStart(m_shooter, Constants.SATConstants.SUB.shooter1, Constants.SATConstants.SUB.shooter1)
         ));
 
-        put("Wing Pivot", new ParallelCommandGroup(
-            new CommandPivotToPose(m_pivot, Constants.SATConstants.WING.pivot), 
+        put("Wing Pivot", new SequentialCommandGroup(
+            new CommandChangeScoringMode(ScoringMode.WING),
+            new CommandPivotToPose(m_pivot), 
             new CommandShooterStart(m_shooter, Constants.SATConstants.WING.shooter1, Constants.SATConstants.WING.shooter1)
         ));
 
