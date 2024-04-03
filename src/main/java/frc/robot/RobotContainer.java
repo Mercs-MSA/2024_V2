@@ -118,6 +118,7 @@ public class RobotContainer {
         /* Single Commands Each Subsystem */
         put("Start Intake", new CommandIntakeStart(m_intake));
         put("Start Index", new CommandIndexStart(m_index));
+        put("Start Shooter", new CommandShooterStart(m_shooter, -60, -45));
 
         /* Reset Commands */
         put("Reset All", new ParallelCommandGroup(
