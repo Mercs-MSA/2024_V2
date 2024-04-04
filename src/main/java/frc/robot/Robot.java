@@ -24,7 +24,7 @@ import frc.robot.subsystems.pivot.Pivot;
  * project.
  */
 public class Robot extends TimedRobot {
-  public static final CTREConfigs ctreConfigs = new CTREConfigs();
+  // public static final CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
 
   private final RobotContainer m_robotContainer = new RobotContainer();
@@ -40,7 +40,6 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
-    m_robotContainer.configureButtonBindings();
 
     Optional<Alliance> alliance = DriverStation.getAlliance();
     Constants.Vision.isRedAlliance = Constants.AllianceFlipUtil.shouldFlip();
@@ -65,8 +64,6 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("robot state", Constants.ScoringConstants.currentScoringMode.toString());
-
-    m_robotContainer.periodic();
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
@@ -92,7 +89,7 @@ public class Robot extends TimedRobot {
     m_robotContainer.m_BeamBreak.disableAsynchronousInterrupt();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
-    m_robotContainer.s_Swerve.zeroGyro();
+    // m_robotContainer.s_Swerve.zeroGyro();
     
     new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
     

@@ -221,7 +221,7 @@ public class RobotContainer {
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
-  private void configureBindings() {
+  public void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(Constants.Vision.manualDriveInvert * -driverJoystick.getLeftY() * MaxSpeed) // Drive forward with
                                                                                            // negative Y (forward)
@@ -354,6 +354,10 @@ public void operatorControls(){
           // new CommandShooterStopNeutral(m_shooter),
           new CommandScore(m_amper, m_shooter, m_amperMotor)
       )
+  );
+
+  operator.start().and(operator.back()).onTrue(
+    new InstantCommand(() -> m_pivot.applyConfig())
   );
 
 }

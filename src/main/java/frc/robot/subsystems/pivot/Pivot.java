@@ -45,8 +45,8 @@ public class Pivot extends SubsystemBase{
     private double targetPose;
 
     public Pivot(){
-        leaderTalon = new TalonFX(ArmConstants.leaderID);
-        followerTalon = new TalonFX(ArmConstants.followerTalon);
+        leaderTalon = new TalonFX(ArmConstants.leaderID, "rio");
+        followerTalon = new TalonFX(ArmConstants.followerTalon, "rio");
         followerTalon.setControl(new Follower(ArmConstants.leaderID, true));
 
         CANcoderConfiguration armEncoderConfig = new CANcoderConfiguration();
@@ -148,5 +148,11 @@ public class Pivot extends SubsystemBase{
 
     public void stop(){
         leaderTalon.setControl(new NeutralOut());
+    }
+
+    public void applyConfig(){
+        leaderTalon.getConfigurator().apply(configLeader);
+        followerTalon.getConfigurator().apply(configLeader);
+
     }
 }
