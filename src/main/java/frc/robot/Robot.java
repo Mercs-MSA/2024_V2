@@ -4,134 +4,151 @@
 
 package frc.robot;
 
+import java.util.Optional;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.TimedRobot;
-import edu.wpi.first.wpilibj.Timer;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
-import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
-import frc.robot.subsystems.vision.ApriltagVision;
+import edu.wpi.first.wpilibj.AnalogInput;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import frc.robot.subsystems.pivot.Pivot;
 
+/**
+ * The VM is configured to automatically run this class, and to call the functions corresponding to
+ * each mode, as described in the TimedRobot documentation. If you change the name of this class or
+ * the package after creating this project, you must also update the build.gradle file in the
+ * project.
+ */
 public class Robot extends TimedRobot {
+  public static final CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
 
-  private RobotContainer m_robotContainer;
+  private final RobotContainer m_robotContainer = new RobotContainer();
 
-  private final boolean UseLimelight = false;
+  Pose2d apiltagPlusGyro = new Pose2d();
+  private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
 
+  /**
+   * This function is run when the robot is first started up and should be used for any
+   * initialization code.
+   */
   @Override
   public void robotInit() {
-    m_robotContainer = new RobotContainer();
+    // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
+    // autonomous chooser on the dashboard.
+    m_robotContainer.configureButtonBindings();
 
-    m_robotContainer.drivetrain.getDaqThread().setThreadPriority(99);
+    Optional<Alliance> alliance = DriverStation.getAlliance();
+    Constants.Vision.isRedAlliance = Constants.AllianceFlipUtil.shouldFlip();
+    SmartDashboard.putBoolean("Are we red alliance?", Constants.Vision.isRedAlliance);
+
+    SmartDashboard.putBoolean("Status 1", Pivot.status1OK);
+    SmartDashboard.putBoolean("Status 2", Pivot.status2OK);
   }
+
+  /**
+   * This function is called every robot packet, no matter the mode. Use this for items like
+   * diagnostics that you want ran during disabled, autonomous, teleoperated and test.
+   *
+   * <p>This runs after the mode specific periodic functions, but before LiveWindow and
+   * SmartDashboard integrated updating.
+   */
   @Override
   public void robotPeriodic() {
+    // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
+    // commands, running already-scheduled commands, removing finished or interrupted commands,
+    // and running subsystem periodic() methods.  This must be called from the robot's periodic
+    // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    SmartDashboard.putString("robot state", Constants.ScoringConstants.currentScoringMode.toString());
 
-    /**
-     * This example of adding Limelight is very simple and may not be sufficient for on-field use.
-     * Users typically need to provide a standard deviation that scales with the distance to target
-     * and changes with number of tags available.
-     *
-     * This example is sufficient to show that vision integration is possible, though exact implementation
-     * of how to use vision should be tuned per-robot and to the team's specification.
-     */
-    // if (UseLimelight) {
-    //   var lastResult = LimelightHelpers.getLatestResults("limelight").targetingResults;
+    m_robotContainer.periodic();
+  }
 
-    //   Pose2d llPose = lastResult.getBotPose2d_wpiBlue();
-
-    //   if (lastResult.valid) {
-    //     m_robotContainer.drivetrain.addVisionMeasurement(llPose, Timer.getFPGATimestamp());
-    //   }
-    // }
+  /** This function is called once each time the robot enters Disabled mode. */
+  @Override
+  public void disabledInit() {
   }
 
   @Override
-  public void disabledInit() {}
+  public void disabledPeriodic() {
+    m_robotContainer.m_pivot.setBrakeMode(false);
+  }
 
-  @Override
-  public void disabledPeriodic() {}
-
-  @Override
-  public void disabledExit() {}
-
+  /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
+    // if (Constants.AllianceFlipUtil.shouldFlip()){
+    //   m_robotContainer.s_Swerve.gyro.setYaw(180);
+    // }
+    // else {
+    //   m_robotContainer.s_Swerve.gyro.setYaw(0);
+    // }
+
+    m_robotContainer.m_BeamBreak.disableAsynchronousInterrupt();
     m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
+    m_robotContainer.s_Swerve.zeroGyro();
+    
+    new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
+    
     if (m_autonomousCommand != null) {
       m_autonomousCommand.schedule();
     }
-
+  
     Constants.Vision.visionTurnedOn = false;
     m_robotContainer.m_pivot.setBrakeMode(true);
+
     Constants.Vision.autoRunning = true;
-    m_robotContainer.m_BeamBreak.disableAsynchronousInterrupt();
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
+
+    
   }
 
+  /** This function is called periodically during autonomous. */
   @Override
   public void autonomousPeriodic() {}
 
   @Override
-  public void autonomousExit() {}
-
-  @Override
   public void teleopInit() {
-    Constants.ScoringConstants.currentScoringMode =Constants.ScoringConstants.ScoringMode.INTAKE;
+    // This makes sure that the autonomous stops running when
+    // teleop starts running. If you want the autonomous to
+    // continue until interrupted by another command, remove
+    // this line or comment it out.
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
 
-    
     Constants.Vision.visionTurnedOn = true;
 
     new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
     m_robotContainer.stopIndexShooterAmperNeutral();
     m_robotContainer.m_pivot.setBrakeMode(true);
     Constants.Vision.autoRunning = false;
+
   }
 
+  /** This function is called periodically during operator control. */
   @Override
   public void teleopPeriodic() {
-    SmartDashboard.putNumber("current heading", m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees());
-    SmartDashboard.putNumber("desiredAngle", m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees() - ApriltagVision.getYaw());
-
     if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.AMP){
       new CommandAmperScoreAmp(m_robotContainer.m_amper).schedule();
-      // new CommandShooterStart(m_robotContainer.m_shooter, Constants.SATConstants.AMP.shooter1, Constants.SATConstants.AMP.shooter2).schedule();
-    }
-    else if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.INTAKE){
-      //nothing
     }
     else {
       new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
-      // new CommandShooterStart(m_robotContainer.m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2).schedule();
     }
-
-  }
-
-  @Override
-  public void teleopExit() {
   }
 
   @Override
   public void testInit() {
-    CommandScheduler.getInstance().cancelAll();
+    // Cancels all running commands at the start of test mode.
   }
 
+  /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {}
 
-  @Override
-  public void testExit() {}
-
-  @Override
-  public void simulationPeriodic() {}
 }
