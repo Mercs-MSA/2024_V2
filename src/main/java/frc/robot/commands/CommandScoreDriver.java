@@ -24,13 +24,16 @@ public class CommandScoreDriver extends Command {
         if (ScoringConstants.currentScoringMode == ScoringConstants.ScoringMode.AMP){
             m_amperMotor.startAmperMotor();
             m_shooter.setBothShooterMotor(SATConstants.AMP.shooter1, SATConstants.AMP.shooter2);
-
+            
         }
         else {
             m_amperMotor.stopAmperMotor();
+            
         }
 
         m_index.startIndexMotor();
+
+        
         
     }
 

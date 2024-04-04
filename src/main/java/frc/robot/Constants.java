@@ -39,7 +39,7 @@ public final class Constants {
         }
 
         public static final class AMP{
-            public static final double pivot = 166.4291992;
+            public static final double pivot = 170;
             public static final double shooter1 = -22.5;
             public static final double shooter2 = -22.5;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)));

@@ -123,7 +123,8 @@ public class RobotContainer {
         /* Reset Commands */
         put("Reset All", new ParallelCommandGroup(
             new CommandPivotToPose(m_pivot, Constants.SATConstants.START.pivot), 
-            new CommandShooterStart(m_shooter, 0, 0), 
+            // new CommandShooterStart(m_shooter, 0, 0), 
+            new CommandShooterStopNeutral(m_shooter),
             new CommandIntakeStop(m_intake), 
             new CommandIndexStop(m_index)
         ));
@@ -143,7 +144,7 @@ public class RobotContainer {
 
         put("Stop Intake", new CommandIntakeStop(m_intake));
         put("Stop Index", new CommandIndexStop(m_index));
-        put("Stop Shooter", new CommandShooterStart(m_shooter, 0, 0));
+        put("Stop Shooter", new CommandShooterStopNeutral(m_shooter));
         put("Reset Pivot", new CommandPivotToPose(m_pivot, Constants.SATConstants.START.pivot));
 
         /* Pivot Positions */
@@ -248,7 +249,7 @@ public class RobotContainer {
         drivetrain.applyRequest(() -> {
             double currentYawInRadians = (drivetrain.getState().Pose.getRotation().getDegrees());
             
-            double radiansToTarget = (ApriltagVision.getYaw());
+            double radiansToTarget = (ApriltagVision.getYaw() + 180);
 
             // TODO: IM NOT SURE IF THESE ANGLES SHOULD BE ADDED OR SUBTRACTED BASED ON WHETHER THEY'RE SIGNS ARE THE SAME DIRECTION
             Rotation2d desiredAngle = Rotation2d.fromDegrees(currentYawInRadians - radiansToTarget);
@@ -275,18 +276,18 @@ public class RobotContainer {
         new SequentialCommandGroup(
             new CommandIntakeStopNeutral(m_intake),
             new CommandIndexStopNeutral(m_index),
-            new CommandAmperMotorStopNeutral(m_amperMotor),
-            new WaitCommand(0.1),
-            new CommandShooterStopNeutral(m_shooter)
+            new CommandAmperMotorStopNeutral(m_amperMotor)
+            // new WaitCommand(0.1),
+            // new CommandShooterStopNeutral(m_shooter)
         )
     );
 
-    driverJoystick.leftBumper().onTrue(
-        // new CommandRotateToPose(s_Swerve, m_ApriltagVision)
-        new InstantCommand(() -> Constants.Vision.autoAimActive = true)
-    ).onFalse(
-        new InstantCommand(() -> Constants.Vision.autoAimActive = false)
-    );
+    // driverJoystick.leftBumper().onTrue(
+    //     // new CommandRotateToPose(s_Swerve, m_ApriltagVision)
+    //     new InstantCommand(() -> Constants.Vision.autoAimActive = true)
+    // ).onFalse(
+    //     new InstantCommand(() -> Constants.Vision.autoAimActive = false)
+    // );
 
     driverJoystick.b().onTrue(
         new InstantCommand(() -> Constants.Vision.manualDriveInvert = -1)
@@ -379,7 +380,7 @@ public Command stopIntakeIndexShooterAmperNeutral(){
 }
 
 public Command stopIndexShooterAmperNeutral(){
-  return new ParallelCommandGroup(
+  return new SequentialCommandGroup(
       new CommandIndexStopNeutral(m_index),
       new CommandShooterStopNeutral(m_shooter),
       new CommandAmperMotorStopNeutral(m_amperMotor)

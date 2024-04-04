@@ -62,13 +62,13 @@
       "name": "Reset",
       "waypointRelativePos": 0.35,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Reset All"
+                "name": "Stop Shooter"
               }
             }
           ]
@@ -103,29 +103,6 @@
               "type": "named",
               "data": {
                 "name": "Reset I+I"
-              }
-            }
-          ]
-        }
-      }
-    },
-    {
-      "name": "Spin Flywheel",
-      "waypointRelativePos": 1.25,
-      "command": {
-        "type": "parallel",
-        "data": {
-          "commands": [
-            {
-              "type": "named",
-              "data": {
-                "name": "Podium Pivot Center"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Start Shooter"
               }
             }
           ]

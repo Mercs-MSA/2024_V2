@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
+import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
@@ -122,7 +123,7 @@ public class Robot extends TimedRobot {
     Constants.Vision.visionTurnedOn = true;
 
     new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
-    m_robotContainer.stopIndexShooterAmperNeutral();
+    m_robotContainer.stopIndexShooterAmperNeutral().schedule();
     m_robotContainer.m_pivot.setBrakeMode(true);
     Constants.Vision.autoRunning = false;
 
@@ -133,9 +134,12 @@ public class Robot extends TimedRobot {
   public void teleopPeriodic() {
     if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.AMP){
       new CommandAmperScoreAmp(m_robotContainer.m_amper).schedule();
+      new CommandShooterStart(m_robotContainer.m_shooter, Constants.SATConstants.AMP.shooter1, Constants.SATConstants.AMP.shooter2).schedule();
     }
     else {
       new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
+      new CommandShooterStart(m_robotContainer.m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2).schedule();
+
     }
   }
 
