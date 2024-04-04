@@ -168,9 +168,9 @@ public class RobotContainer {
         ));
 
         //Pivot Positions for CENTER
-        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 40));
-        put("Center Pivot", new CommandPivotToPose(m_pivot, 42));
-        put("AMP Pivot", new CommandPivotToPose(m_pivot, 38));
+        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 41.5));
+        put("Center Pivot", new CommandPivotToPose(m_pivot, 44));
+        put("AMP Pivot", new CommandPivotToPose(m_pivot, 39));
 
         put("Auto Pivot Test", 
         new SequentialCommandGroup(
