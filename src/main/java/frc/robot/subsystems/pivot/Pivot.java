@@ -3,6 +3,7 @@ package frc.robot.subsystems.pivot;
 import java.util.List;
 
 import com.ctre.phoenix6.BaseStatusSignal;
+import com.ctre.phoenix6.StatusCode;
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
@@ -37,6 +38,10 @@ public class Pivot extends SubsystemBase{
     // Config
     private final TalonFXConfiguration configLeader = new TalonFXConfiguration();
 
+    //Check if inverted is applied 
+    public static Boolean status1OK = false; 
+    public static Boolean status2OK = false;
+
     private double targetPose;
 
     public Pivot(){
@@ -46,6 +51,8 @@ public class Pivot extends SubsystemBase{
 
         CANcoderConfiguration armEncoderConfig = new CANcoderConfiguration();
         armEncoderConfig.MagnetSensor.SensorDirection = SensorDirectionValue.Clockwise_Positive;
+
+
 
         // Leader motor configs
         configLeader.Slot0.kP = ArmConstants.leaderKP;
@@ -79,6 +86,30 @@ public class Pivot extends SubsystemBase{
         supplyCurrent.get(1),
         tempCelsius.get(0),
         tempCelsius.get(1));
+
+        StatusCode status1 = StatusCode.StatusCodeNotInitialized;
+        for (int i = 0; i < 20; ++i) {
+            status1 = leaderTalon.getConfigurator().apply(configLeader);
+            if (status1.isOK())
+                status1OK = true;
+                SmartDashboard.putBoolean("Status 1", Pivot.status1OK);
+                break;
+        }
+        if (!status1.isOK()) {
+            System.out.println("Could not apply configs, error code: " + status1.toString());
+        }
+
+        StatusCode status2 = StatusCode.StatusCodeNotInitialized;
+        for (int i = 0; i < 20; ++i) {
+            status2 = followerTalon.getConfigurator().apply(configLeader);
+        if (status2.isOK())
+            status1OK = true;
+            SmartDashboard.putBoolean("Status 2", Pivot.status2OK);
+            break;
+        }
+        if (!status2.isOK()) {
+            System.out.println("Could not apply configs, error code: " + status2.toString());
+        }
 
         leaderTalon.setPosition(0);
         followerTalon.setPosition(0);
