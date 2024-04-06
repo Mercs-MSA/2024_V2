@@ -62,13 +62,19 @@
       "name": "Reset",
       "waypointRelativePos": 0.15,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Reset SAT"
+                "name": "Stop Shooter"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Reset Pivot"
               }
             }
           ]
@@ -102,7 +108,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Reset I+I"
+                "name": "Reset II"
               }
             }
           ]
@@ -111,7 +117,7 @@
     },
     {
       "name": "Spin Up shooter",
-      "waypointRelativePos": 1.4,
+      "waypointRelativePos": 1.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -119,7 +125,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Source Pivot Line"
+                "name": "Start Shooter Poop"
               }
             }
           ]
@@ -128,8 +134,8 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 4.0,
+    "maxAcceleration": 4.0,
     "maxAngularVelocity": 180.0,
     "maxAngularAcceleration": 180.0
   },

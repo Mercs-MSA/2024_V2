@@ -144,7 +144,7 @@ public class RobotContainer {
 
         put("Stop Intake", new CommandIntakeStop(m_intake));
         put("Stop Index", new CommandIndexStop(m_index));
-        put("Stop Shooter", new CommandShooterStopNeutral(m_shooter));
+        put("Stop Shooter", new CommandShooterStart(m_shooter, 0, 0));
         put("Reset Pivot", new CommandPivotToPose(m_pivot, Constants.SATConstants.START.pivot));
 
         /* Pivot Positions */
@@ -168,9 +168,9 @@ public class RobotContainer {
         ));
 
         //Pivot Positions for CENTER
-        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 41.5));
-        put("Center Pivot", new CommandPivotToPose(m_pivot, 44));
-        put("AMP Pivot", new CommandPivotToPose(m_pivot, 39));
+        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 43)); // RED: 41.5  BLUE: 43
+        put("Center Pivot", new CommandPivotToPose(m_pivot, 46)); // RED: 44  BLUE: 46
+        put("AMP Pivot", new CommandPivotToPose(m_pivot, 41)); // RED: 39  BLUE: 41
 
         put("Auto Pivot Test", 
         new SequentialCommandGroup(
@@ -196,7 +196,7 @@ public class RobotContainer {
 
         //Pivot Positions for SOURCESIDE
         put("Source Pivot Preload", new ParallelCommandGroup(
-            new CommandPivotToPose(m_pivot, 31), 
+            new CommandPivotToPose(m_pivot, 36), 
             new CommandShooterStart(m_shooter, -75, -55)
         ));
 
@@ -204,6 +204,8 @@ public class RobotContainer {
             new CommandPivotToPose(m_pivot, 31), 
             new CommandShooterStart(m_shooter, -75, -55)
         ));
+
+        put("Start Shooter Poop", new CommandShooterStart(m_shooter, -20, -20));
 
         /* Intake */
         put("Intake Note w/ Beam", new IntakeNote(m_intake, m_index, m_BeamBreak));
