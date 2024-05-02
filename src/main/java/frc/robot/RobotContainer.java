@@ -278,8 +278,8 @@ public class RobotContainer {
 
 public void operatorControls(){
   operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
-  operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
-  operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
+//   operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
+//   operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
   operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
   operator.a().whileTrue(
       new SequentialCommandGroup(
