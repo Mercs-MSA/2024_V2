@@ -1,3 +1,4 @@
+
 package frc.robot;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
@@ -47,15 +48,15 @@ public final class Constants {
 
         public static final class PODIUM{
             public static final double pivot = 30;
-            public static final double shooter1 = -10.0;
-            public static final double shooter2 = -10.0;
+            public static final double shooter1 = -30.0;
+            public static final double shooter2 = -30.0;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-23.9)));
         }
         
         public static final class WING{
             public static final double pivot = 25;
-            public static final double shooter1 = -100.0;
-            public static final double shooter2 = -60.0;
+            public static final double shooter1 = -20.0;
+            public static final double shooter2 = -20.0;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d());   
         }
 
