@@ -210,8 +210,9 @@ public class RobotContainer {
         /* Intake */
         put("Intake Note w/ Beam", new IntakeNote(m_intake, m_index, m_BeamBreak));
         put("Intake Note", new ParallelCommandGroup(
-            new CommandIntakeStart(m_intake), 
-            new CommandIndexStart(m_index)
+            // new CommandIntakeStart(m_intake), 
+            // new CommandIndexStart(m_index)
+            new IntakeNote(m_intake, m_index, m_BeamBreak)
         ));
 
         /* Score Note */

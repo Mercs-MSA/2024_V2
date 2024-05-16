@@ -29,16 +29,23 @@ public class IntakeNote extends Command {
   public void initialize() {
     SmartDashboard.putBoolean("Intake done", false);
       if (!m_beamBreak.detectsNote()){
-          m_beamBreak.enableAsynchronousInterrupt();
+          //m_beamBreak.enableAsynchronousInterrupt();
           m_intake.startIntakeMotor();
           m_index.startIndexMotor();
+
+
+
+      
       }
 
     
   }
 
   @Override
-  public void execute() {}
+  public void execute() {
+
+
+  }
 
   @Override
   public void end(boolean interrupted) {
