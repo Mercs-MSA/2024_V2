@@ -220,6 +220,11 @@ public class RobotContainer {
             new WaitCommand(0.2), 
             new CommandIndexStart(m_index)
         ));
+
+        put("derp", new ParallelCommandGroup(
+            new CommandPivotToPose(m_pivot, 43),
+            new IntakeNote(m_intake, m_index, m_BeamBreak)
+        ));
     }
   };
 

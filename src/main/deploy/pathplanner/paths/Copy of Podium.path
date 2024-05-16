@@ -35,19 +35,13 @@
       "name": "New Event Marker",
       "waypointRelativePos": 0.0,
       "command": {
-        "type": "parallel",
+        "type": "sequential",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
-                "name": "Podium Pivot Center"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Intake Note w/ Beam"
+                "name": "derp"
               }
             }
           ]
