@@ -210,20 +210,14 @@ public class RobotContainer {
         /* Intake */
         put("Intake Note w/ Beam", new IntakeNote(m_intake, m_index, m_BeamBreak));
         put("Intake Note", new ParallelCommandGroup(
-            // new CommandIntakeStart(m_intake), 
-            // new CommandIndexStart(m_index)
-            new IntakeNote(m_intake, m_index, m_BeamBreak)
+            new CommandIntakeStart(m_intake), 
+            new CommandIndexStart(m_index)
         ));
 
         /* Score Note */
         put("Score", new SequentialCommandGroup(
             new WaitCommand(0.2), 
             new CommandIndexStart(m_index)
-        ));
-
-        put("derp", new ParallelCommandGroup(
-            new CommandPivotToPose(m_pivot, 43),
-            new IntakeNote(m_intake, m_index, m_BeamBreak)
         ));
     }
   };
