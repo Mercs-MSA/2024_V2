@@ -42,15 +42,21 @@
           }
         },
         {
-          "type": "wait",
-          "data": {
-            "waitTime": 1.0
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Copy of Podium"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score"
           }
         },
         {
@@ -60,9 +66,33 @@
           }
         },
         {
+          "type": "named",
+          "data": {
+            "name": "Intake Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score"
+          }
+        },
+        {
           "type": "path",
           "data": {
             "pathName": "Copy of 2PieceLeftIm"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score"
           }
         },
         {
