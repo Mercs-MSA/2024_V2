@@ -22,7 +22,7 @@ public class IntakeNote extends Command {
     m_intake = intake;
     m_index = index;
     m_beamBreak = beamBreak;
-    addRequirements(m_intake, m_index, m_beamBreak);
+    //addRequirements(m_intake, m_index, m_beamBreak);
   }
 
   @Override

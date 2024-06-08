@@ -208,9 +208,10 @@ public class RobotContainer {
         put("Start Shooter Poop", new CommandShooterStart(m_shooter, -20, -20));
 
         /* Intake */
-        put("Intake Note w/ Beam", new IntakeNote(m_intake, m_index, m_BeamBreak));
-        put("Intake Note", new ParallelCommandGroup(
-            new CommandIntakeStart(m_intake), 
+        put("Intake Note", new IntakeNote(m_intake, m_index, m_BeamBreak));
+        put("Intake Noteyyyyyyg", new ParallelCommandGroup(
+            new WaitCommand(0.2),
+            // new CommandIntakeStart(m_intake) 
             new CommandIndexStart(m_index)
         ));
 
