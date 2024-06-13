@@ -41,6 +41,7 @@ import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
+import frc.robot.commands.CommandRotateToPose;
 import frc.robot.commands.CommandScore;
 import frc.robot.commands.CommandScoreDriver;
 import frc.robot.commands.IntakeNote;
@@ -72,7 +73,7 @@ public class RobotContainer {
   /* Setting up bindings for necessary control of the swerve drive platform */
   private final CommandXboxController driverJoystick = new CommandXboxController(0); 
   private final CommandXboxController operator = new CommandXboxController(1); 
-  public static final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+  public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
 
    public ProfiledPIDController thetaController =
       new ProfiledPIDController(10, 0.01, 0.1, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
@@ -248,23 +249,8 @@ public class RobotContainer {
     driveAngle.HeadingController = new PhoenixPIDController(12.5, 0.0, 0.0);  ;
     driveAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
-    driverJoystick.leftBumper().whileTrue(
-        drivetrain.applyRequest(() -> {
-            double currentYawInRadians = (drivetrain.getState().Pose.getRotation().getDegrees());
-            
-            double radiansToTarget = (ApriltagVision.getYaw() + 180);
 
-            // TODO: IM NOT SURE IF THESE ANGLES SHOULD BE ADDED OR SUBTRACTED BASED ON WHETHER THEY'RE SIGNS ARE THE SAME DIRECTION
-            Rotation2d desiredAngle = Rotation2d.fromDegrees(currentYawInRadians - radiansToTarget);
-
-
-            return driveRobotCentric.withVelocityX(Constants.Vision.manualDriveInvert * -driverJoystick.getLeftY() * MaxSpeed)
-                .withVelocityY(Constants.Vision.manualDriveInvert * -driverJoystick.getLeftX() * MaxSpeed)
-                .withRotationalRate(thetaController.calculate(drivetrain.getState().Pose.getRotation().getRadians(), desiredAngle.getRadians()));
-                // .withTargetDirection(Rotation2d.fromDegrees(90));
-
-        }
-    ));
+    driverJoystick.leftBumper().whileTrue(new CommandRotateToPose(drivetrain, new Rotation2d(0.3)));
   }
 
   public void driverControls(){
