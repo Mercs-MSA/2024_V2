@@ -5,6 +5,9 @@
 package frc.robot;
 
 import java.util.Optional;
+
+import com.ctre.phoenix6.hardware.Pigeon2;
+
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -17,6 +20,8 @@ import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.pivot.Pivot;
+import edu.wpi.first.wpilibj.Timer;
+
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -27,6 +32,9 @@ import frc.robot.subsystems.pivot.Pivot;
 public class Robot extends TimedRobot {
   // public static final CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
+
+  private Pigeon2 pigeon2 = new Pigeon2(16); //change port
+
 
   private final RobotContainer m_robotContainer = new RobotContainer();
 
@@ -65,6 +73,18 @@ public class Robot extends TimedRobot {
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("robot state", Constants.ScoringConstants.currentScoringMode.toString());
+
+    LimelightHelpers.SetRobotOrientation("limelight", pigeon2.getAngle(), 0, 0, 0, 0, 0);
+
+    var lastResult = LimelightHelpers.getLatestResults("limelight");
+    if (lastResult.valid) {
+    m_robotContainer.drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), Timer.getFPGATimestamp());
+      SmartDashboard.putBoolean("limelightResultValid", true);
+    } else {
+      SmartDashboard.putBoolean("limelightResultValid", false);
+    }
+    SmartDashboard.putNumber("poseX", m_robotContainer.drivetrain.getState().Pose.getX());
+    SmartDashboard.putNumber("poseY", m_robotContainer.drivetrain.getState().Pose.getY());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */
