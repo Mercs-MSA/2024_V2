@@ -2,6 +2,7 @@ package frc.robot;
 
 import static edu.wpi.first.units.Units.Volts;
 
+import java.util.List;
 import java.util.function.Supplier;
 
 import com.ctre.phoenix6.SignalLogger;
@@ -19,7 +20,9 @@ import com.pathplanner.lib.util.ReplanningConfig;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.Notifier;
 import edu.wpi.first.wpilibj.RobotController;
@@ -163,7 +166,7 @@ public class CommandSwerveDrivetrain extends SwerveDrivetrain implements Subsyst
             Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond,
             Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared);
 
-        // return PathfindHolonomic(pose, constraints, 9, getPose(), getRobotRelativeSpeeds(), this::getRobotRelativeSpeeds, this::driveRobotRelative, )
+            // return PathfindHolonomic(pose, constraints, 9, getPose(), getRobotRelativeSpeeds(), this::getRobotRelativeSpeeds, this::driveRobotRelative, )
         // Since AutoBuilder is configured, we can use it to build pathfinding commands
         return AutoBuilder.pathfindToPose(
             pose,

@@ -50,12 +50,10 @@ public class CommandRotateToPose extends Command {
         thetaController.calculate(
             currPose.getRotation().getRadians(), desiredAngle.getRadians());
     SmartDashboard.putNumber("thetaVel", thetaVelocity);
-    swerve.applyRequest(
-        () -> drive.withRotationalRate(thetaVelocity)
-    );
-
+    swerve.applyRequest(() -> drive.withVelocityX(0.0)
+            .withVelocityY(0.0)
+            .withRotationalRate(thetaVelocity));
   }
-
   public boolean atGoal() {
     return thetaController.atGoal();
   }

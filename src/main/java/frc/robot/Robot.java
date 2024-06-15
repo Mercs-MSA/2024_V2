@@ -9,6 +9,7 @@ import java.util.Optional;
 import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -33,13 +34,13 @@ public class Robot extends TimedRobot {
   // public static final CTREConfigs ctreConfigs = new CTREConfigs();
   private Command m_autonomousCommand;
 
-  private Pigeon2 pigeon2 = new Pigeon2(16); //change port
+  //private Pigeon2 pigeon2 = new Pigeon2(16); //change port
 
 
   private final RobotContainer m_robotContainer = new RobotContainer();
 
   Pose2d apiltagPlusGyro = new Pose2d();
-  private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
+  //private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -74,7 +75,7 @@ public class Robot extends TimedRobot {
     CommandScheduler.getInstance().run();
     SmartDashboard.putString("robot state", Constants.ScoringConstants.currentScoringMode.toString());
 
-    LimelightHelpers.SetRobotOrientation("limelight", pigeon2.getAngle(), 0, 0, 0, 0, 0);
+    LimelightHelpers.SetRobotOrientation("limelight", m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
 
     var lastResult = LimelightHelpers.getLatestResults("limelight");
     if (lastResult.valid) {
@@ -85,6 +86,7 @@ public class Robot extends TimedRobot {
     }
     SmartDashboard.putNumber("poseX", m_robotContainer.drivetrain.getState().Pose.getX());
     SmartDashboard.putNumber("poseY", m_robotContainer.drivetrain.getState().Pose.getY());
+    SmartDashboard.putNumber("test", new Rotation2d(m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees() - (LimelightHelpers.getTX("limelight"))).getRadians());
   }
 
   /** This function is called once each time the robot enters Disabled mode. */

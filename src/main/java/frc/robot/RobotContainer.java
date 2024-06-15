@@ -226,6 +226,17 @@ public class RobotContainer {
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
+  double limelight_aim_proportional() {
+    double kP = 0.035;
+    int[] ids = new int[1];
+    ids[0] = 7;
+    LimelightHelpers.SetFiducialIDFiltersOverride("limelight", ids);
+
+    double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
+    targetingAngularVelocity *= MaxAngularRate;
+    targetingAngularVelocity *= -1.0;
+    return targetingAngularVelocity;
+}
   public void configureBindings() {
     drivetrain.setDefaultCommand( // Drivetrain will execute this command periodically
         drivetrain.applyRequest(() -> drive.withVelocityX(Constants.Vision.manualDriveInvert * -driverJoystick.getLeftY() * MaxSpeed) // Drive forward with
@@ -233,6 +244,11 @@ public class RobotContainer {
             .withVelocityY(Constants.Vision.manualDriveInvert * -driverJoystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
             .withRotationalRate(-driverJoystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ).ignoringDisable(false));
+        driverJoystick.leftBumper().whileTrue(drivetrain.applyRequest(() -> 
+          drive.withVelocityX(driverJoystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
+                .withVelocityY(driverJoystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+                .withRotationalRate(limelight_aim_proportional())
+        ));
 
 
     // reset the field-centric heading on left bumper press
@@ -249,8 +265,7 @@ public class RobotContainer {
     driveAngle.HeadingController = new PhoenixPIDController(12.5, 0.0, 0.0);  ;
     driveAngle.HeadingController.enableContinuousInput(-Math.PI, Math.PI);
 
-
-    driverJoystick.leftBumper().whileTrue(new CommandRotateToPose(drivetrain, new Rotation2d(0.3)));
+   // driverJoystick.leftBumper().onTrue(drivetrain.applyRequest(() -> driveAngle.withTargetDirection(new Rotation2d(drivetrain.getState().Pose.getRotation().getDegrees() - LimelightHelpers.getTX("limelight")))));
   }
 
   public void driverControls(){
