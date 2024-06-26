@@ -25,7 +25,7 @@ public class CommandIntakeStopNeutral extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_intake.getIntakeMotorSpeed() == 0;
+    return true;
   }
 }
 

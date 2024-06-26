@@ -26,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score"
+            "name": "Score Auto"
           }
         },
         {
@@ -56,7 +56,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score"
+            "name": "Score Auto"
           }
         },
         {
@@ -74,7 +74,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Score"
+            "name": "Score Auto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 1.0
           }
         },
         {
@@ -92,7 +98,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score"
+            "name": "Score Auto"
           }
         },
         {

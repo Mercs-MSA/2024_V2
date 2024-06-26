@@ -2,20 +2,30 @@ package frc.robot.commands.IndexSubcommands;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.index.Index;
+import frc.robot.subsystems.sensors.BeamBreak;
 
 
-public class CommandIndexStart extends Command {
+
+public class CommandIndexStartAuto extends Command {
   private final Index m_index;
+  private final BeamBreak m_beamBreak;
+  boolean has_seen = false;
   
-  public CommandIndexStart(Index m_index) {
-    this.m_index = m_index;
+  public CommandIndexStartAuto(Index index, BeamBreak beamBreak) {
+    m_index = index;
+    m_beamBreak = beamBreak;
+    
     addRequirements(m_index);
   }
 
   @Override
   public void initialize() {
-    m_index.startIndexMotor();
+
+    if (m_beamBreak.detectsNote()){
+      has_seen = true;
+      m_index.startIndexMotor(); 
   }
+}
 
   @Override
   public void execute() {}
@@ -26,7 +36,7 @@ public class CommandIndexStart extends Command {
 
   @Override
   public boolean isFinished() {
-    return true;
+    return (has_seen = true) && (!m_beamBreak.detectsNote());
     //return Math.abs(m_index.getIndexMotorSpeed() + IntakeConstants.kIndexMotorSpeed) <= IntakeConstants.kIndexMotorDCTolerance;
   }
 }

@@ -57,6 +57,7 @@ public class Robot extends TimedRobot {
 
     SmartDashboard.putBoolean("Status 1", Pivot.status1OK);
     SmartDashboard.putBoolean("Status 2", Pivot.status2OK);
+
   }
 
   /**
@@ -87,7 +88,13 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("poseX", m_robotContainer.drivetrain.getState().Pose.getX());
     SmartDashboard.putNumber("poseY", m_robotContainer.drivetrain.getState().Pose.getY());
     SmartDashboard.putNumber("test", new Rotation2d(m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees() - (LimelightHelpers.getTX("limelight"))).getRadians());
+    SmartDashboard.putNumber("limelight_ty", LimelightHelpers.getTY("limelight"));
+
+
+    SmartDashboard.putNumber("pivotRotationsTarget", Constants.Vision.pivotEncoderCalculator());
+
   }
+
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override

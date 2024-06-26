@@ -125,7 +125,7 @@ public class Pivot extends SubsystemBase{
 
 
         SmartDashboard.putNumber("Follower Motor Temperature", followerTalon.getDeviceTemp().getValueAsDouble());
-        SmartDashboard.putNumber("Follower Motor Position", followerTalon.getPosition().getValueAsDouble());
+       
     }
 
     public void setBrakeMode(boolean enabled){

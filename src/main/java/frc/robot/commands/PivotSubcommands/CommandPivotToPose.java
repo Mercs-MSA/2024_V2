@@ -1,5 +1,6 @@
 package frc.robot.commands.PivotSubcommands;
 
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -59,15 +60,15 @@ public class CommandPivotToPose extends Command {
           pivotPos = SATConstants.START.pivot;
           break;
         case AUTOAIM:
-          pivotPos = Constants.Vision.pivotAngleCalculator(m_ApriltagVision.distance);
+          pivotPos = Constants.Vision.pivotEncoderCalculator();
           break;
         default:
           break;
       }
     }
-
+    if (pivotPos > 0){
     m_pivot.leaderGoToPosition(pivotPos);
-
+    }
   }
 
   @Override

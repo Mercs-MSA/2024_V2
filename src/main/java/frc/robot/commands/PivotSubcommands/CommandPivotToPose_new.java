@@ -54,7 +54,7 @@ public class CommandPivotToPose_new extends Command {
           pivotPos = SATConstants.START.pivot;
           break;
         case AUTOAIM:
-          pivotPos = Constants.Vision.pivotEncoderCalculator(currPose);
+          pivotPos = Constants.Vision.pivotEncoderCalculator();
           break;
         default:
           break;

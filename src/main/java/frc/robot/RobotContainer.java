@@ -48,15 +48,19 @@ import frc.robot.commands.IntakeNote;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStopNeutral;
 import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
 import frc.robot.commands.IndexSubcommands.CommandIndexStart;
+import frc.robot.commands.IndexSubcommands.CommandIndexStartAuto;
 import frc.robot.commands.IndexSubcommands.CommandIndexStop;
 import frc.robot.commands.IndexSubcommands.CommandIndexStopNeutral;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeReverse;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
+import frc.robot.commands.PivotSubcommands.CommandAutoPivotAim;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
+import frc.robot.commands.IntakeNoteTele;
+import frc.robot.commands.PivotSubcommands.CommandPivotShunt;
 import frc.robot.subsystems.amper.Amper;
 import frc.robot.subsystems.amperMotor.AmperMotor;
 import frc.robot.subsystems.index.Index;
@@ -169,9 +173,9 @@ public class RobotContainer {
         ));
 
         //Pivot Positions for CENTER
-        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 48)); // RED: 41.5  BLUE: 43 JUST CHNAGED FROM 43
-        put("Center Pivot", new CommandPivotToPose(m_pivot, 50)); // RED: 44  BLUE: 46 JUST CHANGED FROM 46
-        put("AMP Pivot", new CommandPivotToPose(m_pivot, 49)); // RED: 39  BLUE: 41 JUST CHANGED FROM 41
+        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 43)); // RED: 41.5  BLUE: 43 JUST CHNAGED FROM 43
+        put("Center Pivot", new CommandPivotToPose(m_pivot, 43)); // RED: 44  BLUE: 46 JUST CHANGED FROM 46
+        put("AMP Pivot", new CommandPivotToPose(m_pivot, 40)); // RED: 39  BLUE: 41 JUST CHANGED FROM 41
 
         put("Auto Pivot Test", 
         new SequentialCommandGroup(
@@ -221,13 +225,20 @@ public class RobotContainer {
             new WaitCommand(0.2), 
             new CommandIndexStart(m_index)
         ));
+
+        put("Score Auto", new SequentialCommandGroup(
+            new WaitCommand(0.2), 
+            new CommandIndexStartAuto(m_index, m_BeamBreak)
+        ));
+
+        put("Auto Pivot", new CommandAutoPivotAim(m_pivot));
     }
   };
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   double limelight_aim_proportional() {
-    double kP = 0.035;
+    double kP = 0.020;
     int[] ids = new int[1];
     ids[0] = 7;
     LimelightHelpers.SetFiducialIDFiltersOverride("limelight", ids);
@@ -271,8 +282,8 @@ public class RobotContainer {
   public void driverControls(){
     driverJoystick.rightBumper().onTrue(
         new ParallelCommandGroup(
-            new CommandScoreDriver(m_shooter, m_amperMotor, m_index),
-            new CommandIntakeStart(m_intake)
+            new CommandScoreDriver(m_shooter, m_amperMotor, m_index)
+            //new CommandIntakeStart(m_intake)
         )
         
     )
@@ -303,8 +314,9 @@ public class RobotContainer {
 
 }
 
+
 public void operatorControls(){
-  operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.PODIUM));
+  operator.pov(0).onTrue(new CommandChangeScoringMode(ScoringMode.AUTOAIM));
   operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
   operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
   operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
@@ -313,14 +325,14 @@ public void operatorControls(){
           new CommandChangeScoringMode(ScoringMode.AUTOAIM),
           new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       ));
-  
+
   operator.leftBumper()
-  .onTrue(
+  .whileTrue(
       new SequentialCommandGroup(
           // new InstantCommand(() -> m_BeamBreak.enableAsynchronousInterrupt()),
           // intakeNote(),
           // new CommandShooterReverse(m_shooter, 10, 10)
-          new IntakeNote(m_intake, m_index, m_BeamBreak)
+          new IntakeNoteTele(m_intake, m_index, m_BeamBreak)
           // new CommandScore(m_amper, m_shooter, m_amperMotor)
       )
       
@@ -348,6 +360,13 @@ public void operatorControls(){
   .onTrue(
       new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
   );
+
+  operator.y()
+  .onTrue(
+      new CommandPivotShunt(m_pivot).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+  );
+
+
 
   operator.y().onTrue(
       new SequentialCommandGroup(
