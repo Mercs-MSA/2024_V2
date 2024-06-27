@@ -1,5 +1,6 @@
 package frc.robot.commands.IndexSubcommands;
 
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.subsystems.index.Index;
 import frc.robot.subsystems.sensors.BeamBreak;
@@ -21,11 +22,11 @@ public class CommandIndexStartAuto extends Command {
   @Override
   public void initialize() {
 
-    if (m_beamBreak.detectsNote()){
-      has_seen = true;
-      m_index.startIndexMotor(); 
+    has_seen = true;
+    SmartDashboard.putBoolean("has seen note", has_seen);
+    m_index.startIndexMotor(); 
   }
-}
+
 
   @Override
   public void execute() {}

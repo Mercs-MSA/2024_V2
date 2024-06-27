@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.5,
-        "y": 4.37
+        "x": 0.7284778050297884,
+        "y": 4.403274541213847
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.2216816138054516,
-        "y": 4.548407050851191
+        "x": 3.1291992969149973,
+        "y": 1.9205771935081666
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.086934844340443,
-        "y": 5.141057243598081
+        "x": 8.094593992326358,
+        "y": 1.042264452574553
       },
       "prevControl": {
-        "x": 2.028681345305005,
-        "y": 4.616775752279143
-      },
-      "nextControl": {
-        "x": 2.122067353977788,
-        "y": 5.457249830334182
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.8012958736331153,
-        "y": 5.609490705429342
-      },
-      "prevControl": {
-        "x": 2.388241995361097,
-        "y": 5.5544168549930735
+        "x": 7.094593992326358,
+        "y": 1.042264452574553
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,21 +33,15 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.35,
+      "waypointRelativePos": 0.6,
       "command": {
-        "type": "sequential",
+        "type": "parallel",
         "data": {
           "commands": [
             {
               "type": "named",
               "data": {
                 "name": "Intake Note"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Center Pivot"
               }
             }
           ]
@@ -79,14 +57,14 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 1.397181027296524,
+    "rotation": -26.56505117707804,
     "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": {
-    "rotation": 0,
+    "rotation": -60.46121774044193,
     "velocity": 0
   },
-  "useDefaultConstraints": false
+  "useDefaultConstraints": true
 }

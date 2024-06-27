@@ -22,6 +22,7 @@ import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
 import frc.robot.subsystems.pivot.Pivot;
 import edu.wpi.first.wpilibj.Timer;
+import frc.robot.subsystems.sensors.BeamBreak;
 
 
 /**
@@ -32,6 +33,8 @@ import edu.wpi.first.wpilibj.Timer;
  */
 public class Robot extends TimedRobot {
   // public static final CTREConfigs ctreConfigs = new CTREConfigs();
+  
+  
   private Command m_autonomousCommand;
 
   //private Pigeon2 pigeon2 = new Pigeon2(16); //change port
@@ -50,6 +53,7 @@ public class Robot extends TimedRobot {
   public void robotInit() {
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
+
 
     Optional<Alliance> alliance = DriverStation.getAlliance();
     Constants.Vision.isRedAlliance = Constants.AllianceFlipUtil.shouldFlip();
@@ -78,20 +82,27 @@ public class Robot extends TimedRobot {
 
     LimelightHelpers.SetRobotOrientation("limelight", m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees(), 0, 0, 0, 0, 0);
 
-    var lastResult = LimelightHelpers.getLatestResults("limelight");
-    if (lastResult.valid) {
-    m_robotContainer.drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), Timer.getFPGATimestamp());
-      SmartDashboard.putBoolean("limelightResultValid", true);
-    } else {
-      SmartDashboard.putBoolean("limelightResultValid", false);
-    }
     SmartDashboard.putNumber("poseX", m_robotContainer.drivetrain.getState().Pose.getX());
     SmartDashboard.putNumber("poseY", m_robotContainer.drivetrain.getState().Pose.getY());
     SmartDashboard.putNumber("test", new Rotation2d(m_robotContainer.drivetrain.getState().Pose.getRotation().getDegrees() - (LimelightHelpers.getTX("limelight"))).getRadians());
     SmartDashboard.putNumber("limelight_ty", LimelightHelpers.getTY("limelight"));
-
+    // SmartDashboard.putBoolean("hasNote", );
 
     SmartDashboard.putNumber("pivotRotationsTarget", Constants.Vision.pivotEncoderCalculator());
+
+    SmartDashboard.putNumber("newPivotRotationsTarget", Constants.Vision.pivotAngleEquation());
+
+    SmartDashboard.putNumber("xDistance", Constants.Vision.returnxDistance());
+
+    
+    // SmartDashboard.putNumber("hypotenuse1", Constants.Vision.returnHypotenuse1());
+
+    // SmartDashboard.putNumber("xDistance", Constants.Vision.returnXdistance());
+
+    // SmartDashboard.putNumber("AngleToApriltag", Constants.Vision.returnAngleToApriltag());
+
+    // SmartDashboard.putNumber("hypotenuse2", Constants.Vision.returnHypotenuse2());
+
 
   }
 
@@ -169,6 +180,15 @@ public class Robot extends TimedRobot {
       new CommandAmperScoreNote(m_robotContainer.m_amper).schedule();
       new CommandShooterStart(m_robotContainer.m_shooter, Constants.SATConstants.PODIUM.shooter1, Constants.SATConstants.PODIUM.shooter2).schedule();
 
+    }
+
+    
+    var lastResult = LimelightHelpers.getLatestResults("limelight");
+    if (lastResult.valid) {
+    m_robotContainer.drivetrain.addVisionMeasurement(LimelightHelpers.getBotPose2d_wpiBlue("limelight"), Timer.getFPGATimestamp());
+      SmartDashboard.putBoolean("limelightResultValid", true);
+    } else {
+      SmartDashboard.putBoolean("limelightResultValid", false);
     }
   }
 

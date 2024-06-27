@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 5.468960666879964
+        "x": 2.8,
+        "y": 5.61
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.531946633080141,
-        "y": 5.597779868883561
+        "x": 2.3319466330801406,
+        "y": 5.738819202003597
       },
       "isLocked": false,
       "linkedName": null
@@ -57,7 +57,7 @@
             {
               "type": "named",
               "data": {
-                "name": "AMP Pivot"
+                "name": "Intake Note"
               }
             }
           ]
@@ -66,15 +66,15 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 2.0,
-    "maxAcceleration": 2.0,
+    "maxVelocity": 3.0,
+    "maxAcceleration": 3.0,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
     "rotation": 29.907162250140775,
-    "rotateFast": true
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,

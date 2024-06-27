@@ -77,8 +77,8 @@ public final class Constants {
     }
 
     public static final class AutoConstants {
-        public static final double kMaxSpeedMetersPerSecond = 2;
-        public static final double kMaxAccelerationMetersPerSecondSquared = 2;
+        public static final double kMaxSpeedMetersPerSecond = 3;
+        public static final double kMaxAccelerationMetersPerSecondSquared = 3;
         public static final double kMaxAngularSpeedRadiansPerSecond = Math.PI;
         public static final double kMaxAngularSpeedRadiansPerSecondSquared = Math.PI;
    
@@ -181,6 +181,269 @@ public final class Constants {
         // (Fake values. Experiment and determine estimation noise on an actual robot.)
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
+
+
+        // public static double returnTheta(){
+        //     double pivotAngle;
+            
+        //     double xDistance;
+
+        //     double hypotenuse1;
+
+        //     double hypotenuse2;
+
+        //     double y1 = 49;
+
+        //     double y2 = 25;
+
+        //     double theta;
+
+        //     double rotations;
+
+            
+        //     double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
+
+            
+            
+           
+        //     hypotenuse1 = y1 / (Math.sin(angleToApriltag));
+
+        //     xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
+
+        //     hypotenuse2 = Math.sqrt(Math.pow(xDistance, 2) + Math.pow((y1 + y2), 2)); 
+
+          
+
+        //     return(hypotenuse2);
+
+
+
+
+        // }
+
+        // public static double returnHypotenuse2(){
+        //     double pivotAngle;
+            
+        //     double xDistance;
+
+        //     double hypotenuse1;
+
+        //     double hypotenuse2;
+
+        //     double y1 = 49;
+
+        //     double y2 = 25;
+
+        //     double theta;
+
+        //     double rotations;
+
+            
+        //     double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
+
+            
+            
+           
+        //     hypotenuse1 = y1 / (Math.sin(angleToApriltag));
+
+        //     xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
+
+        //     hypotenuse2 = Math.sqrt(Math.pow(xDistance, 2) + Math.pow((y1 + y2), 2)); 
+
+        //     return(hypotenuse2);
+
+
+
+
+        // }
+        // public static double returnXdistance(){
+        //     double pivotAngle;
+            
+        //     double xDistance;
+
+        //     double hypotenuse1;
+
+        //     double hypotenuse2;
+
+        //     double y1 = 49;
+
+        //     double y2 = 25;
+
+        //     double theta;
+
+        //     double rotations;
+
+            
+        //     double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
+
+            
+            
+           
+        //     hypotenuse1 = y1 / (Math.sin(angleToApriltag));
+
+        //     xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
+
+        //     return(xDistance);
+
+
+
+
+        // }
+
+        // public static double returnAngleToApriltag(){
+        //     double pivotAngle;
+            
+        //     double xDistance;
+
+        //     double hypotenuse1;
+
+        //     double hypotenuse2;
+
+        //     double y1 = 49;
+
+        //     double y2 = 25;
+
+        //     double theta;
+
+        //     double rotations;
+
+            
+        //     double angleToApriltag = Math.floor(30 + LimelightHelpers.getTY("limelight"));
+
+        //     hypotenuse1 = y1 / Math.sin(angleToApriltag);
+
+        //     xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
+
+        //     hypotenuse2 = Math.sqrt(Math.pow(xDistance, 2) + Math.pow((y1 + y2), 2)); 
+
+        //     theta = Math.asin((y2 + y1)/ hypotenuse2);
+
+        //     rotations = theta / 0.59;
+
+        //     return(angleToApriltag);
+
+
+
+
+        // }
+        // public static double returnHypotenuse1(){
+        //     double pivotAngle;
+            
+        //     double xDistance;
+
+        //     double hypotenuse1;
+
+        //     double hypotenuse2;
+
+        //     double y1 = 49;
+
+        //     double y2 = 25;
+
+        //     double theta;
+
+        //     double rotations;
+
+            
+        //     double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
+
+            
+            
+           
+        //     return(y1 / (Math.sin(angleToApriltag)));
+
+
+
+
+        // }
+
+
+    public static double returnxDistance(){
+            double pivotAngle;
+            
+            double xDistance;
+
+            double hypotenuse1;
+
+            double hypotenuse2;
+
+            double y1 = 49;
+
+            double y2 = 25;
+
+            double theta;
+
+            double rotations;
+
+            
+            double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
+
+           hypotenuse1 = y1 / (Math.sin(angleToApriltag));
+
+            xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
+
+            hypotenuse2 = Math.sqrt(Math.pow(xDistance, 2) + Math.pow((y1 + y2), 2)); 
+
+            theta = Math.asin(((y2 + y1)/ hypotenuse2));
+
+            theta = theta * (180 / Math.PI);
+
+            rotations = theta * 1.32;
+
+            return(xDistance);
+
+
+
+
+        }
+        public static double pivotAngleEquation(){
+            double pivotAngle;
+            
+            double xDistance;
+
+            double hypotenuse1;
+
+            double hypotenuse2;
+
+            double y1 = 49;
+
+            double y2 = 25;
+
+            double theta;
+
+            double rotations;
+
+            
+            double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
+
+           hypotenuse1 = y1 / (Math.sin(angleToApriltag));
+
+            xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
+
+            hypotenuse2 = Math.sqrt(Math.pow(xDistance, 2) + Math.pow((y1 + y2), 2)); 
+
+            theta = Math.asin(((y2 + y1)/ hypotenuse2));
+
+            theta = theta * (180 / Math.PI);
+
+            rotations = theta * 1.32;
+            
+            if (LimelightHelpers.getTY("limelight") < -14) {
+                return(rotations + (xDistance / 40));
+            }
+            else if (LimelightHelpers.getTY("limelight") > -14) {
+                return(rotations + 6);
+            }
+
+            else {
+                return(42);
+            }
+
+
+
+// (xDistance / 32)
+
+
+        }
         
         // This function takes the current robots pose (in meters X and Y) and generates the pivot motor command to aim the shooter at the speaker (in rotations)
         public static double pivotEncoderCalculator(){

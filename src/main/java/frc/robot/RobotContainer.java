@@ -173,15 +173,24 @@ public class RobotContainer {
         ));
 
         //Pivot Positions for CENTER
-        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 43)); // RED: 41.5  BLUE: 43 JUST CHNAGED FROM 43
-        put("Center Pivot", new CommandPivotToPose(m_pivot, 43)); // RED: 44  BLUE: 46 JUST CHANGED FROM 46
-        put("AMP Pivot", new CommandPivotToPose(m_pivot, 40)); // RED: 39  BLUE: 41 JUST CHANGED FROM 41
+        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 50)); // RED: 41.5  BLUE: 43 JUST CHNAGED FROM 43
+        put("Center Pivot", new CommandPivotToPose(m_pivot, 48)); // RED: 44  BLUE: 46 JUST CHANGED FROM 46
+        put("AMP Pivot", new CommandPivotToPose(m_pivot, 41)); // RED: 39  BLUE: 41 JUST CHANGED FROM 41
 
-        put("Auto Pivot Test", 
+        put("Auto Pivot", 
         new SequentialCommandGroup(
           new CommandChangeScoringMode(ScoringMode.AUTOAIM),
           new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
       ));
+
+        put("Sub Auto Pivot", 
+          new SequentialCommandGroup(
+          new CommandChangeScoringMode(ScoringMode.AUTOAIM),
+          new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf),
+          new CommandShooterStart(m_shooter, Constants.SATConstants.WING.shooter1, Constants.SATConstants.WING.shooter1)
+      ));
+                  
+
 
         //Pivot Positions for AMPSIDE
         put("Amp Pivot Preload", new ParallelCommandGroup(
@@ -239,8 +248,9 @@ public class RobotContainer {
 
   double limelight_aim_proportional() {
     double kP = 0.020;
-    int[] ids = new int[1];
+    int[] ids = new int[2];
     ids[0] = 7;
+    ids[1] = 4;
     LimelightHelpers.SetFiducialIDFiltersOverride("limelight", ids);
 
     double targetingAngularVelocity = LimelightHelpers.getTX("limelight") * kP;
