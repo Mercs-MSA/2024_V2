@@ -431,7 +431,7 @@ public final class Constants {
                 return(rotations + (xDistance / 40)); //the higher this value is the lower the pivot goes for long distance shots
             }
             else if (LimelightHelpers.getTY("limelight") > -14) {
-                return(rotations + 6); //6 is too many. I am not allowed to commit this unfortunately, but i would predict 4.5 or 5 will fix the issue of the pivot shooting too high when it is at the amp/area between podium and amp. 
+                return(rotations + 4); //6 is too many. I am not allowed to commit this unfortunately, but i would predict 4.5 or 5 will fix the issue of the pivot shooting too high when it is at the amp/area between podium and amp. 
             }
 
             else {
