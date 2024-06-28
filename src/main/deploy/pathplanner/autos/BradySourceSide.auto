@@ -48,12 +48,6 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Score Auto"
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "BradySource2"

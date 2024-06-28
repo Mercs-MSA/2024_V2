@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.09,
-        "y": 1.04
+        "x": 8.47,
+        "y": 0.71
       },
       "prevControl": null,
       "nextControl": {
-        "x": 7.181148741755401,
-        "y": 1.5341195874973776
+        "x": 5.729005010078493,
+        "y": 0.772915212021579
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 7.848666424864946,
-        "y": 2.4709865111598974
+        "x": 4.265150441855804,
+        "y": 0.71
       },
       "prevControl": {
-        "x": 6.841534481927736,
-        "y": 2.049396395511764
+        "x": 6.185727635363972,
+        "y": 0.9368669236625209
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.3,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "Intake Note"
+                "name": "Reset All"
               }
             }
           ]

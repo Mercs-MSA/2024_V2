@@ -16,12 +16,12 @@
     },
     {
       "anchor": {
-        "x": 8.164859011601047,
-        "y": 0.7963368851131419
+        "x": 8.410786579062458,
+        "y": 0.7612043754757987
       },
       "prevControl": {
-        "x": 8.655247574403852,
-        "y": 0.7925073111201851
+        "x": 8.901175141865263,
+        "y": 0.7573748014828419
       },
       "nextControl": null,
       "isLocked": false,
@@ -33,11 +33,18 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0,
+      "waypointRelativePos": 0.45,
       "command": {
         "type": "parallel",
         "data": {
-          "commands": []
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake Note"
+              }
+            }
+          ]
         }
       }
     }
