@@ -68,6 +68,13 @@ public final class Constants {
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d());   
         }
 
+        public static final class NEW_SHUNT{
+            public static final double pivot = 80;
+            public static final double shooter1 = -20.0;
+            public static final double shooter2 = -10.0;
+            public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d());   
+        }
+
         public static final class START{
             public static final double pivot = 0.2;
             public static final double shooter1 = 0.0;
@@ -431,7 +438,7 @@ public final class Constants {
                 return(rotations + (xDistance / 40)); //the higher this value is the lower the pivot goes for long distance shots
             }
             else if (LimelightHelpers.getTY("limelight") > -14) {
-                return(rotations + 2.5); //6 is too many. I am not allowed to commit this unfortunately, but i would predict 4.5 or 5 will fix the issue of the pivot shooting too high when it is at the amp/area between podium and amp. 
+                return(rotations + 2.5); //probably like 2 will work
             }
 
             else {
@@ -608,6 +615,7 @@ public class AllianceFlipUtil {
             PODIUM,
             TRAP,
             AUTOAIM,
+            NEW_SHUNT,
             START
         }
     }

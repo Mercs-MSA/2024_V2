@@ -330,11 +330,16 @@ public void operatorControls(){
   operator.pov(90).onTrue(new CommandChangeScoringMode(ScoringMode.SUBWOOFER));
   operator.pov(270).onTrue(new CommandChangeScoringMode(ScoringMode.AMP));
   operator.pov(180).onTrue(new CommandChangeScoringMode(ScoringMode.START));
-  operator.a().whileTrue(
-      new SequentialCommandGroup(
-          new CommandChangeScoringMode(ScoringMode.AUTOAIM),
-          new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
-      ));
+
+    operator.a()
+        .onTrue( 
+             new CommandChangeScoringMode(ScoringMode.NEW_SHUNT));
+
+//   operator.a().whileTrue(
+//       new SequentialCommandGroup(
+//           new CommandChangeScoringMode(ScoringMode.AUTOAIM),
+//           new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+//       ));
 
   operator.leftBumper()
   .whileTrue(

@@ -43,6 +43,10 @@ public class CommandShooterStart extends Command {
                 motor1 = SATConstants.START.shooter1;
                 motor2 = SATConstants.START.shooter2;
                 break;
+            case NEW_SHUNT:
+                motor1 = SATConstants.AMP.shooter1;
+                motor2 = SATConstants.AMP.shooter2;
+                break;
             default:
                 motor1 = SATConstants.SUB.shooter1;
                 motor2 = SATConstants.SUB.shooter2;

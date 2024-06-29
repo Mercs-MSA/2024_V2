@@ -62,6 +62,9 @@ public class CommandPivotToPose extends Command {
         case AUTOAIM:
           pivotPos = Constants.Vision.pivotAngleEquation();
           break;
+        case NEW_SHUNT:
+          pivotPos = SATConstants.NEW_SHUNT.pivot;
+          break;
         default:
           break;
       }
