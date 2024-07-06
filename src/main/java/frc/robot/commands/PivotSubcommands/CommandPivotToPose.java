@@ -60,7 +60,7 @@ public class CommandPivotToPose extends Command {
           pivotPos = SATConstants.START.pivot;
           break;
         case AUTOAIM:
-          pivotPos = Constants.Vision.pivotAngleEquation();
+          pivotPos = Constants.Vision.pivotInterpolationPosCalculator();
           break;
         default:
           break;

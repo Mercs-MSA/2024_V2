@@ -34,14 +34,14 @@ public final class Constants {
 
     public static final class SATConstants {
         public static final class SUB{
-            public static final double pivot = 76; //changed from 71
+            public static final double pivot = 48; //changed from 71 
             public static final double shooter1 = -45;
             public static final double shooter2 = -40;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
         }
 
         public static final class AMP{
-            public static final double pivot = 170;
+            public static final double pivot = 40;
             public static final double shooter1 = -22.5;
             public static final double shooter2 = -22.5;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)));
@@ -49,8 +49,8 @@ public final class Constants {
 
         public static final class PODIUM{
             public static final double pivot = 42; //changed from 42
-            public static final double shooter1 = -75.0;
-            public static final double shooter2 = -55.0;
+            public static final double shooter1 = -100.0;
+            public static final double shooter2 = -65.0;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-23.9)));
         }
         
@@ -182,179 +182,6 @@ public final class Constants {
         public static final Matrix<N3, N1> kSingleTagStdDevs = VecBuilder.fill(1, 1, 2);
         public static final Matrix<N3, N1> kMultiTagStdDevs = VecBuilder.fill(0.5, 0.5, 1);
 
-
-        // public static double returnTheta(){
-        //     double pivotAngle;
-            
-        //     double xDistance;
-
-        //     double hypotenuse1;
-
-        //     double hypotenuse2;
-
-        //     double y1 = 49;
-
-        //     double y2 = 25;
-
-        //     double theta;
-
-        //     double rotations;
-
-            
-        //     double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
-
-            
-            
-           
-        //     hypotenuse1 = y1 / (Math.sin(angleToApriltag));
-
-        //     xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
-
-        //     hypotenuse2 = Math.sqrt(Math.pow(xDistance, 2) + Math.pow((y1 + y2), 2)); 
-
-          
-
-        //     return(hypotenuse2);
-
-
-
-
-        // }
-
-        // public static double returnHypotenuse2(){
-        //     double pivotAngle;
-            
-        //     double xDistance;
-
-        //     double hypotenuse1;
-
-        //     double hypotenuse2;
-
-        //     double y1 = 49;
-
-        //     double y2 = 25;
-
-        //     double theta;
-
-        //     double rotations;
-
-            
-        //     double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
-
-            
-            
-           
-        //     hypotenuse1 = y1 / (Math.sin(angleToApriltag));
-
-        //     xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
-
-        //     hypotenuse2 = Math.sqrt(Math.pow(xDistance, 2) + Math.pow((y1 + y2), 2)); 
-
-        //     return(hypotenuse2);
-
-
-
-
-        // }
-        // public static double returnXdistance(){
-        //     double pivotAngle;
-            
-        //     double xDistance;
-
-        //     double hypotenuse1;
-
-        //     double hypotenuse2;
-
-        //     double y1 = 49;
-
-        //     double y2 = 25;
-
-        //     double theta;
-
-        //     double rotations;
-
-            
-        //     double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
-
-            
-            
-           
-        //     hypotenuse1 = y1 / (Math.sin(angleToApriltag));
-
-        //     xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
-
-        //     return(xDistance);
-
-
-
-
-        // }
-
-        // public static double returnAngleToApriltag(){
-        //     double pivotAngle;
-            
-        //     double xDistance;
-
-        //     double hypotenuse1;
-
-        //     double hypotenuse2;
-
-        //     double y1 = 49;
-
-        //     double y2 = 25;
-
-        //     double theta;
-
-        //     double rotations;
-
-            
-        //     double angleToApriltag = Math.floor(30 + LimelightHelpers.getTY("limelight"));
-
-        //     hypotenuse1 = y1 / Math.sin(angleToApriltag);
-
-        //     xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
-
-        //     hypotenuse2 = Math.sqrt(Math.pow(xDistance, 2) + Math.pow((y1 + y2), 2)); 
-
-        //     theta = Math.asin((y2 + y1)/ hypotenuse2);
-
-        //     rotations = theta / 0.59;
-
-        //     return(angleToApriltag);
-
-
-
-
-        // }
-        // public static double returnHypotenuse1(){
-        //     double pivotAngle;
-            
-        //     double xDistance;
-
-        //     double hypotenuse1;
-
-        //     double hypotenuse2;
-
-        //     double y1 = 49;
-
-        //     double y2 = 25;
-
-        //     double theta;
-
-        //     double rotations;
-
-            
-        //     double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
-
-            
-            
-           
-        //     return(y1 / (Math.sin(angleToApriltag)));
-
-
-
-
-        // }
 
 
     public static double returnxDistance(){
@@ -495,6 +322,39 @@ public final class Constants {
             //  }
             //  // the returned value is the # of motor rotations needed to reach the pivot angle (it's the x in the y = mx + b equation)
         }
+
+         public static double pivotInterpolationPosCalculator(){
+
+            double y1 = 45; //68
+
+            double y2 = 19.25; //26
+
+            double x1 = 17.45;
+
+            double x2 = -17.65;
+
+            double x = LimelightHelpers.getTY("limelight");
+
+            double y;
+
+            y = (y1 + ((y2 - y1)/ (x2 - x1)) * (x - x1));
+
+            
+            
+            if ((y > 0) && ( y < 100)){
+                return y ;
+            }
+            else{
+                return 18;
+            }
+
+
+
+
+         }
+
+
+
     }
 
     public static class ArmConstants{
