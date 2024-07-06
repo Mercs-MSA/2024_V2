@@ -173,9 +173,9 @@ public class RobotContainer {
         ));
 
         //Pivot Positions for CENTER
-        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 50)); // RED: 41.5  BLUE: 43 JUST CHNAGED FROM 43
-        put("Center Pivot", new CommandPivotToPose(m_pivot, 48)); // RED: 44  BLUE: 46 JUST CHANGED FROM 46
-        put("AMP Pivot", new CommandPivotToPose(m_pivot, 41)); // RED: 39  BLUE: 41 JUST CHANGED FROM 41
+        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 30)); // RED: 41.5  BLUE: 43 JUST CHNAGED FROM 43
+        put("Center Pivot", new CommandPivotToPose(m_pivot, 30)); // RED: 44  BLUE: 46 JUST CHANGED FROM 46
+        put("AMP Pivot", new CommandPivotToPose(m_pivot, 25.2)); // RED: 39  BLUE: 41 JUST CHANGED FROM 41
 
         put("Auto Pivot", 
         new SequentialCommandGroup(
