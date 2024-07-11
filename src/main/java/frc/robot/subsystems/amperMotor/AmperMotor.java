@@ -27,10 +27,6 @@ public class AmperMotor extends SubsystemBase {
   private final PositionVoltage AmperMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final VelocityVoltage AmperMotor_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
 
-
-  private double AmperMotorPos;
-  private double AmperMotorSpeed;
-
   /** Creates a new Index. */
   public AmperMotor() {
     SmartDashboard.putString("sensor debug", "init");
@@ -73,7 +69,7 @@ public class AmperMotor extends SubsystemBase {
   }
 
   public double getAmperMotorPosition() {
-    return AmperMotorPos;
+    return AmperMotor.getPosition().getValueAsDouble();
   }
 
   public void startAmperMotor() {
@@ -106,11 +102,6 @@ public class AmperMotor extends SubsystemBase {
 
   @Override
   public void periodic() {
-  
-    AmperMotorPos = AmperMotor.getPosition().getValueAsDouble();
-    AmperMotorSpeed = AmperMotor.getDutyCycle().getValueAsDouble();
-
-    SmartDashboard.putNumber("Amper Motor Speed", AmperMotorSpeed);
     SmartDashboard.putNumber("Amper Motor Temperature", AmperMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Amper Motor rpm", AmperMotor.getVelocity().getValueAsDouble());
   }

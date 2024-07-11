@@ -27,10 +27,6 @@ public class Intake extends SubsystemBase {
   private final PositionVoltage intakeMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final VelocityVoltage intakeMotor_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
 
-
-  private double intakeMotorPos;
-  private double intakeMotorSpeed;
-
   /** Creates a new intake. */
   public Intake() {
     SmartDashboard.putString("sensor debug", "init");
@@ -70,7 +66,7 @@ public class Intake extends SubsystemBase {
   }
 
   public double getIntakeMotorPosition() {
-    return intakeMotorPos;
+    return intakeMotor.getPosition().getValueAsDouble();
   }
 
   public void startIntakeMotor() {
@@ -103,11 +99,6 @@ public class Intake extends SubsystemBase {
 
   @Override
   public void periodic() {
-  
-    intakeMotorPos = intakeMotor.getPosition().getValueAsDouble();
-    intakeMotorSpeed = intakeMotor.getDutyCycle().getValueAsDouble();
-
-    SmartDashboard.putNumber("Intake Motor Speed", intakeMotorSpeed);
     SmartDashboard.putNumber("Intake Motor Temperature", intakeMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("intake rpm", intakeMotor.getVelocity().getValueAsDouble());
   }

@@ -27,10 +27,6 @@ public class Index extends SubsystemBase {
   private final PositionVoltage IndexMotor_voltagePosition = new PositionVoltage(0, 0, true, 0, 0, false, false, false);
   private final VelocityVoltage IndexMotor_voltageVelocity = new VelocityVoltage(0, 0, true, 0, 0, false, false, false);
 
-
-  private double IndexMotorPos;
-  private double IndexMotorSpeed;
-
   /** Creates a new Index. */
   public Index() {
     SmartDashboard.putString("sensor debug", "init");
@@ -70,7 +66,7 @@ public class Index extends SubsystemBase {
   }
 
   public double getIndexMotorPosition() {
-    return IndexMotorPos;
+    return IndexMotor.getPosition().getValueAsDouble();
   }
 
   public void startIndexMotor() {
@@ -103,11 +99,6 @@ public class Index extends SubsystemBase {
 
   @Override
   public void periodic() {
-  
-    IndexMotorPos = IndexMotor.getPosition().getValueAsDouble();
-    IndexMotorSpeed = IndexMotor.getDutyCycle().getValueAsDouble();
-
-    SmartDashboard.putNumber("Index Motor Speed", IndexMotorSpeed);
     SmartDashboard.putNumber("Index Motor Temperature", IndexMotor.getDeviceTemp().getValueAsDouble());
     SmartDashboard.putNumber("Index rpm", IndexMotor.getVelocity().getValueAsDouble());
   }

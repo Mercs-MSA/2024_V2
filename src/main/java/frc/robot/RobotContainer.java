@@ -104,7 +104,7 @@ public class RobotContainer {
   // TODO: THIS PROPORTIONAL GAIN VALUE IS PROBABLY TOO HIGH AND NEEDS TO BE TESTED/TUNED
   private final PhoenixPIDController turnPID = new PhoenixPIDController(3.2, 0.0, 0.0);                                                             
 
-  PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
+//   PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
   /* Subsystems */
   public static final Intake m_intake = new Intake();

@@ -37,7 +37,7 @@ public class Robot extends TimedRobot {
   
   private Command m_autonomousCommand;
 
-  //private Pigeon2 pigeon2 = new Pigeon2(16); //change port
+  // private Pigeon2 pigeon2 = new Pigeon2(16, "canivore"); //change port
 
 
   private final RobotContainer m_robotContainer = new RobotContainer();
@@ -117,33 +117,17 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("mod1Volt", m_robotContainer.drivetrain.getModule(1).getDriveMotor().getSupplyVoltage().getValue());
     SmartDashboard.putNumber("mod2Volt", m_robotContainer.drivetrain.getModule(2).getDriveMotor().getSupplyVoltage().getValue());
     SmartDashboard.putNumber("mod3Volt", m_robotContainer.drivetrain.getModule(3).getDriveMotor().getSupplyVoltage().getValue());
-
-    SmartDashboard.putNumber("pdhPort0Current", m_robotContainer.powerDistribution.getCurrent(0));
-    SmartDashboard.putNumber("pdhPort1Current", m_robotContainer.powerDistribution.getCurrent(1));
-    SmartDashboard.putNumber("pdhPort2Current", m_robotContainer.powerDistribution.getCurrent(2));
-    SmartDashboard.putNumber("pdhPort3Current", m_robotContainer.powerDistribution.getCurrent(3));
-    SmartDashboard.putNumber("pdhPort4Current", m_robotContainer.powerDistribution.getCurrent(4));
-    SmartDashboard.putNumber("pdhPort5Current", m_robotContainer.powerDistribution.getCurrent(5));
-    SmartDashboard.putNumber("pdhPort6Current", m_robotContainer.powerDistribution.getCurrent(6));
-    SmartDashboard.putNumber("pdhPort7Current", m_robotContainer.powerDistribution.getCurrent(7));
-    SmartDashboard.putNumber("pdhPort8Current", m_robotContainer.powerDistribution.getCurrent(8));
-    SmartDashboard.putNumber("pdhPort9Current", m_robotContainer.powerDistribution.getCurrent(9));
-
-    SmartDashboard.putNumber("pdhVoltage", m_robotContainer.powerDistribution.getVoltage());
-    SmartDashboard.putBoolean("pdhCanWarning", m_robotContainer.powerDistribution.getFaults().CanWarning);
-    SmartDashboard.putBoolean("pdhHardwareFault", m_robotContainer.powerDistribution.getFaults().HardwareFault);
-
   }
 
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
   public void disabledInit() {
+    m_robotContainer.m_pivot.setBrakeMode(false);
   }
-
+  
   @Override
   public void disabledPeriodic() {
-    m_robotContainer.m_pivot.setBrakeMode(false);
   }
 
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
