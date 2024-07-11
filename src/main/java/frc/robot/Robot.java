@@ -105,18 +105,18 @@ public class Robot extends TimedRobot {
 
     // SmartDashboard.putNumber("hypotenuse2", Constants.Vision.returnHypotenuse2());
 
-    // SmartDashboard.putNumber("mod0CurrentDrive", m_robotContainer.drivetrain.getModule(0).getDriveMotor().getSupplyCurrent().getValue());
-    // SmartDashboard.putNumber("mod1CurrentDrive", m_robotContainer.drivetrain.getModule(1).getDriveMotor().getSupplyCurrent().getValue());
-    // SmartDashboard.putNumber("mod2CurrentDrive", m_robotContainer.drivetrain.getModule(2).getDriveMotor().getSupplyCurrent().getValue());
-    // SmartDashboard.putNumber("mod3CurrentDrive", m_robotContainer.drivetrain.getModule(3).getDriveMotor().getSupplyCurrent().getValue());
-    // SmartDashboard.putNumber("mod0CurrentSteer", m_robotContainer.drivetrain.getModule(0).getSteerMotor().getSupplyCurrent().getValue());
-    // SmartDashboard.putNumber("mod1CurrentSteer", m_robotContainer.drivetrain.getModule(1).getSteerMotor().getSupplyCurrent().getValue());
-    // SmartDashboard.putNumber("mod2CurrentSteer", m_robotContainer.drivetrain.getModule(2).getSteerMotor().getSupplyCurrent().getValue());
-    // SmartDashboard.putNumber("mod3CurrentSteer", m_robotContainer.drivetrain.getModule(3).getSteerMotor().getSupplyCurrent().getValue());
-    // SmartDashboard.putNumber("mod0Volt", m_robotContainer.drivetrain.getModule(0).getDriveMotor().getSupplyVoltage().getValue());
-    // SmartDashboard.putNumber("mod1Volt", m_robotContainer.drivetrain.getModule(1).getDriveMotor().getSupplyVoltage().getValue());
-    // SmartDashboard.putNumber("mod2Volt", m_robotContainer.drivetrain.getModule(2).getDriveMotor().getSupplyVoltage().getValue());
-    // SmartDashboard.putNumber("mod3Volt", m_robotContainer.drivetrain.getModule(3).getDriveMotor().getSupplyVoltage().getValue());
+    SmartDashboard.putNumber("mod0CurrentDrive", m_robotContainer.drivetrain.getModule(0).getDriveMotor().getSupplyCurrent().getValue());
+    SmartDashboard.putNumber("mod1CurrentDrive", m_robotContainer.drivetrain.getModule(1).getDriveMotor().getSupplyCurrent().getValue());
+    SmartDashboard.putNumber("mod2CurrentDrive", m_robotContainer.drivetrain.getModule(2).getDriveMotor().getSupplyCurrent().getValue());
+    SmartDashboard.putNumber("mod3CurrentDrive", m_robotContainer.drivetrain.getModule(3).getDriveMotor().getSupplyCurrent().getValue());
+    SmartDashboard.putNumber("mod0CurrentSteer", m_robotContainer.drivetrain.getModule(0).getSteerMotor().getSupplyCurrent().getValue());
+    SmartDashboard.putNumber("mod1CurrentSteer", m_robotContainer.drivetrain.getModule(1).getSteerMotor().getSupplyCurrent().getValue());
+    SmartDashboard.putNumber("mod2CurrentSteer", m_robotContainer.drivetrain.getModule(2).getSteerMotor().getSupplyCurrent().getValue());
+    SmartDashboard.putNumber("mod3CurrentSteer", m_robotContainer.drivetrain.getModule(3).getSteerMotor().getSupplyCurrent().getValue());
+    SmartDashboard.putNumber("mod0Volt", m_robotContainer.drivetrain.getModule(0).getDriveMotor().getSupplyVoltage().getValue());
+    SmartDashboard.putNumber("mod1Volt", m_robotContainer.drivetrain.getModule(1).getDriveMotor().getSupplyVoltage().getValue());
+    SmartDashboard.putNumber("mod2Volt", m_robotContainer.drivetrain.getModule(2).getDriveMotor().getSupplyVoltage().getValue());
+    SmartDashboard.putNumber("mod3Volt", m_robotContainer.drivetrain.getModule(3).getDriveMotor().getSupplyVoltage().getValue());
 
     SmartDashboard.putNumber("pdhPort0Current", m_robotContainer.powerDistribution.getCurrent(0));
     SmartDashboard.putNumber("pdhPort1Current", m_robotContainer.powerDistribution.getCurrent(1));
