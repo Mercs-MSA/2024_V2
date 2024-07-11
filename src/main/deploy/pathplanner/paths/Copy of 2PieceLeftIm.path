@@ -16,28 +16,28 @@
     },
     {
       "anchor": {
-        "x": 2.379705757984981,
-        "y": 6.265297551993107
+        "x": 2.262597392527166,
+        "y": 6.230165042355762
       },
       "prevControl": {
-        "x": 2.3888924939953555,
-        "y": 6.099936303806359
+        "x": 2.2717841285375404,
+        "y": 6.0648037941690145
       },
       "nextControl": {
-        "x": 2.356284084893418,
-        "y": 6.686887667641241
+        "x": 2.239175719435603,
+        "y": 6.651755158003897
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 3.0,
-        "y": 7.108477783289376
+        "x": 2.918404239090931,
+        "y": 6.921104398556871
       },
       "prevControl": {
-        "x": 2.4019161332855115,
-        "y": 6.799340093730069
+        "x": 2.3203203723764423,
+        "y": 6.611966708997564
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +49,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.55,
+      "waypointRelativePos": 0.35,
       "command": {
         "type": "parallel",
         "data": {
@@ -59,6 +59,12 @@
               "data": {
                 "name": "Intake Note"
               }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Five Piece Amp Note Pivot"
+              }
             }
           ]
         }
@@ -66,14 +72,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 3.0,
-    "maxAcceleration": 3.0,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 29.907162250140775,
+    "rotation": 37.0,
     "rotateFast": false
   },
   "reversed": false,

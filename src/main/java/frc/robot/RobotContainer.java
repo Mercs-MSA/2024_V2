@@ -29,6 +29,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.PowerDistribution;
+import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -57,6 +59,7 @@ import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
 import frc.robot.commands.PivotSubcommands.CommandAutoPivotAim;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
+import frc.robot.commands.PivotSubcommands.CommandPivotToPose_new;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
 import frc.robot.commands.IntakeNoteTele;
@@ -100,6 +103,8 @@ public class RobotContainer {
 
   // TODO: THIS PROPORTIONAL GAIN VALUE IS PROBABLY TOO HIGH AND NEEDS TO BE TESTED/TUNED
   private final PhoenixPIDController turnPID = new PhoenixPIDController(3.2, 0.0, 0.0);                                                             
+
+  PowerDistribution powerDistribution = new PowerDistribution(1, ModuleType.kRev);
 
   /* Subsystems */
   public static final Intake m_intake = new Intake();
@@ -173,9 +178,13 @@ public class RobotContainer {
         ));
 
         //Pivot Positions for CENTER
-        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 50)); // RED: 41.5  BLUE: 43 JUST CHNAGED FROM 43
-        put("Center Pivot", new CommandPivotToPose(m_pivot, 48)); // RED: 44  BLUE: 46 JUST CHANGED FROM 46
-        put("AMP Pivot", new CommandPivotToPose(m_pivot, 41)); // RED: 39  BLUE: 41 JUST CHANGED FROM 41
+        put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 30)); // RED: 41.5  BLUE: 43 JUST CHNAGED FROM 43
+        put("Center Pivot", new CommandPivotToPose(m_pivot, 30)); // RED: 44  BLUE: 46 JUST CHANGED FROM 46
+        put("AMP Pivot", new CommandPivotToPose(m_pivot, 25.2)); // RED: 39  BLUE: 41 JUST CHANGED FROM 41
+        put("Five Piece Preload Pivot", new CommandPivotToPose(m_pivot, 33.2));
+        put("Five Piece CenterLine Note Pivot", new CommandPivotToPose(m_pivot, 29.5));
+        put("Five Piece Amp Note Pivot", new CommandPivotToPose(m_pivot, 28));
+        put("Five Piece Podium Note Pivot", new CommandPivotToPose(m_pivot, 29));
 
         put("Auto Pivot", 
         new SequentialCommandGroup(
