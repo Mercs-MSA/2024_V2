@@ -2,6 +2,7 @@ package frc.robot;
 import com.ctre.phoenix6.signals.InvertedValue;
 import com.ctre.phoenix6.signals.NeutralModeValue;
 import com.ctre.phoenix6.signals.SensorDirectionValue;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators.None;
 
 import edu.wpi.first.math.Matrix;
 import edu.wpi.first.math.VecBuilder;
@@ -325,9 +326,9 @@ public final class Constants {
 
          public static double pivotInterpolationPosCalculator(){
 
-            double y1 = 45; //68
+            double y1 = 42.5; //68
 
-            double y2 = 19.25; //26
+            double y2 = 18.75; //26
 
             double x1 = 17.45;
 
@@ -372,6 +373,25 @@ public final class Constants {
 
         public static int rotorToSensorRatio = 1;
         public static int sensorToMechanismRatio = 1;
+        public static Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
+        public static double tol = 0.6;
+    }
+
+    public static class  ClimberConstants{
+        public static int leaderID = 0;
+        public static int followerTalon = 0;
+        public static double armEncoderOffsetRads = 0.0;
+        public static boolean leaderInverted = true;
+
+        /* Leader Motor PID Values */
+        public static final double leaderKP = 1.5;
+        public static final double leaderKI = 0.0;
+        public static final double leaderKD = 0.0;
+        public static final double leaderKF = 0.0;
+
+        public static int rotorToSensorRatio = 1;
+        public static int sensorToMechanismRatio = 1;
+
         public static Rotation2d angleOffset = Rotation2d.fromDegrees(0.0);
         public static double tol = 0.6;
     }
