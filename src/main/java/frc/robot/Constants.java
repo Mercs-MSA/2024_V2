@@ -35,14 +35,14 @@ public final class Constants {
 
     public static final class SATConstants {
         public static final class SUB{
-            public static final double pivot = 48; //changed from 71 
+            public static final double pivot = 47; //changed from 71 
             public static final double shooter1 = -45;
             public static final double shooter2 = -40;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(0)));
         }
 
         public static final class AMP{
-            public static final double pivot = 40;
+            public static final double pivot = 95;
             public static final double shooter1 = -22.5;
             public static final double shooter2 = -22.5;
             public static final Pose2d pose = AllianceFlipUtil.apply(new Pose2d(0, 0, Rotation2d.fromDegrees(-90)));
@@ -333,13 +333,13 @@ public final class Constants {
 
          public static double pivotInterpolationPosCalculator(){
 
-            double y1 = 42.5; //68
+            double y1 = 47; //68
 
-            double y2 = 18.75; //26
+            double y2 = 21; //26
 
-            double x1 = 17.45;
+            double x1 = 17.85;
 
-            double x2 = -17.65;
+            double x2 = -15.65;
 
             double x = LimelightHelpers.getTY("limelight");
 
