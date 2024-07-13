@@ -47,7 +47,9 @@ import frc.robot.commands.CommandRotateToPose;
 import frc.robot.commands.CommandScore;
 import frc.robot.commands.CommandScoreDriver;
 import frc.robot.commands.IntakeNote;
+import frc.robot.commands.ClimberSubcommands.CommandClimbersToPos;
 import frc.robot.commands.AmperMotorSubcommands.CommandAmperMotorStopNeutral;
+import frc.robot.commands.ClimberSubcommands.CommandClimbersToPos;
 import frc.robot.commands.IndexSubcommands.CommandIndexReverse;
 import frc.robot.commands.IndexSubcommands.CommandIndexStart;
 import frc.robot.commands.IndexSubcommands.CommandIndexStartAuto;
@@ -71,6 +73,7 @@ import frc.robot.subsystems.intake.Intake;
 import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.sensors.BeamBreak;
 import frc.robot.subsystems.shooter.Shooter;
+import frc.robot.subsystems.climber.Climbers;
 import frc.robot.subsystems.vision.ApriltagVision;
 
 public class RobotContainer {
@@ -113,6 +116,7 @@ public class RobotContainer {
   public static final Shooter m_shooter = new Shooter();
   public static final Amper m_amper = new Amper();
   public static final AmperMotor m_amperMotor = new AmperMotor();
+  public static final Climbers m_climbers = new Climbers();
   public ApriltagVision m_ApriltagVision = new ApriltagVision("FL");
   public BeamBreak m_BeamBreak = new BeamBreak();
 
@@ -390,6 +394,15 @@ public void operatorControls(){
       new CommandPivotShunt(m_pivot).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
   );
 
+  operator.leftTrigger()
+    .onTrue(
+        new CommandClimbersToPos(m_climbers, Constants.ClimberConstants.climberTopPos)
+  );
+  operator.rightTrigger()
+    .onTrue(
+        new CommandClimbersToPos(m_climbers, Constants.ClimberConstants.climberBottomPos)
+  );
+
 
 
   operator.y().onTrue(
@@ -407,6 +420,8 @@ public void operatorControls(){
   operator.start().and(operator.back()).onTrue(
     new InstantCommand(() -> m_pivot.applyConfig())
   );
+
+
 
 }
 

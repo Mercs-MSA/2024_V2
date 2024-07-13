@@ -385,10 +385,12 @@ public final class Constants {
     }
 
     public static class  ClimberConstants{
-        public static int leaderID = 0;
-        public static int followerTalon = 0;
+        public static int leaderID = 21;
+        public static int followerTalon = 22;
         public static double armEncoderOffsetRads = 0.0;
         public static boolean leaderInverted = true;
+        public static double climberTopPos = -120;
+        public static double climberBottomPos = -10;
 
         /* Leader Motor PID Values */
         public static final double leaderKP = 1.5;
