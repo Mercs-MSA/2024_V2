@@ -3,25 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 1.43,
-        "y": 3.43
+        "x": 2.0,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 1.9018619225751185,
-        "y": 3.6596086900217784
+        "x": 2.7311642279088124,
+        "y": 5.54
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.67,
-        "y": 3.06
+        "x": 3.0,
+        "y": 5.61
       },
       "prevControl": {
-        "x": 2.3489253698588417,
-        "y": 3.4966533316399966
+        "x": 2.946584368369889,
+        "y": 5.61
       },
       "nextControl": null,
       "isLocked": false,
@@ -32,8 +32,8 @@
   "constraintZones": [],
   "eventMarkers": [
     {
-      "name": "Pivot ",
-      "waypointRelativePos": 0,
+      "name": "New Event Marker",
+      "waypointRelativePos": 0.0,
       "command": {
         "type": "parallel",
         "data": {
@@ -41,7 +41,13 @@
             {
               "type": "named",
               "data": {
-                "name": "Source Pivot Preload"
+                "name": "Intake Note"
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "5pieceStep2Pivot"
               }
             }
           ]
@@ -57,11 +63,11 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -44.0,
-    "rotateFast": true
+    "rotation": 0.0,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
   "previewStartingState": null,
-  "useDefaultConstraints": true
+  "useDefaultConstraints": false
 }

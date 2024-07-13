@@ -3,41 +3,25 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 3.0,
-        "y": 5.468960666879964
+        "x": 1.38,
+        "y": 5.54
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.7076091812668635,
-        "y": 5.5387163915839945
+        "x": 2.1111642279088123,
+        "y": 5.54
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.379705757984981,
-        "y": 6.265297551993107
+        "x": 2.0,
+        "y": 5.54
       },
       "prevControl": {
-        "x": 2.180621536706695,
-        "y": 6.05450249416904
-      },
-      "nextControl": {
-        "x": 2.4925656723869056,
-        "y": 6.384796284889262
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 3.0,
-        "y": 6.885971888919526
-      },
-      "prevControl": {
-        "x": 2.78349364905389,
-        "y": 6.760971888919526
+        "x": 1.4260332022514541,
+        "y": 5.54
       },
       "nextControl": null,
       "isLocked": false,
@@ -49,7 +33,7 @@
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.8,
+      "waypointRelativePos": 0,
       "command": {
         "type": "parallel",
         "data": {
@@ -57,7 +41,7 @@
             {
               "type": "named",
               "data": {
-                "name": "AMP Pivot"
+                "name": "5pieceStep1Pivot"
               }
             }
           ]
@@ -73,8 +57,8 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 25.0,
-    "rotateFast": true
+    "rotation": 0.0,
+    "rotateFast": false
   },
   "reversed": false,
   "folder": null,
