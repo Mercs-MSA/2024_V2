@@ -189,9 +189,6 @@ public class RobotContainer {
         put("Five Piece CenterLine Note Pivot", new CommandPivotToPose(m_pivot, 29.5));
         put("Five Piece Amp Note Pivot", new CommandPivotToPose(m_pivot, 28));
         put("Five Piece Podium Note Pivot", new CommandPivotToPose(m_pivot, 29));
-        put("5pieceStep1Pivot", new CommandPivotToPose(m_pivot, 34.7));
-        put("5pieceStep2Pivot", new CommandPivotToPose(m_pivot, 27));
-        put("5pieceStep4Pivot", new CommandPivotToPose(m_pivot, 28));
 
         put("Auto Pivot", 
         new SequentialCommandGroup(

@@ -26,7 +26,7 @@
         {
           "type": "named",
           "data": {
-            "name": "Score Auto"
+            "name": "Score"
           }
         },
         {
@@ -42,21 +42,15 @@
           }
         },
         {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Podium"
-          }
-        },
-        {
           "type": "named",
           "data": {
             "name": "Intake Note"
           }
         },
         {
-          "type": "named",
+          "type": "path",
           "data": {
-            "name": "Score Auto"
+            "pathName": "Copy of Podium"
           }
         },
         {
@@ -66,51 +60,27 @@
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Score Auto"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.5
-          }
-        },
-        {
           "type": "path",
           "data": {
             "pathName": "Copy of 2PieceLeftIm"
           }
         },
         {
-          "type": "named",
-          "data": {
-            "name": "Intake Note"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
           "type": "path",
           "data": {
-            "pathName": "Copy of backToSub"
+            "pathName": "Copy of 2CenterLeft"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Score Auto"
+            "name": "Score"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.75
+            "waitTime": 1.0
           }
         },
         {
