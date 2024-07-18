@@ -333,13 +333,14 @@ public final class Constants {
 
          public static double pivotInterpolationPosCalculator(){
 
-            double y1 = 47; //68
+            double y1 = 45; //68
 
-            double y2 = 21; //26
+            double y2 = 22; //26
 
-            double x1 = 17.85;
+            double x1 = 18.00; //18.00
 
-            double x2 = -15.65;
+            double x2 = -15.639; //-15.44
+
 
             double x = LimelightHelpers.getTY("limelight");
 

@@ -13,6 +13,8 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
@@ -20,6 +22,7 @@ import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.subsystems.pivot.Pivot;
 import edu.wpi.first.wpilibj.Timer;
 import frc.robot.subsystems.sensors.BeamBreak;
@@ -41,6 +44,8 @@ public class Robot extends TimedRobot {
 
 
   private final RobotContainer m_robotContainer = new RobotContainer();
+  private final CommandXboxController test_controller = new CommandXboxController(3); 
+
 
   Pose2d apiltagPlusGyro = new Pose2d();
   //private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
@@ -205,6 +210,8 @@ public class Robot extends TimedRobot {
     }
   }
 
+  private Joystick test_joystick = new Joystick(3);
+
   @Override
   public void testInit() {
     // Cancels all running commands at the start of test mode.
@@ -212,6 +219,21 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during test mode. */
   @Override
-  public void testPeriodic() {}
+  public void testPeriodic() {
+    test_controller.a().whileTrue(
+      m_robotContainer.drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
+  );
 
+  test_controller.b().whileTrue(
+      m_robotContainer.drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
+  );
+
+  test_controller.x().whileTrue(
+      m_robotContainer.drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+  );
+
+  test_controller.y().whileTrue(
+      m_robotContainer.drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+  );
+}
 }

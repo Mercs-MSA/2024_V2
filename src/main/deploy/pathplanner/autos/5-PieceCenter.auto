@@ -12,45 +12,15 @@
     "data": {
       "commands": [
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 1.0
+            "name": "Start Shooter Auto"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Sub Pivot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Start Shooter"
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of Podium"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Note"
+            "name": "Auto Pivot"
           }
         },
         {
@@ -62,43 +32,79 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of 2PieceRightIm"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score"
+            "pathName": "5-PiecePath1"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "Copy of 2PieceLeftIm"
+            "pathName": "5-PiecePath2"
           }
         },
         {
           "type": "named",
           "data": {
-            "name": "Intake Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score"
+            "name": "Score Auto"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 2.0
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5-PiecePath3"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score Auto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5-PiecePath4"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score Auto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "5-PiecePath5"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score Auto"
+          }
+        },
+        {
+          "type": "wait",
+          "data": {
+            "waitTime": 0.25
           }
         },
         {

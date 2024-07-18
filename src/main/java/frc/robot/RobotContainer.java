@@ -63,6 +63,7 @@ import frc.robot.commands.PivotSubcommands.CommandAutoPivotAim;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose_new;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
+import frc.robot.commands.ShooterSubcommands.CommandShooterStartAuto;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
 import frc.robot.commands.IntakeNoteTele;
 import frc.robot.commands.PivotSubcommands.CommandPivotShunt;
@@ -84,6 +85,7 @@ public class RobotContainer {
   private final CommandXboxController driverJoystick = new CommandXboxController(0); 
   private final CommandXboxController operator = new CommandXboxController(1); 
   public final CommandSwerveDrivetrain drivetrain = TunerConstants.DriveTrain; // My drivetrain
+
 
    public ProfiledPIDController thetaController =
       new ProfiledPIDController(10, 0.01, 0.1, new TrapezoidProfile.Constraints(Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecond, Constants.AutoConstants.kMaxAngularSpeedRadiansPerSecondSquared));
@@ -133,6 +135,7 @@ public class RobotContainer {
         put("Start Intake", new CommandIntakeStart(m_intake));
         put("Start Index", new CommandIndexStart(m_index));
         put("Start Shooter", new CommandShooterStart(m_shooter, -60, -45));
+        put("Start Shooter Auto", new CommandShooterStartAuto(m_shooter, -100, -65));
 
         /* Reset Commands */
         put("Reset All", new ParallelCommandGroup(
@@ -175,6 +178,11 @@ public class RobotContainer {
             new CommandShooterStart(m_shooter, Constants.SATConstants.SUB.shooter1, Constants.SATConstants.SUB.shooter1)
         ));
 
+        put("Sub Pivot 5-piece", new SequentialCommandGroup(
+            new CommandChangeScoringMode(ScoringMode.SUBWOOFER),
+            new CommandPivotToPose(m_pivot)
+        ));
+
         put("Wing Pivot", new SequentialCommandGroup(
             new CommandChangeScoringMode(ScoringMode.WING),
             new CommandPivotToPose(m_pivot), 
@@ -185,15 +193,12 @@ public class RobotContainer {
         put("Podium Pivot Center", new CommandPivotToPose(m_pivot, 30)); // RED: 41.5  BLUE: 43 JUST CHNAGED FROM 43
         put("Center Pivot", new CommandPivotToPose(m_pivot, 30)); // RED: 44  BLUE: 46 JUST CHANGED FROM 46
         put("AMP Pivot", new CommandPivotToPose(m_pivot, 25.2)); // RED: 39  BLUE: 41 JUST CHANGED FROM 41
-        put("Five Piece Preload Pivot", new CommandPivotToPose(m_pivot, 33.2));
-        put("Five Piece CenterLine Note Pivot", new CommandPivotToPose(m_pivot, 29.5));
-        put("Five Piece Amp Note Pivot", new CommandPivotToPose(m_pivot, 28));
-        put("Five Piece Podium Note Pivot", new CommandPivotToPose(m_pivot, 29));
+        put("5-Piece Center CenterLine Pivot", new CommandPivotToPose(m_pivot, 32.5));
+        put("5-Piece Podium Pivot", new CommandPivotToPose(m_pivot, 26));
 
         put("Auto Pivot", 
         new SequentialCommandGroup(
-          new CommandChangeScoringMode(ScoringMode.AUTOAIM),
-          new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+          new CommandPivotToPose(m_pivot, Constants.Vision.pivotInterpolationPosCalculator())
       ));
 
         put("Sub Auto Pivot", 
@@ -386,7 +391,7 @@ public void operatorControls(){
 
   operator.x()
   .onTrue(
-      new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+        new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
   );
 
   operator.y()
