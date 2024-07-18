@@ -196,10 +196,10 @@ public class RobotContainer {
         put("5-Piece Center CenterLine Pivot", new CommandPivotToPose(m_pivot, 32.5));
         put("5-Piece Podium Pivot", new CommandPivotToPose(m_pivot, 26));
 
-        put("Auto Pivot", 
-        new SequentialCommandGroup(
-          new CommandPivotToPose(m_pivot, Constants.Vision.pivotInterpolationPosCalculator())
-      ));
+    //     put("Auto Pivot", 
+    //     new SequentialCommandGroup(
+    //       new CommandPivotToPose(m_pivot, Constants.Vision.pivotInterpolationPosCalculator())
+    //   ));
 
         put("Sub Auto Pivot", 
           new SequentialCommandGroup(

@@ -93,13 +93,8 @@ public class Robot extends TimedRobot {
     SmartDashboard.putNumber("limelight_ty", LimelightHelpers.getTY("limelight"));
     // SmartDashboard.putBoolean("hasNote", );
 
-    SmartDashboard.putNumber("pivotRotationsTarget", Constants.Vision.pivotEncoderCalculator());
 
-    SmartDashboard.putNumber("newPivotRotationsTarget", Constants.Vision.pivotAngleEquation());
-
-    SmartDashboard.putNumber("xDistance", Constants.Vision.returnxDistance());
-
-    SmartDashboard.putNumber("Interpolation", Constants.Vision.pivotInterpolationPosCalculator());
+    SmartDashboard.putNumber("Interpolation tarPos", Constants.Vision.pivotInterpolationPosCalculator());
 
     
     // SmartDashboard.putNumber("hypotenuse1", Constants.Vision.returnHypotenuse1());
