@@ -90,27 +90,15 @@
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.2
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "Copy of backToSub"
+            "name": "Sub Auto Pivot"
           }
         },
         {
           "type": "named",
           "data": {
             "name": "Score Auto"
-          }
-        },
-        {
-          "type": "wait",
-          "data": {
-            "waitTime": 0.75
           }
         },
         {

@@ -41,12 +41,6 @@
             {
               "type": "named",
               "data": {
-                "name": "Podium Pivot Center"
-              }
-            },
-            {
-              "type": "named",
-              "data": {
                 "name": "Intake Note"
               }
             }

@@ -204,8 +204,8 @@ public class RobotContainer {
         put("Sub Auto Pivot", 
           new SequentialCommandGroup(
           new CommandChangeScoringMode(ScoringMode.AUTOAIM),
-          new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf),
-          new CommandShooterStart(m_shooter, Constants.SATConstants.WING.shooter1, Constants.SATConstants.WING.shooter1)
+          new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+        //   new CommandShooterStart(m_shooter, Constants.SATConstants.WING.shooter1, Constants.SATConstants.WING.shooter1)
       ));
                   
 
