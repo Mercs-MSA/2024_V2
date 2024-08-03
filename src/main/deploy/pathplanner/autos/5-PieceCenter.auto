@@ -42,15 +42,21 @@
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Score Auto"
+            "waitTime": 0.5
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.25
+            "name": "Sub Auto Pivot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score Auto"
           }
         },
         {
@@ -62,19 +68,13 @@
         {
           "type": "named",
           "data": {
-            "name": "Score Auto"
+            "name": "Intake Note"
           }
         },
         {
-          "type": "wait",
+          "type": "named",
           "data": {
-            "waitTime": 0.25
-          }
-        },
-        {
-          "type": "path",
-          "data": {
-            "pathName": "5-PiecePath4"
+            "name": "Sub Auto Pivot"
           }
         },
         {
@@ -84,15 +84,21 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.25
+            "pathName": "5-PiecePath4Copy"
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "5-PiecePath5"
+            "name": "Intake Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Sub Auto Pivot"
           }
         },
         {
@@ -102,9 +108,27 @@
           }
         },
         {
-          "type": "wait",
+          "type": "path",
           "data": {
-            "waitTime": 0.25
+            "pathName": "5-PiecePath5Copy"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Sub Auto Pivot"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Score Auto"
           }
         },
         {

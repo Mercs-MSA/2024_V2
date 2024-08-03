@@ -215,20 +215,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
-    test_controller.a().whileTrue(
-      m_robotContainer.drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
-  );
 
-  test_controller.b().whileTrue(
-      m_robotContainer.drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
-  );
-
-  test_controller.x().whileTrue(
-      m_robotContainer.drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
-  );
-
-  test_controller.y().whileTrue(
-      m_robotContainer.drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
-  );
 }
 }

@@ -3,13 +3,13 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 2.81,
-        "y": 5.47
+        "x": 2.8,
+        "y": 5.61
       },
       "prevControl": null,
       "nextControl": {
-        "x": 2.341946633080141,
-        "y": 5.598819202003597
+        "x": 2.3319466330801406,
+        "y": 5.738819202003597
       },
       "isLocked": false,
       "linkedName": null
@@ -32,12 +32,12 @@
     },
     {
       "anchor": {
-        "x": 2.9652475852740565,
-        "y": 6.827417706190619
+        "x": 2.92,
+        "y": 6.92
       },
       "prevControl": {
-        "x": 2.367163718559568,
-        "y": 6.518280016631312
+        "x": 2.3219161332855114,
+        "y": 6.610862310440693
       },
       "nextControl": null,
       "isLocked": false,
@@ -59,12 +59,6 @@
               "data": {
                 "name": "Intake Note"
               }
-            },
-            {
-              "type": "named",
-              "data": {
-                "name": "Podium Pivot Center"
-              }
             }
           ]
         }
@@ -79,7 +73,7 @@
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": 30.0,
+    "rotation": 37.0,
     "rotateFast": false
   },
   "reversed": false,

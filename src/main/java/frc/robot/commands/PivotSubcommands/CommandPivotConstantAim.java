@@ -10,27 +10,27 @@ import frc.robot.subsystems.pivot.Pivot;
 import frc.robot.subsystems.vision.ApriltagVision;
 
 
-public class CommandPivotToPose extends Command {
+public class CommandPivotConstantAim extends Command {
   private final Pivot m_pivot;
   private ApriltagVision m_ApriltagVision;
   private double pivotPos;
   private boolean useStateSystem;
   private double distance;
   
-  public CommandPivotToPose(Pivot i, double pos) {
+  public CommandPivotConstantAim(Pivot i, double pos) {
     this.m_pivot = i;
     this.pivotPos = pos;
     this.useStateSystem = false;
     addRequirements(m_pivot);
   }
 
-  public CommandPivotToPose(Pivot i) {
+  public CommandPivotConstantAim(Pivot i) {
     this.m_pivot = i;
     this.useStateSystem = true;
     addRequirements(m_pivot);
   }
 
-  public CommandPivotToPose(Pivot i, ApriltagVision v) {
+  public CommandPivotConstantAim(Pivot i, ApriltagVision v) {
     this.m_pivot = i;
     this.useStateSystem = true;
     this.m_ApriltagVision = v;
@@ -39,9 +39,10 @@ public class CommandPivotToPose extends Command {
 
   @Override
   public void initialize() {
-    
-    SmartDashboard.putNumber("pivot is trying to go to this pos", pivotPos);
+  }
 
+  @Override
+  public void execute() {
     if (useStateSystem){
       switch (ScoringConstants.currentScoringMode) {
         case PODIUM:
@@ -75,15 +76,10 @@ public class CommandPivotToPose extends Command {
   }
 
   @Override
-  public void execute() {
-  }
-
-  @Override
   public void end(boolean interrupted) {}
 
   @Override
   public boolean isFinished() {
-    return Constants.isWithinTol(pivotPos, m_pivot.getLeaderPos(), Constants.ArmConstants.tol);
-  }
+    return false;}
 }
 

@@ -12,6 +12,7 @@ import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.trajectory.TrapezoidProfile;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
+import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine.Direction;
 import frc.robot.generated.TunerConstants;
 
@@ -41,6 +42,7 @@ import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import edu.wpi.first.wpilibj2.command.Command.InterruptionBehavior;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import frc.robot.Constants.ScoringConstants.ScoringMode;
 import frc.robot.commands.CommandChangeScoringMode;
 import frc.robot.commands.CommandRotateToPose;
@@ -60,11 +62,14 @@ import frc.robot.commands.IntakeSubcommands.CommandIntakeStart;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStop;
 import frc.robot.commands.IntakeSubcommands.CommandIntakeStopNeutral;
 import frc.robot.commands.PivotSubcommands.CommandAutoPivotAim;
+import frc.robot.commands.PivotSubcommands.CommandPivotConstantAim;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose;
 import frc.robot.commands.PivotSubcommands.CommandPivotToPose_new;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStartAuto;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStopNeutral;
+import frc.robot.commands.ShooterSubcommands.CommandAutoScoreDriver;
+
 import frc.robot.commands.IntakeNoteTele;
 import frc.robot.commands.PivotSubcommands.CommandPivotShunt;
 import frc.robot.subsystems.amper.Amper;
@@ -76,6 +81,7 @@ import frc.robot.subsystems.sensors.BeamBreak;
 import frc.robot.subsystems.shooter.Shooter;
 import frc.robot.subsystems.climber.Climbers;
 import frc.robot.subsystems.vision.ApriltagVision;
+
 
 public class RobotContainer {
   private double MaxSpeed = TunerConstants.kSpeedAt12VoltsMps; // kSpeedAt12VoltsMps desired top speed
@@ -258,14 +264,39 @@ public class RobotContainer {
             new CommandIndexStartAuto(m_index, m_BeamBreak)
         ));
 
-        put("Auto Pivot", new CommandAutoPivotAim(m_pivot));
+        // put("Auto Pivot", new CommandAutoPivotAim(m_pivot));
     }
   };
 
   private final Telemetry logger = new Telemetry(MaxSpeed);
 
   double limelight_aim_proportional() {
-    double kP = 0.020;
+    double kP = 0.03;
+    int[] ids = new int[2];
+    ids[0] = 7;
+    ids[1] = 4;
+    LimelightHelpers.SetFiducialIDFiltersOverride("limelight", ids);
+    
+    double dval;
+
+    if (LimelightHelpers.getTX("limelight") > 0) {
+      dval = LimelightHelpers.getTX("limelight") - 3;
+
+    }
+
+    else {
+      dval = LimelightHelpers.getTX("limelight") + 3;
+
+    }
+    double targetingAngularVelocity = (dval) * kP;
+    targetingAngularVelocity *= MaxAngularRate;
+    targetingAngularVelocity *= -1.0;
+
+    return targetingAngularVelocity;
+}
+
+double limelight_aim_proportional_two() {
+    double kP = 0.029;
     int[] ids = new int[2];
     ids[0] = 7;
     ids[1] = 4;
@@ -284,8 +315,8 @@ public class RobotContainer {
             .withRotationalRate(-driverJoystick.getRightX() * MaxAngularRate) // Drive counterclockwise with negative X (left)
         ).ignoringDisable(false));
         driverJoystick.leftBumper().whileTrue(drivetrain.applyRequest(() -> 
-          drive.withVelocityX(driverJoystick.getLeftY() * MaxSpeed) // Drive forward with negative Y (forward)
-                .withVelocityY(driverJoystick.getLeftX() * MaxSpeed) // Drive left with negative X (left)
+          drive.withVelocityX(driverJoystick.getLeftY() * (MaxSpeed * -1)) // Drive forward with negative Y (forward)
+                .withVelocityY(driverJoystick.getLeftX() * (MaxSpeed * -1)) // Drive left with negative X (left)
                 .withRotationalRate(limelight_aim_proportional())
         ));
 
@@ -332,13 +363,35 @@ public class RobotContainer {
     //     new InstantCommand(() -> Constants.Vision.autoAimActive = false)
     // );
 
-    driverJoystick.b().onTrue(
-        new InstantCommand(() -> Constants.Vision.manualDriveInvert = -1)
-    );
+    // driverJoystick.b().onTrue(
+    //     new InstantCommand(() -> Constants.Vision.manualDriveInvert = -1)
+    // );
 
-    driverJoystick.a().onTrue(
-        new InstantCommand(() -> Constants.Vision.manualDriveInvert = 1)
-    );
+    // driverJoystick.a().onTrue(
+    //     new InstantCommand(() -> Constants.Vision.manualDriveInvert = 1)
+    // );
+
+  
+
+  // driverJoystick.a().whileTrue(
+  //     drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
+  // );
+
+  // driverJoystick.b().whileTrue(
+  //     drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+  // );
+
+  // driverJoystick.x().whileTrue(
+  //     drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+  // );
+
+  // driverJoystick.y().whileTrue(
+  //     drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
+  // );
+
+  driverJoystick.x().whileTrue(
+      new CommandAutoScoreDriver(m_shooter, m_amperMotor, m_index)
+  );
 
 }
 
@@ -381,6 +434,8 @@ public void operatorControls(){
       )
   );
 
+
+
   operator.rightBumper()
   .onTrue(
       expelNote()
@@ -393,6 +448,27 @@ public void operatorControls(){
   .onTrue(
         new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
   );
+
+  operator.b()
+  .whileTrue(
+    new CommandPivotToPose(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+  );
+
+  operator.b().whileTrue(
+        new ParallelCommandGroup(
+            
+        // drivetrain.applyRequest(() -> 
+        //   drive.withVelocityX(driverJoystick.getLeftY() * (MaxSpeed * -1)) // Drive forward with negative Y (forward)
+        //         .withVelocityY(driverJoystick.getLeftX() * (MaxSpeed * -1)) // Drive left with negative X (left)
+        //         .withRotationalRate(limelight_aim_proportional_two())),
+    
+
+        new CommandPivotConstantAim(m_pivot, m_ApriltagVision).withInterruptBehavior(InterruptionBehavior.kCancelSelf)
+
+
+        
+
+        ));
 
   operator.y()
   .onTrue(
@@ -410,17 +486,17 @@ public void operatorControls(){
 
 
 
-  operator.y().onTrue(
-      new SequentialCommandGroup(
-          // new CommandIndexReverse(m_index),
-          // new CommandShooterReverse(m_shooter),
-          // new WaitCommand(0.1),
-          // //new CommandShooterStopNeutral(m_shooter),
-          // new CommandIndexStop(m_index),
-          // new CommandShooterStopNeutral(m_shooter),
-          new CommandScore(m_amper, m_shooter, m_amperMotor)
-      )
-  );
+//   operator.y().onTrue(
+//       new SequentialCommandGroup(
+//           // new CommandIndexReverse(m_index),
+//           // new CommandShooterReverse(m_shooter),
+//           // new WaitCommand(0.1),
+//           // //new CommandShooterStopNeutral(m_shooter),
+//           // new CommandIndexStop(m_index),
+//           // new CommandShooterStopNeutral(m_shooter),
+//           new CommandScore(m_amper, m_shooter, m_amperMotor)
+//       )
+//   );
 
   operator.start().and(operator.back()).onTrue(
     new InstantCommand(() -> m_pivot.applyConfig())
