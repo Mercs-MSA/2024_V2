@@ -333,9 +333,9 @@ public final class Constants {
 
          public static double pivotInterpolationPosCalculator(){
 
-            double y1 = 42.5; //44
+            double y1 = 44; //44
 
-            double y2 = 17.6; //17
+            double y2 = 19.2; //17
 
             double x1 = 17.45; //18.00
 
