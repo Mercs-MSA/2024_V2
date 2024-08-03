@@ -335,7 +335,7 @@ public final class Constants {
 
             double y1 = 42.5; //44
 
-            double y2 = 17.5; //17
+            double y2 = 17.6; //17
 
             double x1 = 17.45; //18.00
 
