@@ -3,64 +3,37 @@
   "waypoints": [
     {
       "anchor": {
-        "x": 8.3,
-        "y": 4.0
+        "x": 8.55,
+        "y": 0.63
       },
       "prevControl": null,
       "nextControl": {
-        "x": 5.892956721719433,
-        "y": 4.567226252854788
+        "x": 6.196378394810999,
+        "y": 0.8148910678420493
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 2.578789979263267,
-        "y": 4.754599637587292
+        "x": 2.2977299021645106,
+        "y": 3.5249618002802334
       },
       "prevControl": {
-        "x": 3.246307662372813,
-        "y": 4.766310474133074
-      },
-      "nextControl": {
-        "x": 1.59460399127902,
-        "y": 4.737333216745463
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 2.0560904162923754,
-        "y": 4.425912336835772
-      },
-      "prevControl": {
-        "x": 1.548236363234494,
-        "y": 4.871708003045107
+        "x": 3.1994643161896867,
+        "y": 2.459275674614116
       },
       "nextControl": null,
       "isLocked": false,
       "linkedName": null
     }
   ],
-  "rotationTargets": [
-    {
-      "waypointRelativePos": 1.0,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    },
-    {
-      "waypointRelativePos": 0.5,
-      "rotationDegrees": 0,
-      "rotateFast": false
-    }
-  ],
+  "rotationTargets": [],
   "constraintZones": [],
   "eventMarkers": [
     {
       "name": "New Event Marker",
-      "waypointRelativePos": 0.85,
+      "waypointRelativePos": 0.75,
       "command": {
         "type": "parallel",
         "data": {
@@ -77,14 +50,14 @@
     }
   ],
   "globalConstraints": {
-    "maxVelocity": 4.5,
-    "maxAcceleration": 4.5,
+    "maxVelocity": 3.5,
+    "maxAcceleration": 3.5,
     "maxAngularVelocity": 540.0,
     "maxAngularAcceleration": 720.0
   },
   "goalEndState": {
     "velocity": 0,
-    "rotation": -27.0,
+    "rotation": -52.85331330197817,
     "rotateFast": false
   },
   "reversed": false,

@@ -30,21 +30,27 @@
           }
         },
         {
-          "type": "path",
+          "type": "named",
           "data": {
-            "pathName": "5-PiecePath1"
+            "name": "Reset Pivot"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "5-PiecePath2"
+            "pathName": "3PiecePath1"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "3PiecePath2"
           }
         },
         {
           "type": "wait",
           "data": {
-            "waitTime": 0.2
+            "waitTime": 0.5
           }
         },
         {
@@ -60,63 +66,27 @@
           }
         },
         {
-          "type": "path",
+          "type": "wait",
           "data": {
-            "pathName": "5-PiecePath3"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Sub Auto Pivot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score"
+            "waitTime": 0.5
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "5-PiecePath4Copy"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Intake Note"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Sub Auto Pivot"
-          }
-        },
-        {
-          "type": "named",
-          "data": {
-            "name": "Score"
+            "pathName": "3PiecePath3"
           }
         },
         {
           "type": "path",
           "data": {
-            "pathName": "5-PiecePath5Copy"
+            "pathName": "3PiecePath4"
           }
         },
         {
-          "type": "named",
+          "type": "wait",
           "data": {
-            "name": "Intake Note"
+            "waitTime": 0.5
           }
         },
         {

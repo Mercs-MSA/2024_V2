@@ -43,12 +43,16 @@ public class CommandAutoScoreDriver extends Command {
 
     @Override
     public void execute() {
+        
+        double tx = LimelightHelpers.getTX("limelight");
+        double ty = LimelightHelpers.getTY("limelight");
+        double fiduciaLid = LimelightHelpers.getFiducialID("limelight");
+        
 
-        if ((Math.abs(LimelightHelpers.getTX("limelight")) < 10)) {
+        if ((Math.abs(tx) < 10) && (Math.abs(ty) < 8) && (fiduciaLid == 4 || fiduciaLid == 7)) {
             m_index.startIndexMotor();
-    }
-
-        else { 
+        }
+         else { 
             m_index.stopIndexMotor();
         }
     }

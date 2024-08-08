@@ -250,7 +250,7 @@ public final class Constants {
             
             double angleToApriltag = (Math.PI / 180) * (30 + LimelightHelpers.getTY("limelight"));
 
-           hypotenuse1 = y1 / (Math.sin(angleToApriltag));
+            hypotenuse1 = y1 / (Math.sin(angleToApriltag));
 
             xDistance = Math.sqrt(Math.pow(hypotenuse1, 2) - Math.pow(y1, 2));
 
@@ -333,13 +333,13 @@ public final class Constants {
 
          public static double pivotInterpolationPosCalculator(){
 
-            double y1 = 44; //44
+            double y1 = 46.5; //44
 
-            double y2 = 19.2; //17
+            double y2 = 22.5; //17
 
-            double x1 = 17.45; //18.00
+            double x1 = 17.75; //18.00
 
-            double x2 = -12.8; //-15.44
+            double x2 = -13.8; //-15.44
 
 
             double x = LimelightHelpers.getTY("limelight");
