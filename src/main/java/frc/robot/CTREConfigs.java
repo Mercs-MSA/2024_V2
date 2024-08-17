@@ -1,6 +1,7 @@
 package frc.robot;
 
 import com.ctre.phoenix6.configs.CANcoderConfiguration;
+/// I MADE THIS CHANGE
 import com.ctre.phoenix6.configs.TalonFXConfiguration;
 
 public final class CTREConfigs {
