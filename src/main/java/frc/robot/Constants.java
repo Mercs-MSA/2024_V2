@@ -33,6 +33,8 @@ import java.util.function.Supplier;
 public final class Constants {
     public static final double stickDeadband = 0.1;
 
+    public static final double rumbleTime = 2.0;
+
     public static final class SATConstants {
         public static final class SUB{
             public static final double pivot = 44; //changed from 71 
@@ -335,11 +337,11 @@ public final class Constants {
 
             double y1 = 46.5; //44
 
-            double y2 = 22.5; //17
+            double y2 = 22; // 22.5 // 17
 
             double x1 = 17.75; //18.00
 
-            double x2 = -13.8; //-15.44
+            double x2 = -13.8; // -13.8// -15.44
 
 
             double x = LimelightHelpers.getTY("limelight");

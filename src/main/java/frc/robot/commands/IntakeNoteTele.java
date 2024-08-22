@@ -2,6 +2,7 @@ package frc.robot.commands;
 
 import java.io.Console;
 
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants;
@@ -56,7 +57,8 @@ public class IntakeNoteTele extends Command {
 
   @Override
   public boolean isFinished() {
-    return m_beamBreak.detectsNote();
+    boolean hasNote = m_beamBreak.detectsNote();
+    return hasNote;
     //Math.abs(m_intake.getIntakeMotorSpeed() - IntakeConstants.kIntakeMotorSpeed) <= IntakeConstants.kIntakeMotorDCTolerance;
   }
 }

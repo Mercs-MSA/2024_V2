@@ -10,6 +10,7 @@ import com.ctre.phoenix6.hardware.Pigeon2;
 
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.units.Time;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -22,9 +23,11 @@ import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
 import edu.wpi.first.wpilibj.AnalogInput;
 import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.DriverStation.Alliance;
+import edu.wpi.first.wpilibj.GenericHID.RumbleType;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.subsystems.pivot.Pivot;
 import edu.wpi.first.wpilibj.Timer;
+import edu.wpi.first.wpilibj.XboxController;
 import frc.robot.subsystems.sensors.BeamBreak;
 
 
@@ -44,11 +47,13 @@ public class Robot extends TimedRobot {
 
 
   private final RobotContainer m_robotContainer = new RobotContainer();
-  private final CommandXboxController test_controller = new CommandXboxController(3); 
 
 
   Pose2d apiltagPlusGyro = new Pose2d();
   //private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
+
+  double rumbleStart = Timer.getFPGATimestamp();
+  boolean hasDoneRumble = false;
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -63,7 +68,6 @@ public class Robot extends TimedRobot {
     Optional<Alliance> alliance = DriverStation.getAlliance();
     Constants.Vision.isRedAlliance = Constants.AllianceFlipUtil.shouldFlip();
     SmartDashboard.putBoolean("Are we red alliance?", Constants.Vision.isRedAlliance);
-
     SmartDashboard.putBoolean("Status 1", Pivot.status1OK);
     SmartDashboard.putBoolean("Status 2", Pivot.status2OK);
 
@@ -124,6 +128,8 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.m_pivot.setBrakeMode(false);
+    m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0);
+    m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0);
   }
   
   @Override
@@ -183,8 +189,37 @@ public class Robot extends TimedRobot {
   }
 
   /** This function is called periodically during operator control. */
-  @Override
-  public void teleopPeriodic() {
+   @Override
+  public void teleopPeriodic(){
+    boolean hasNote = m_robotContainer.m_BeamBreak.detectsNote();
+    
+    // if (hasNote && (hasDoneRumble == false)) {
+    //   m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0.7);
+    //   m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0.7);
+    //   hasDoneRumble = false;
+    //   rumbleStart = Timer.getFPGATimestamp();
+    // }
+
+    // SmartDashboard.putBoolean("hasRumble", hasDoneRumble);
+    // SmartDashboard.putNumber("rumbleTime", rumbleStart);
+    // SmartDashboard.putNumber("currMinusRumble", Timer.getFPGATimestamp() - Constants.rumbleTime);
+
+    // if (hasDoneRumble == false && rumbleStart < (Timer.getFPGATimestamp() - Constants.rumbleTime)) {
+    //   m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0.0);
+    //   m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0.0);
+    //   hasDoneRumble = true;
+    // }
+
+    if (hasNote) {
+      m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0.1);
+      m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0.1);
+    } 
+    else {
+      m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0.0);
+      m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0.0);
+    }
+    
+  
     if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.AMP){
       new CommandAmperScoreAmp(m_robotContainer.m_amper).schedule();
       new CommandShooterStart(m_robotContainer.m_shooter, Constants.SATConstants.AMP.shooter1, Constants.SATConstants.AMP.shooter2).schedule();

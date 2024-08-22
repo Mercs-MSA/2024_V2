@@ -8,36 +8,20 @@
       },
       "prevControl": null,
       "nextControl": {
-        "x": 3.5742110856546954,
-        "y": 1.9439988665997294
+        "x": 5.6001858080748965,
+        "y": 1.2647703469444023
       },
       "isLocked": false,
       "linkedName": null
     },
     {
       "anchor": {
-        "x": 6.431655202825382,
-        "y": 4.239322829572906
+        "x": 8.27025654051308,
+        "y": 2.4241431649767726
       },
       "prevControl": {
-        "x": 4.511078009317214,
-        "y": 4.379852868122284
-      },
-      "nextControl": {
-        "x": 6.562237237183256,
-        "y": 4.2297680465711105
-      },
-      "isLocked": false,
-      "linkedName": null
-    },
-    {
-      "anchor": {
-        "x": 8.305389050150424,
-        "y": 4.239322829572906
-      },
-      "prevControl": {
-        "x": 7.7198472228613495,
-        "y": 4.215901156481343
+        "x": 5.459655769525519,
+        "y": 1.7097821356840999
       },
       "nextControl": null,
       "isLocked": false,
@@ -46,7 +30,7 @@
   ],
   "rotationTargets": [
     {
-      "waypointRelativePos": 0.5,
+      "waypointRelativePos": 0.25,
       "rotationDegrees": 0,
       "rotateFast": false
     }
@@ -60,6 +44,12 @@
         "type": "parallel",
         "data": {
           "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Reset Pivot"
+              }
+            },
             {
               "type": "named",
               "data": {
