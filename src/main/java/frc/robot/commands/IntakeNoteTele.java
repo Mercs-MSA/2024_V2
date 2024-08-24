@@ -3,8 +3,12 @@ package frc.robot.commands;
 import java.io.Console;
 
 import edu.wpi.first.wpilibj.GenericHID.RumbleType;
+import edu.wpi.first.wpilibj.XboxController;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants;
 import frc.robot.RobotContainer;
 import frc.robot.subsystems.amper.Amper;
@@ -25,6 +29,9 @@ public class IntakeNoteTele extends Command {
     m_beamBreak = beamBreak;
     //addRequirements(m_intake, m_index, m_beamBreak);
   }
+
+  
+    public final XboxController driver_rumble = new XboxController(0); 
 
   @Override
   public void initialize() {
@@ -53,6 +60,15 @@ public class IntakeNoteTele extends Command {
     SmartDashboard.putBoolean("Intake done", true);
     m_intake.stopIntakeMotor();
     m_index.stopIndexMotor();
+    if (m_beamBreak.detectsNote()) {
+      CommandScheduler.getInstance().schedule(
+            new SequentialCommandGroup(
+          new CommandRumble(0.8, driver_rumble),
+          new WaitCommand(1),
+          new CommandRumble(0, driver_rumble)
+          )
+      );
+    }
   }
 
   @Override

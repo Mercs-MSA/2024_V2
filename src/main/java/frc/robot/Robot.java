@@ -17,6 +17,9 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
 import edu.wpi.first.wpilibj2.command.sysid.SysIdRoutine;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
+import frc.robot.commands.CommandRumble;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreAmp;
 import frc.robot.commands.AmperSubcommands.CommandAmperScoreNote;
 import frc.robot.commands.ShooterSubcommands.CommandShooterStart;
@@ -52,15 +55,13 @@ public class Robot extends TimedRobot {
   Pose2d apiltagPlusGyro = new Pose2d();
   //private AnalogInput PSU_Volt_Monitor = new AnalogInput(0);
 
-  double rumbleStart = Timer.getFPGATimestamp();
-  boolean hasDoneRumble = false;
-
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
    */
   @Override
   public void robotInit() {
+    m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0.0);
     // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
     // autonomous chooser on the dashboard.
 
@@ -128,8 +129,6 @@ public class Robot extends TimedRobot {
   @Override
   public void disabledInit() {
     m_robotContainer.m_pivot.setBrakeMode(false);
-    m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0);
-    m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0);
   }
   
   @Override
@@ -171,6 +170,7 @@ public class Robot extends TimedRobot {
 
   @Override
   public void teleopInit() {
+    
     // This makes sure that the autonomous stops running when
     // teleop starts running. If you want the autonomous to
     // continue until interrupted by another command, remove
@@ -191,34 +191,6 @@ public class Robot extends TimedRobot {
   /** This function is called periodically during operator control. */
    @Override
   public void teleopPeriodic(){
-    boolean hasNote = m_robotContainer.m_BeamBreak.detectsNote();
-    
-    // if (hasNote && (hasDoneRumble == false)) {
-    //   m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0.7);
-    //   m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0.7);
-    //   hasDoneRumble = false;
-    //   rumbleStart = Timer.getFPGATimestamp();
-    // }
-
-    // SmartDashboard.putBoolean("hasRumble", hasDoneRumble);
-    // SmartDashboard.putNumber("rumbleTime", rumbleStart);
-    // SmartDashboard.putNumber("currMinusRumble", Timer.getFPGATimestamp() - Constants.rumbleTime);
-
-    // if (hasDoneRumble == false && rumbleStart < (Timer.getFPGATimestamp() - Constants.rumbleTime)) {
-    //   m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0.0);
-    //   m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0.0);
-    //   hasDoneRumble = true;
-    // }
-
-    if (hasNote) {
-      m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0.1);
-      m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0.1);
-    } 
-    else {
-      m_robotContainer.driver_rumble.setRumble(RumbleType.kBothRumble, 0.0);
-      m_robotContainer.operator_rumble.setRumble(RumbleType.kBothRumble, 0.0);
-    }
-    
   
     if (Constants.ScoringConstants.currentScoringMode == Constants.ScoringConstants.ScoringMode.AMP){
       new CommandAmperScoreAmp(m_robotContainer.m_amper).schedule();
