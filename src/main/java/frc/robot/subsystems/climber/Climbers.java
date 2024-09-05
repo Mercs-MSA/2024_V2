@@ -58,8 +58,8 @@ public class Climbers extends SubsystemBase{
         configLeader.Slot0.kP = ClimberConstants.leaderKP;
         configLeader.Slot0.kI = ClimberConstants.leaderKI;
         configLeader.Slot0.kD = ClimberConstants.leaderKD;
-        configLeader.Voltage.PeakForwardVoltage = 10;
-        configLeader.Voltage.PeakReverseVoltage  = -10;
+        configLeader.Voltage.PeakForwardVoltage = 12;
+        configLeader.Voltage.PeakReverseVoltage  = -12;
         configLeader.MotorOutput.Inverted =
         ClimberConstants.leaderInverted
             ? InvertedValue.Clockwise_Positive

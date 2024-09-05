@@ -335,13 +335,13 @@ public final class Constants {
 
          public static double pivotInterpolationPosCalculator(){
 
-            double y1 = 46.5; //44
+            double y1 = 44.75; //44
 
-            double y2 = 21; // 22.5 // 17
+            double y2 = 22; // 22.5 // 17
 
-            double x1 = 17.75; //18.00
+            double x1 = 17.95; //18.00
 
-            double x2 = -13.8; // -13.8// -15.44
+            double x2 = -13.67; // -13.8// -15.44
 
 
             double x = LimelightHelpers.getTY("limelight");
@@ -392,8 +392,8 @@ public final class Constants {
         public static int followerTalon = 22;
         public static double armEncoderOffsetRads = 0.0;
         public static boolean leaderInverted = true;
-        public static double climberTopPos = -120;
-        public static double climberBottomPos = -10;
+        public static double climberTopPos = -145;
+        public static double climberBottomPos = -2;
 
         /* Leader Motor PID Values */
         public static final double leaderKP = 1.5;

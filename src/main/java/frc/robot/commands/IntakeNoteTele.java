@@ -32,6 +32,7 @@ public class IntakeNoteTele extends Command {
 
   
     public final XboxController driver_rumble = new XboxController(0); 
+    public final XboxController operator_rumble = new XboxController(1);
 
   @Override
   public void initialize() {
@@ -64,9 +65,10 @@ public class IntakeNoteTele extends Command {
       CommandScheduler.getInstance().schedule(
             new SequentialCommandGroup(
           new CommandRumble(0.8, driver_rumble),
+          new CommandRumble(0.8, operator_rumble),
           new WaitCommand(1),
-          new CommandRumble(0, driver_rumble)
-          )
+          new CommandRumble(0, driver_rumble),
+          new CommandRumble(0, operator_rumble))
       );
     }
   }
