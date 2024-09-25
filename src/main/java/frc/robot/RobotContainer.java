@@ -360,6 +360,7 @@ double limelight_aim_proportional_two() {
             // new CommandShooterStopNeutral(m_shooter)
         )
     );
+  }
 
     // driverJoystick.leftBumper().onTrue(
     //     // new CommandRotateToPose(s_Swerve, m_ApriltagVision)
@@ -378,22 +379,22 @@ double limelight_aim_proportional_two() {
 
   
 
-  driverJoystick.a().whileTrue(
-      drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
-  );
+  // driverJoystick.a().whileTrue(
+  //     drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
+  // );
 
-  driverJoystick.b().whileTrue(
-      drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
-  );
+  // driverJoystick.b().whileTrue(
+  //     drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+  // );
 
-  driverJoystick.x().whileTrue(
-      drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
-  );
+  // driverJoystick.x().whileTrue(
+  //     drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+  // );
 
-  driverJoystick.y().whileTrue(
-      drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
-  );
-  }
+  // driverJoystick.y().whileTrue(
+  //     drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
+  // );
+  // }
   
 
 //   driverJoystick.x().whileTrue(

@@ -212,29 +212,30 @@ public class Robot extends TimedRobot {
     }
   }
 
-  private Joystick test_joystick = new Joystick(3);
+  private CommandXboxController test_joystick = new CommandXboxController(3);
 
   @Override
-  public void testInit() {
-driverJoystick.a().whileTrue(
-      drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
-  );
-
-  driverJoystick.b().whileTrue(
-      drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
-  );
-
-  driverJoystick.x().whileTrue(
-      drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
-  );
-
-  driverJoystick.y().whileTrue(
-      drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
-  );  }
+  public void testInit() {}
 
   /** This function is called periodically during test mode. */
   @Override
   public void testPeriodic() {
+      test_joystick.a().whileTrue(
+      m_robotContainer.drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
+  );
+
+  test_joystick.b().whileTrue(
+      m_robotContainer.drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+  );
+
+  test_joystick.x().whileTrue(
+      m_robotContainer.drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+  );
+
+  test_joystick.y().whileTrue(
+      m_robotContainer.drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
+  );
+  //sys id is application to put file in-convert file to wpilog
 
 }
 }
