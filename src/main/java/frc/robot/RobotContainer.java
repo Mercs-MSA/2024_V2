@@ -378,27 +378,29 @@ double limelight_aim_proportional_two() {
 
   
 
-  // driverJoystick.a().whileTrue(
-  //     drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
-  // );
-
-  // driverJoystick.b().whileTrue(
-  //     drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
-  // );
-
-  // driverJoystick.x().whileTrue(
-  //     drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
-  // );
-
-  // driverJoystick.y().whileTrue(
-  //     drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
-  // );
-
-  driverJoystick.x().whileTrue(
-      new CommandAutoScoreDriver(m_shooter, m_amperMotor, m_index)
+  driverJoystick.a().whileTrue(
+      drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
   );
 
-}
+  driverJoystick.b().whileTrue(
+      drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+  );
+
+  driverJoystick.x().whileTrue(
+      drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+  );
+
+  driverJoystick.y().whileTrue(
+      drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
+  );
+  }
+  
+
+//   driverJoystick.x().whileTrue(
+//       new CommandAutoScoreDriver(m_shooter, m_amperMotor, m_index)
+//   );
+
+// }
 
 
 public void operatorControls(){

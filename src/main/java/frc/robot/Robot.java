@@ -216,8 +216,21 @@ public class Robot extends TimedRobot {
 
   @Override
   public void testInit() {
-    // Cancels all running commands at the start of test mode.
-  }
+driverJoystick.a().whileTrue(
+      drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kReverse)
+  );
+
+  driverJoystick.b().whileTrue(
+      drivetrain.sysIdQuasistatic(SysIdRoutine.Direction.kForward)
+  );
+
+  driverJoystick.x().whileTrue(
+      drivetrain.sysIdDynamic(SysIdRoutine.Direction.kReverse)
+  );
+
+  driverJoystick.y().whileTrue(
+      drivetrain.sysIdDynamic(SysIdRoutine.Direction.kForward)
+  );  }
 
   /** This function is called periodically during test mode. */
   @Override
