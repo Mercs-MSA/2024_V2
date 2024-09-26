@@ -337,11 +337,12 @@ public final class Constants {
 
             double y1 = 46; //44
 
-            double y2 = 28; // 22.5 // 17
+            double y2 = 22.5
+            ; // 22.5 // 17
 
             double x1 = 17.42; //18.00
 
-            double x2 = -9.30; // -13.8// -15.44
+            double x2 = -15.20; // -13.8// -15.44
 
 
             double x = LimelightHelpers.getTY("limelight");

@@ -78,7 +78,7 @@ public class Intake extends SubsystemBase {
   }
 
   public void reverseIntakeMotor() {
-    // WARNING!! 
+    // WARNING!!    
     // DO NOT USE THIS FUNCTION DIRECTLY!!
     // INSTEAD USE: CommandOverrideIntakeStart
     // intakeMotor.setControl(intakeMotor_dutyCycleOut.withOutput(IntakeConstants.kIntakeMotorSpeed));
